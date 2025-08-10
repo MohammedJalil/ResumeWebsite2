@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Mohammed‑Taqi Jalil • Portfolio</title>
+    <meta name="description" content="Portfolio of Mohammed‑Taqi Jalil — Data Analyst & Computational Biology." />
+    <meta name="theme-color" content="#2E2836" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mohammed‑Taqi Jalil • Portfolio" />
+    <meta property="og:description" content="Data Analyst & Computational Biology — projects, experience, and education." />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="assets/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mohammed‑Taqi Jalil • Portfolio" />
+    <meta name="twitter:description" content="Data Analyst & Computational Biology — projects, experience, and education." />
+    <meta name="twitter:image" content="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <link rel="mask-icon" href="assets/favicon.svg" color="#E1AA7D" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="prefetch" href="https://via.placeholder.com/800x500.png?text=Air+Pollution+Model" as="image" />
+    <link rel="prefetch" href="https://via.placeholder.com/800x500.png?text=RNA-Seq+Analysis" as="image" />
+    <link rel="prefetch" href="https://via.placeholder.com/800x500.png?text=Education+Analytics+Dashboard" as="image" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mohammed‑Taqi Jalil",
+        "jobTitle": "Data Analyst",
+        "address": {"@type": "PostalAddress", "addressLocality": "Austin", "addressRegion": "TX"},
+        "email": "mailto:mohammed.jalil.email@gmail.com",
+        "telephone": "+1-512-696-1614",
+        "sameAs": [
+          "https://www.linkedin.com/in/mohammedtaqijalil/",
+          "https://github.com/MohammedJalil/Projects"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#about" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <nav class="nav">
+        <div class="container nav__inner">
+          <a href="#home" class="nav__brand" aria-label="Home">Mohammed‑Taqi</a>
+          <ul class="nav__links">
+            <li><a href="#home" class="nav__link">Home</a></li>
+            <li><a href="#about" class="nav__link">About</a></li>
+            <li><a href="#experience" class="nav__link">Experience</a></li>
+            <li><a href="#education" class="nav__link">Education</a></li>
+            <li><a href="#projects" class="nav__link">Projects</a></li>
+            <li><a href="#contact" class="nav__link">Contact</a></li>
+            <li><a href="assets/Mohammed-Taqi-Jalil-Resume.pdf" class="nav__link" target="_blank" rel="noopener">Resume (PDF)</a></li>
+          </ul>
+          <button id="themeToggle" class="btn btn--ghost theme-toggle" aria-label="Toggle color theme" aria-pressed="false">
+            <span class="theme-toggle__icon" aria-hidden="true">☾</span>
+          </button>
+          <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <aside id="mobile-drawer" class="drawer" aria-hidden="true">
+      <div class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+        <div class="drawer__header">
+          <strong id="drawerTitle">Menu</strong>
+          <button class="drawer__close" id="drawerClose" aria-label="Close menu">×</button>
+        </div>
+        <ul class="drawer__links">
+          <li><a href="#home" class="nav__link">Home</a></li>
+          <li><a href="#about" class="nav__link">About</a></li>
+          <li><a href="#experience" class="nav__link">Experience</a></li>
+          <li><a href="#education" class="nav__link">Education</a></li>
+          <li><a href="#projects" class="nav__link">Projects</a></li>
+          <li><a href="#contact" class="nav__link">Contact</a></li>
+          <li><a href="resume.html" class="nav__link" target="_blank" rel="noopener">Resume</a></li>
+        </ul>
+      </div>
+      <button class="drawer__backdrop" tabindex="-1" aria-hidden="true"></button>
+    </aside>
+
+    <main>
+      <section id="home" class="section hero">
+        <div class="container">
+          <div class="hero__orbs" aria-hidden="true">
+            <span class="hero__orb hero__orb--1"></span>
+            <span class="hero__orb hero__orb--2"></span>
+            <span class="hero__orb hero__orb--3"></span>
+          </div>
+          <h1 class="hero__title hidden">
+            <span id="typed-text" aria-label="Intro title"></span>
+          </h1>
+          <p class="hero__subtitle hidden">
+            Data‑driven Computational Biology graduate specializing in data analysis, machine learning, and visualization.
+            Python, SQL, Tableau.
+          </p>
+          <div class="hero__actions hidden">
+            <a href="#projects" class="btn btn--accent">View Projects</a>
+            <a href="#contact" class="btn btn--ghost">Contact</a>
+            <a href="assets/Mohammed-Taqi-Jalil-Resume.pdf" target="_blank" rel="noopener" class="btn btn--ghost">Download Resume (PDF)</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section about reveal-on-scroll">
+        <div class="container grid grid--two about__grid">
+          <div class="about__content hidden">
+            <h2 class="section__title">About</h2>
+            <p>
+              I’m Mohammed‑Taqi Jalil, a data‑driven Computational Biology graduate based in Austin, TX. I build predictive
+              models, streamline ETL workflows, and craft clear dashboards that turn data into action.
+            </p>
+            <p>
+              Comfortable across Python, R, SQL, and BI tooling, I enjoy delivering statistically sound insights for
+              healthcare, education, and environmental datasets.
+            </p>
+            <div class="about__skills">
+              <div class="project-card__tags">
+                <span class="tag">Python</span>
+                <span class="tag">Pandas</span>
+                <span class="tag">NumPy</span>
+                <span class="tag">Matplotlib</span>
+                <span class="tag">Scikit‑learn</span>
+                <span class="tag">R</span>
+                <span class="tag">ggplot2</span>
+                <span class="tag">tidyverse</span>
+                <span class="tag">SQL</span>
+                <span class="tag">MySQL</span>
+                <span class="tag">MS SQL Server</span>
+                <span class="tag">Tableau</span>
+                <span class="tag">Power BI</span>
+                <span class="tag">EDA</span>
+                <span class="tag">Predictive Modeling</span>
+                <span class="tag">Regression</span>
+                <span class="tag">ETL</span>
+                <span class="tag">A/B & Inference</span>
+              </div>
+            </div>
+          </div>
+          <div class="about__media hidden" aria-hidden="true">
+            <img
+              src="https://via.placeholder.com/640x640.png?text=Mohammed%E2%80%91Taqi+Jalil"
+              alt="Profile placeholder"
+              class="about__img"
+              width="640"
+              height="640"
+              loading="lazy" decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" class="section experience reveal-on-scroll">
+        <div class="container">
+          <h2 class="section__title hidden"><span class="eyebrow">Experience</span> Work Experience</h2>
+          <div class="timeline timeline--alt">
+            <article class="timeline__item hidden reveal-on-scroll">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <div class="timeline__content">
+                <h3 class="timeline__role">Data Engineer Intern · SNH AI</h3>
+                <p class="timeline__meta"><span class="badge">June 2025 – Present</span> · Austin, TX</p>
+                <ul class="timeline__list">
+                  <li>Built Label Studio workflows for streamlined annotation for AI agents.</li>
+                  <li>Standardized heterogeneous XML to a unified golden dataset; validated via XSD.</li>
+                  <li>Aligned data prep with ML training across cross‑functional stakeholders.</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="timeline__item hidden reveal-on-scroll">
+              <span class="timeline__dot" aria-hidden="true"></span>
+              <div class="timeline__content">
+                <h3 class="timeline__role">Data Analyst Intern · JSoftUSA</h3>
+                <p class="timeline__meta"><span class="badge">Feb 2024 – Aug 2024</span> · Austin, TX</p>
+                <ul class="timeline__list">
+                  <li>Analyzed student data; insights contributed to 15% increase in platform adoption.</li>
+                  <li>Automated ETL with SQL; reduced manual reporting time by 30%.</li>
+                  <li>Developed Tableau dashboards; supported regression analysis for interventions.</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="education" class="section education reveal-on-scroll">
+        <div class="container">
+          <h2 class="section__title hidden">Education</h2>
+          <div class="education__grid">
+            <article class="edu-card hidden reveal-on-scroll">
+              <h3 class="edu-card__title">The University of Texas at Austin</h3>
+              <p class="edu-card__meta">B.S., Biology (Computational) · May 2024</p>
+              <p class="edu-card__desc">
+                Coursework: Data Science, Regression Analysis, Biostatistics, Statistical Modeling, Genomics, Data Mining,
+                Mathematical Statistics.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section projects reveal-on-scroll">
+        <div class="container">
+          <h2 class="section__title hidden"><span class="eyebrow">Selected Work</span> Projects</h2>
+          <div class="filters" role="tablist" aria-label="Project filters">
+            <button class="filter is-active" role="tab" aria-selected="true" data-filter="all">All</button>
+            <button class="filter" role="tab" aria-selected="false" data-filter="ml">ML</button>
+            <button class="filter" role="tab" aria-selected="false" data-filter="bio">Bioinformatics</button>
+            <button class="filter" role="tab" aria-selected="false" data-filter="dash">Dashboards</button>
+          </div>
+
+          <div class="projects__grid">
+            <div class="project-card hidden reveal-on-scroll" data-cat="ml">
+              <img
+                src="https://via.placeholder.com/800x500.png?text=Air+Pollution+Model"
+                alt="Ambient Air Pollution Prediction Model preview"
+                class="project-card__img"
+                width="800"
+                height="500"
+                loading="lazy" decoding="async"
+                srcset="https://via.placeholder.com/800x500.webp?text=Air+Pollution+Model 800w, https://via.placeholder.com/1200x750.webp?text=Air+Pollution+Model 1200w, https://via.placeholder.com/800x500.png?text=Air+Pollution+Model 800w"
+                sizes="(max-width: 720px) 100vw, 50vw"
+              />
+              <div class="project-card__body">
+                <h3 class="project-card__title">Ambient Air Pollution Prediction</h3>
+                <p class="project-card__desc">
+                  Built models (Random Forest, XGBoost, k‑NN, Lasso) to predict PM2.5 across the U.S.; performed EDA,
+                  feature selection, and cross‑validation using RMSE.
+                </p>
+                <div class="project-card__tags">
+                  <span class="tag">Python</span>
+                  <span class="tag">Pandas</span>
+                  <span class="tag">Scikit‑learn</span>
+                  <span class="tag">XGBoost</span>
+                  <span class="tag">Random Forest</span>
+                </div>
+              </div>
+              <div class="project-card__overlay"><div class="project-card__overlay-inner"><h3>Ambient Air Pollution Prediction</h3><p>View case study</p></div></div>
+            </div>
+
+            <div class="project-card hidden reveal-on-scroll" data-cat="bio">
+              <img
+                src="https://via.placeholder.com/800x500.png?text=RNA-Seq+Analysis"
+                alt="RNA‑Seq Gene Expression Analysis preview"
+                class="project-card__img"
+                width="800"
+                height="500"
+                loading="lazy" decoding="async"
+                srcset="https://via.placeholder.com/800x500.webp?text=RNA-Seq+Analysis 800w, https://via.placeholder.com/1200x750.webp?text=RNA-Seq+Analysis 1200w, https://via.placeholder.com/800x500.png?text=RNA-Seq+Analysis 800w"
+                sizes="(max-width: 720px) 100vw, 50vw"
+              />
+              <div class="project-card__body">
+                <h3 class="project-card__title">RNA‑Seq Gene Expression Analysis</h3>
+                <p class="project-card__desc">
+                  Differential expression with DESeq2; normalization, QC, and log fold‑change; visualized results with PCA,
+                  volcano plots, and heatmaps.
+                </p>
+                <div class="project-card__tags">
+                  <span class="tag">R</span>
+                  <span class="tag">DESeq2</span>
+                  <span class="tag">Bioconductor</span>
+                  <span class="tag">ggplot2</span>
+                </div>
+              </div>
+              <div class="project-card__overlay"><div class="project-card__overlay-inner"><h3>RNA‑Seq Analysis</h3><p>View case study</p></div></div>
+            </div>
+
+            <div class="project-card hidden reveal-on-scroll" data-cat="dash">
+              <img
+                src="https://via.placeholder.com/800x500.png?text=Education+Analytics+Dashboard"
+                alt="Student Success Analytics Dashboard preview"
+                class="project-card__img"
+                width="800"
+                height="500"
+                loading="lazy" decoding="async"
+                srcset="https://via.placeholder.com/800x500.webp?text=Education+Analytics+Dashboard 800w, https://via.placeholder.com/1200x750.webp?text=Education+Analytics+Dashboard 1200w, https://via.placeholder.com/800x500.png?text=Education+Analytics+Dashboard 800w"
+                sizes="(max-width: 720px) 100vw, 50vw"
+              />
+              <div class="project-card__body">
+                <h3 class="project-card__title">Student Success Analytics Dashboard</h3>
+                <p class="project-card__desc">
+                  Automated ETL with SQL and built Tableau dashboards for adoption and resource tracking; supported
+                  regression analysis to guide targeted interventions.
+                </p>
+                <div class="project-card__tags">
+                  <span class="tag">SQL</span>
+                  <span class="tag">Tableau</span>
+                  <span class="tag">ETL</span>
+                  <span class="tag">Regression</span>
+                </div>
+              </div>
+              <div class="project-card__overlay"><div class="project-card__overlay-inner"><h3>Education Analytics</h3><p>View case study</p></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact reveal-on-scroll">
+        <div class="container">
+          <h2 class="section__title hidden">Contact</h2>
+          <p class="contact__text hidden">
+            Austin, TX 78660 — Open to opportunities and collaborations in data science, analytics, and computational
+            biology.
+          </p>
+          <div class="contact__actions hidden">
+            <a class="btn btn--accent copy-email" href="mailto:mohammed.jalil.email@gmail.com" data-copy="mohammed.jalil.email@gmail.com" aria-label="Copy email to clipboard">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2 0 8 5 8-5H4Zm16 2-8 5-8-5v10h16V8Z"/></svg>
+              Email
+            </a>
+            <a class="btn btn--ghost" href="tel:+15126961614" aria-label="Call phone">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.8 15.8 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.5 11.5 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1 17 17 0 0 1-17-17 1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.2.2 2.4.6 3.6a1 1 0 0 1-.25 1l-2.2 2.2Z"/></svg>
+              Call
+            </a>
+            <a
+              class="btn btn--ghost"
+              href="https://www.linkedin.com/in/mohammedtaqijalil/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open LinkedIn"
+              >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.82-2.05 3.75-2.05 4.01 0 4.75 2.64 4.75 6.08V23h-4v-6.95c0-1.66-.03-3.79-2.31-3.79-2.31 0-2.66 1.8-2.66 3.67V23h-4V8z"/></svg>
+              LinkedIn
+            </a>
+            <a
+              class="btn btn--ghost"
+              href="https://github.com/MohammedJalil/Projects"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open GitHub"
+              >
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.04c-3.34.73-4.04-1.61-4.04-1.61-.55-1.4-1.34-1.77-1.34-1.77-1.09-.75.08-.74.08-.74 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.8 1.31 3.49 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.98 0-1.32.47-2.4 1.24-3.24-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.28-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.92 1.24 3.24 0 4.66-2.81 5.67-5.49 5.97.43.37.82 1.1.82 2.23v3.3c0 .32.22.69.82.58A12 12 0 0 0 12 .5Z"/></svg>
+              GitHub
+            </a>
+          </div>
+
+          
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>© <span id="year"></span> Mohammed‑Taqi Jalil. All rights reserved.</small>
+      </div>
+    </footer>
+
+    <button id="scrollTop" class="scroll-top" aria-label="Scroll to top">↑</button>
+    <div class="cursor-dot" aria-hidden="true"></div>
+
+    <script src="js/script.js"></script>
+  </body>
+  </html>
+
+

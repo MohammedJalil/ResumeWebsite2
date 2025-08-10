@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E1AA7D"/>
+      <stop offset="100%" stop-color="#B6D094"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="#2E2836"/>
+  <circle cx="32" cy="32" r="22" fill="url(#g)" opacity="0.2"/>
+  <text x="50%" y="54%" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="24" fill="#E1AA7D">MJ</text>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#6A2E35" opacity="0.4"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#BE8A60" opacity="0.25"/>
+  <circle cx="32" cy="32" r="18" fill="none" stroke="#E1AA7D" opacity="0.25"/>
+</svg>
+
+
