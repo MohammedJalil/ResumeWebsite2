@@ -128,6 +128,7 @@
     initCopyEmail();
     initMobileDrawer();
     initProjectFilters();
+    initProjectCards();
     // Register service worker for PWA offline shell
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/js/sw.js').catch(() => {});
@@ -227,6 +228,36 @@ function initProjectFilters(){
         const show = cat==='all' || c===cat;
         card.style.display = show ? '' : 'none';
       });
+    });
+  });
+}
+
+// Enhanced project card interactions
+function initProjectCards() {
+  const clickableCards = document.querySelectorAll('.project-card--link');
+  
+  clickableCards.forEach(card => {
+    // Add keyboard navigation support
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+    
+    // Add loading state feedback
+    card.addEventListener('click', () => {
+      const overlay = card.querySelector('.project-card__overlay');
+      if (overlay) {
+        const text = overlay.querySelector('p');
+        if (text) {
+          const originalText = text.textContent;
+          text.textContent = 'Opening...';
+          setTimeout(() => {
+            text.textContent = originalText;
+          }, 1000);
+        }
+      }
     });
   });
 }

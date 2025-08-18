@@ -408,8 +408,63 @@ a {
 .project-card__overlay h3 { margin: 0 0 6px; }
 .project-card:hover .project-card__overlay { opacity: 1; }
 
+/* Enhanced overlay for clickable cards */
+.project-card--link .project-card__overlay {
+  background: linear-gradient(to top, rgba(46,40,54,.9), rgba(46,40,54,.3));
+}
+
+.project-card--link .project-card__overlay p {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Add subtle indicator that card is clickable */
+.project-card--link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.project-card--link:hover::before {
+  opacity: 1;
+}
+
 .project-card { position: relative; transform-style: preserve-3d; }
 .project-card:hover { transform: perspective(900px) rotateX(1.2deg) rotateY(-1.2deg) translateY(-5px); }
+
+/* Clickable project card styles */
+.project-card--link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+}
+
+.project-card--link:hover {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--elev-high);
+  border-color: var(--accent);
+}
+
+.project-card--link:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.project-card--link:active {
+  transform: translateY(-4px) scale(1.01);
+}
 
 .project-card__body {
   padding: 1rem;
