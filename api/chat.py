@@ -166,15 +166,21 @@ def handler(req):
                 'body': json.dumps({'error': 'Method not allowed'})
             }
         
-        # Parse body - Vercel passes body as string or dict
-        if hasattr(req, 'json'):
-            body = req.json
-        elif hasattr(req, 'body'):
-            if isinstance(req.body, str):
-                body = json.loads(req.body) if req.body else {}
+        # Parse body - Vercel Python functions receive body as string
+        try:
+            if hasattr(req, 'json') and req.json:
+                body = req.json
+            elif hasattr(req, 'body'):
+                if isinstance(req.body, str):
+                    body = json.loads(req.body) if req.body else {}
+                elif isinstance(req.body, dict):
+                    body = req.body
+                else:
+                    body = {}
             else:
-                body = req.body or {}
-        else:
+                body = {}
+        except (json.JSONDecodeError, AttributeError) as e:
+            print(f"Error parsing request body: {e}")
             body = {}
         
         message = body.get('message', '')

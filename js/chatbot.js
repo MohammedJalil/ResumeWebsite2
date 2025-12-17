@@ -114,7 +114,16 @@
         const data = await response.json();
         hideTypingIndicator(typingId);
 
+        // Check if response has error
+        if (data.error) {
+          throw new Error(data.error || 'API returned an error');
+        }
+
         // Add assistant message
+        if (!data.response) {
+          throw new Error('No response from server');
+        }
+        
         addMessage('assistant', data.response);
         conversationHistory.push({ role: 'assistant', content: data.response });
         saveHistory();
