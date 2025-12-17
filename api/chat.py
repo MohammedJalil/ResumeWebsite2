@@ -139,11 +139,11 @@ Guidelines:
 When context is provided, use it to answer questions accurately. When no relevant context is found, you can still be helpful with general knowledge."""
 
 # Vercel serverless function handler
-def handler(req):
+def handler(request):
     """Main handler function for Vercel"""
     try:
         # Handle CORS preflight
-        if req.method == 'OPTIONS':
+        if request.method == 'OPTIONS':
             return {
                 'statusCode': 200,
                 'headers': {
@@ -155,7 +155,7 @@ def handler(req):
             }
         
         # Parse request
-        if req.method != 'POST':
+        if request.method != 'POST':
             return {
                 'statusCode': 405,
                 'headers': {
@@ -165,11 +165,16 @@ def handler(req):
                 'body': json.dumps({'error': 'Method not allowed'})
             }
         
-        # Parse body
-        if isinstance(req.body, str):
-            body = json.loads(req.body)
+        # Parse body - Vercel passes body as string or dict
+        if hasattr(request, 'json'):
+            body = request.json
+        elif hasattr(request, 'body'):
+            if isinstance(request.body, str):
+                body = json.loads(request.body) if request.body else {}
+            else:
+                body = request.body or {}
         else:
-            body = req.body or {}
+            body = {}
         
         message = body.get('message', '')
         history = body.get('history', [])
