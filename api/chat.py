@@ -138,48 +138,55 @@ Guidelines:
 
 When context is provided, use it to answer questions accurately. When no relevant context is found, you can still be helpful with general knowledge."""
 
+# CORS headers
+CORS_HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+}
+
 # Vercel serverless function handler
-# Vercel automatically detects this as the handler
 def handler(req):
     """Main handler function for Vercel"""
     try:
+        # Get request method - Vercel Python functions use req.method
+        method = getattr(req, 'method', 'GET')
+        
         # Handle CORS preflight
-        if req.method == 'OPTIONS':
+        if method == 'OPTIONS':
             return {
                 'statusCode': 200,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
-                },
+                'headers': CORS_HEADERS,
                 'body': ''
             }
         
         # Parse request
-        if req.method != 'POST':
+        if method != 'POST':
             return {
                 'statusCode': 405,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': CORS_HEADERS,
                 'body': json.dumps({'error': 'Method not allowed'})
             }
         
         # Parse body - Vercel Python functions receive body as string
         try:
+            # Try different ways to access the body
             if hasattr(req, 'json') and req.json:
                 body = req.json
             elif hasattr(req, 'body'):
-                if isinstance(req.body, str):
-                    body = json.loads(req.body) if req.body else {}
-                elif isinstance(req.body, dict):
-                    body = req.body
+                body_str = req.body
+                if isinstance(body_str, str):
+                    body = json.loads(body_str) if body_str else {}
+                elif isinstance(body_str, bytes):
+                    body = json.loads(body_str.decode('utf-8')) if body_str else {}
+                elif isinstance(body_str, dict):
+                    body = body_str
                 else:
                     body = {}
             else:
                 body = {}
-        except (json.JSONDecodeError, AttributeError) as e:
+        except (json.JSONDecodeError, AttributeError, TypeError) as e:
             print(f"Error parsing request body: {e}")
             body = {}
         
@@ -189,10 +196,7 @@ def handler(req):
         if not message:
             return {
                 'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                'headers': CORS_HEADERS,
                 'body': json.dumps({'error': 'Message is required'})
             }
         
@@ -237,10 +241,7 @@ def handler(req):
         
         return {
             'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            'headers': CORS_HEADERS,
             'body': json.dumps({
                 'response': assistant_message
             })
@@ -252,10 +253,7 @@ def handler(req):
         traceback.print_exc()
         return {
             'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            'headers': CORS_HEADERS,
             'body': json.dumps({
                 'error': 'Internal server error',
                 'message': str(e)
