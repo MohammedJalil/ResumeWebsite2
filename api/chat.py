@@ -150,8 +150,17 @@ CORS_HEADERS = {
 def handler(req):
     """Main handler function for Vercel"""
     try:
+        # Debug: Print request attributes
+        print(f"Request type: {type(req)}")
+        print(f"Request attributes: {dir(req)}")
+        
         # Get request method - Vercel Python functions use req.method
-        method = getattr(req, 'method', 'GET')
+        method = getattr(req, 'method', None)
+        if method is None:
+            # Try alternative attribute names
+            method = getattr(req, 'httpMethod', 'GET')
+        
+        print(f"Method: {method}")
         
         # Handle CORS preflight
         if method == 'OPTIONS':
@@ -170,12 +179,15 @@ def handler(req):
             }
         
         # Parse body - Vercel Python functions receive body as string
+        body = {}
         try:
             # Try different ways to access the body
             if hasattr(req, 'json') and req.json:
                 body = req.json
+                print("Using req.json")
             elif hasattr(req, 'body'):
                 body_str = req.body
+                print(f"Body type: {type(body_str)}, value: {body_str[:100] if isinstance(body_str, (str, bytes)) else body_str}")
                 if isinstance(body_str, str):
                     body = json.loads(body_str) if body_str else {}
                 elif isinstance(body_str, bytes):
@@ -184,10 +196,16 @@ def handler(req):
                     body = body_str
                 else:
                     body = {}
+            elif hasattr(req, 'get_json'):
+                body = req.get_json() or {}
+                print("Using req.get_json()")
             else:
+                print("No body attribute found")
                 body = {}
         except (json.JSONDecodeError, AttributeError, TypeError) as e:
             print(f"Error parsing request body: {e}")
+            import traceback
+            traceback.print_exc()
             body = {}
         
         message = body.get('message', '')
