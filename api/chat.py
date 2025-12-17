@@ -140,7 +140,7 @@ When context is provided, use it to answer questions accurately. When no relevan
 
 # Vercel serverless function handler
 # Vercel automatically detects this as the handler
-def handler(req, res):
+def handler(req):
     """Main handler function for Vercel"""
     try:
         # Handle CORS preflight
@@ -156,7 +156,7 @@ def handler(req, res):
             }
         
         # Parse request
-        if request.method != 'POST':
+        if req.method != 'POST':
             return {
                 'statusCode': 405,
                 'headers': {
@@ -167,13 +167,13 @@ def handler(req, res):
             }
         
         # Parse body - Vercel passes body as string or dict
-        if hasattr(request, 'json'):
-            body = request.json
-        elif hasattr(request, 'body'):
-            if isinstance(request.body, str):
-                body = json.loads(request.body) if request.body else {}
+        if hasattr(req, 'json'):
+            body = req.json
+        elif hasattr(req, 'body'):
+            if isinstance(req.body, str):
+                body = json.loads(req.body) if req.body else {}
             else:
-                body = request.body or {}
+                body = req.body or {}
         else:
             body = {}
         
@@ -229,19 +229,29 @@ def handler(req, res):
         
         assistant_message = response.choices[0].message.content
         
-        res.status(200)
-        res.setHeader('Content-Type', 'application/json')
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.json({'response': assistant_message})
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'response': assistant_message
+            })
+        }
     
     except Exception as e:
         print(f"Error: {str(e)}")
         import traceback
         traceback.print_exc()
-        res.status(500)
-        res.setHeader('Content-Type', 'application/json')
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.json({
-            'error': 'Internal server error',
-            'message': str(e)
-        })
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': 'Internal server error',
+                'message': str(e)
+            })
+        }
