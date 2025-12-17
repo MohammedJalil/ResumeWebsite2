@@ -5,6 +5,7 @@ Vercel serverless function for handling chat requests
 import json
 import os
 from typing import List, Dict, Any
+from http.server import BaseHTTPRequestHandler
 from openai import OpenAI
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -141,165 +142,121 @@ Guidelines:
 
 When context is provided, use it to answer questions accurately. When no relevant context is found, you can still be helpful with general knowledge."""
 
-# CORS headers
-CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
-}
-
-# Vercel serverless function handler
-def handler(req):
-    """Main handler function for Vercel"""
-    try:
-        # Debug: Print request attributes
-        print(f"Request type: {type(req)}")
-        print(f"Request attributes: {dir(req)}")
-        
-        # Get request method - Vercel Python functions use req.method
-        method = getattr(req, 'method', None)
-        if method is None:
-            # Try alternative attribute names
-            method = getattr(req, 'httpMethod', 'GET')
-        
-        print(f"Method: {method}")
-        
-        # Handle CORS preflight
-        if method == 'OPTIONS':
-            return {
-                'statusCode': 200,
-                'headers': CORS_HEADERS,
-                'body': ''
-            }
-        
-        # Parse request
-        if method != 'POST':
-            return {
-                'statusCode': 405,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({'error': 'Method not allowed'})
-            }
-        
-        # Parse body - Vercel Python functions receive body as string
-        body = {}
+# Vercel serverless function handler - must be a class
+class handler(BaseHTTPRequestHandler):
+    """Main handler class for Vercel"""
+    
+    def do_OPTIONS(self):
+        """Handle CORS preflight requests"""
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+    
+    def do_POST(self):
+        """Handle POST requests"""
         try:
-            # Try different ways to access the body
-            if hasattr(req, 'json') and req.json:
-                body = req.json
-                print("Using req.json")
-            elif hasattr(req, 'body'):
-                body_str = req.body
-                print(f"Body type: {type(body_str)}, value: {body_str[:100] if isinstance(body_str, (str, bytes)) else body_str}")
-                if isinstance(body_str, str):
-                    body = json.loads(body_str) if body_str else {}
-                elif isinstance(body_str, bytes):
-                    body = json.loads(body_str.decode('utf-8')) if body_str else {}
-                elif isinstance(body_str, dict):
-                    body = body_str
-                else:
-                    body = {}
-            elif hasattr(req, 'get_json'):
-                body = req.get_json() or {}
-                print("Using req.get_json()")
+            # Read request body
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length > 0:
+                body_str = self.rfile.read(content_length).decode('utf-8')
+                body = json.loads(body_str) if body_str else {}
             else:
-                print("No body attribute found")
                 body = {}
-        except (json.JSONDecodeError, AttributeError, TypeError) as e:
-            print(f"Error parsing request body: {e}")
-            import traceback
-            traceback.print_exc()
-            body = {}
-        
-        message = body.get('message', '')
-        history = body.get('history', [])
-        
-        if not message:
-            return {
-                'statusCode': 400,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({'error': 'Message is required'})
-            }
-        
-        # Load knowledge base
-        kb = load_knowledge_base()
-        chunks = chunk_knowledge_base(kb)
-        
-        # Perform semantic search
-        search_results = semantic_search(message, chunks, top_k=3)
-        context = build_context(search_results)
-        
-        # Build messages for OpenAI
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-        
-        # Add context if available
-        if context:
-            messages.append({
-                "role": "system",
-                "content": f"Relevant information about Mohammed-Taqi Jalil:\n\n{context}\n\nUse this information to answer questions accurately."
-            })
-        
-        # Add conversation history (last 10 messages)
-        for msg in history[-10:]:
-            if msg.get('role') in ['user', 'assistant']:
-                messages.append({
-                    "role": msg['role'],
-                    "content": msg.get('content', '')
-                })
-        
-        # Add current message
-        messages.append({"role": "user", "content": message})
-        
-        # Check if OpenAI client is initialized
-        if not client:
-            return {
-                'statusCode': 500,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({
+            
+            message = body.get('message', '')
+            history = body.get('history', [])
+            
+            if not message:
+                self.send_error_response(400, {'error': 'Message is required'})
+                return
+            
+            # Check if OpenAI client is initialized
+            if not client:
+                self.send_error_response(500, {
                     'error': 'OpenAI API key not configured',
                     'message': 'Please set OPENAI_API_KEY in Vercel environment variables'
                 })
-            }
-        
-        # Call OpenAI
-        try:
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=messages,
-                temperature=0.7,
-                max_tokens=500
-            )
-            assistant_message = response.choices[0].message.content
-        except Exception as openai_error:
-            print(f"OpenAI API error: {openai_error}")
-            import traceback
-            traceback.print_exc()
-            return {
-                'statusCode': 500,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({
+                return
+            
+            # Load knowledge base
+            kb = load_knowledge_base()
+            chunks = chunk_knowledge_base(kb)
+            
+            # Perform semantic search
+            search_results = semantic_search(message, chunks, top_k=3)
+            context = build_context(search_results)
+            
+            # Build messages for OpenAI
+            messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+            
+            # Add context if available
+            if context:
+                messages.append({
+                    "role": "system",
+                    "content": f"Relevant information about Mohammed-Taqi Jalil:\n\n{context}\n\nUse this information to answer questions accurately."
+                })
+            
+            # Add conversation history (last 10 messages)
+            for msg in history[-10:]:
+                if msg.get('role') in ['user', 'assistant']:
+                    messages.append({
+                        "role": msg['role'],
+                        "content": msg.get('content', '')
+                    })
+            
+            # Add current message
+            messages.append({"role": "user", "content": message})
+            
+            # Call OpenAI
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=messages,
+                    temperature=0.7,
+                    max_tokens=500
+                )
+                assistant_message = response.choices[0].message.content
+                
+                # Send success response
+                self.send_success_response({'response': assistant_message})
+                
+            except Exception as openai_error:
+                print(f"OpenAI API error: {openai_error}")
+                import traceback
+                traceback.print_exc()
+                self.send_error_response(500, {
                     'error': 'OpenAI API error',
                     'message': str(openai_error)
                 })
-            }
         
-        return {
-            'statusCode': 200,
-            'headers': CORS_HEADERS,
-            'body': json.dumps({
-                'response': assistant_message
-            })
-        }
-    
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return {
-            'statusCode': 500,
-            'headers': CORS_HEADERS,
-            'body': json.dumps({
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            self.send_error_response(500, {
                 'error': 'Internal server error',
                 'message': str(e)
             })
-        }
+    
+    def send_success_response(self, data):
+        """Send a successful JSON response"""
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps(data).encode('utf-8'))
+    
+    def send_error_response(self, status_code, error_data):
+        """Send an error JSON response"""
+        self.send_response(status_code)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps(error_data).encode('utf-8'))
+    
+    def log_message(self, format, *args):
+        """Override to prevent default logging"""
+        pass
