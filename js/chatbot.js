@@ -112,10 +112,13 @@
             message: message,
             history: conversationHistory.slice(-10), // Last 10 messages for context
           }),
+          mode: 'cors', // Explicitly set CORS mode
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const errorText = await response.text();
+          console.error('API Error Response:', errorText);
+          throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();
