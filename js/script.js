@@ -131,7 +131,7 @@
     initProjectCards();
     // Register service worker for PWA offline shell
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/js/sw.js').catch(() => {});
+      navigator.serviceWorker.register('/js/sw.js').catch(() => { });
     }
   });
 })();
@@ -214,18 +214,18 @@ function initCopyEmail() {
 }
 
 // Project filters (All / categories)
-function initProjectFilters(){
+function initProjectFilters() {
   const filters = document.querySelectorAll('.filter');
   const cards = document.querySelectorAll('.project-card');
-  if(!filters.length || !cards.length) return;
-  filters.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      filters.forEach(b=>b.classList.remove('is-active'));
+  if (!filters.length || !cards.length) return;
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
       const cat = btn.dataset.filter;
-      cards.forEach(card=>{
+      cards.forEach(card => {
         const c = card.getAttribute('data-cat');
-        const show = cat==='all' || c===cat;
+        const show = cat === 'all' || c === cat;
         card.style.display = show ? '' : 'none';
       });
     });
@@ -235,7 +235,7 @@ function initProjectFilters(){
 // Enhanced project card interactions
 function initProjectCards() {
   const clickableCards = document.querySelectorAll('.project-card--link');
-  
+
   clickableCards.forEach(card => {
     // Add keyboard navigation support
     card.addEventListener('keydown', (e) => {
@@ -244,7 +244,7 @@ function initProjectCards() {
         card.click();
       }
     });
-    
+
     // Add loading state feedback
     card.addEventListener('click', () => {
       const overlay = card.querySelector('.project-card__overlay');
@@ -263,44 +263,44 @@ function initProjectCards() {
 }
 
 // Mobile nav drawer with focus trap
-function initMobileDrawer(){
+function initMobileDrawer() {
   const btn = document.getElementById('hamburger');
   const drawer = document.getElementById('mobile-drawer');
   const panel = drawer?.querySelector('.drawer__panel');
   const closeBtn = document.getElementById('drawerClose');
   const backdrop = drawer?.querySelector('.drawer__backdrop');
-  if(!btn || !drawer || !panel || !backdrop || !closeBtn) return;
+  if (!btn || !drawer || !panel || !backdrop || !closeBtn) return;
   let lastFocus;
-  function open(){
+  function open() {
     lastFocus = document.activeElement;
     drawer.classList.add('is-open');
     btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded','true');
-    drawer.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
+    btn.setAttribute('aria-expanded', 'true');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
     panel.focus();
   }
-  function close(){
+  function close() {
     drawer.classList.remove('is-open');
     btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded','false');
-    drawer.setAttribute('aria-hidden','true');
-    document.body.style.overflow='';
+    btn.setAttribute('aria-expanded', 'false');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
     lastFocus && lastFocus.focus();
   }
-  panel.setAttribute('tabindex','-1');
-  btn.addEventListener('click',()=>{ drawer.classList.contains('is-open')?close():open(); });
+  panel.setAttribute('tabindex', '-1');
+  btn.addEventListener('click', () => { drawer.classList.contains('is-open') ? close() : open(); });
   closeBtn.addEventListener('click', close);
   backdrop.addEventListener('click', close);
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && drawer.classList.contains('is-open')) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drawer.classList.contains('is-open')) close(); });
   // basic focus trap
-  drawer.addEventListener('keydown',(e)=>{
-    if(e.key!=='Tab') return;
+  drawer.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
     const focusables = drawer.querySelectorAll('a, button, [tabindex="0"]');
     const first = focusables[0];
-    const last = focusables[focusables.length-1];
-    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 }
 
