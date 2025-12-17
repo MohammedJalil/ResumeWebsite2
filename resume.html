@@ -5,33 +5,202 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Resume • Mohammed‑Taqi Jalil</title>
   <link rel="stylesheet" href="css/style.css" />
-  <style>
-    @media print {
-      .site-footer, .nav, .scroll-top, .cursor-dot { display: none !important; }
-      body { background: #fff !important; color: #111 !important; }
-      a { color: #000 !important; text-decoration: underline; }
-    }
-    .resume { width: min(900px, 92vw); margin: 40px auto; background: #fff; color: #111; padding: 32px; border-radius: 12px; }
-    .resume h1 { margin: 0 0 8px; font-size: 28px; }
-    .resume h2 { margin: 24px 0 8px; font-size: 18px; }
-    .resume p { color: #333; }
-  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    .resume-page {
+      min-height: 100vh;
+      padding: 2rem 0;
+    }
+    .resume {
+      width: min(900px, 92vw);
+      margin: 0 auto;
+      background: rgba(106, 46, 53, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 3rem;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    .resume h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2.2rem;
+      color: var(--accent);
+      font-weight: 800;
+    }
+    .resume__contact {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .resume__contact a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .resume__contact a:hover {
+      color: var(--accent-2);
+    }
+    .resume h2 {
+      margin: 2rem 0 1rem;
+      font-size: 1.4rem;
+      color: var(--accent-2);
+      font-weight: 700;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(182, 208, 148, 0.3);
+    }
+    .resume h2:first-of-type {
+      margin-top: 0;
+    }
+    .resume p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+    .resume__section {
+      margin-bottom: 1.5rem;
+    }
+    .resume__item {
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .resume__item::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .resume__item-title {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .resume__item-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .resume__item-desc {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    @media print {
+      .resume-page {
+        padding: 0;
+      }
+      .resume {
+        background: #fff;
+        color: #111;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        padding: 2rem;
+      }
+      .resume h1, .resume h2 {
+        color: #111;
+      }
+      .resume p, .resume__item-desc {
+        color: #333;
+      }
+      .resume__contact a {
+        color: #000;
+        text-decoration: underline;
+      }
+    }
+    @media (max-width: 640px) {
+      .resume {
+        padding: 2rem 1.5rem;
+      }
+      .resume h1 {
+        font-size: 1.8rem;
+      }
+      .resume h2 {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="resume">
-    <h1>Mohammed‑Taqi Jalil</h1>
-    <p>Austin, TX · 512‑696‑1614 · mohammed.jalil.email@gmail.com · LinkedIn / GitHub</p>
-    <h2>Summary</h2>
-    <p>Data‑driven Computational Biology graduate with experience in data analysis, ML, and visualization.</p>
-    <h2>Experience</h2>
-    <p>SNH AI — Data Engineer Intern · 2025 – Present</p>
-    <p>JSoftUSA — Data Analyst Intern · 2024</p>
-    <h2>Education</h2>
-    <p>BS Biology (Computational), The University of Texas at Austin — May 2024</p>
-  </main>
+  <div class="resume-page">
+    <main class="resume">
+      <h1>Mohammed‑Taqi Jalil</h1>
+      <div class="resume__contact">
+        Austin, TX 78660 · 
+        <a href="tel:+15126961614">512‑696‑1614</a> · 
+        <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a> · 
+        <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener">LinkedIn</a> / 
+        <a href="https://github.com/MohammedJalil/Projects" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <h2>Summary</h2>
+      <p>Data‑driven Computational Biology graduate with experience in data analysis, machine learning, and visualization. Specialized in Python, SQL, Tableau, and statistical modeling. Proven track record of delivering actionable insights through predictive modeling, ETL automation, and interactive dashboards.</p>
+
+      <h2>Experience</h2>
+      <div class="resume__section">
+        <div class="resume__item">
+          <div class="resume__item-title">Data Engineer Intern · SNH AI</div>
+          <div class="resume__item-meta">June 2025 – Present · Austin, TX</div>
+          <div class="resume__item-desc">
+            Built Label Studio workflows for streamlined annotation for AI agents. Standardized heterogeneous XML to a unified golden dataset; validated via XSD. Aligned data prep with ML training across cross‑functional stakeholders.
+          </div>
+        </div>
+        <div class="resume__item">
+          <div class="resume__item-title">Data Analyst Intern · JSoftUSA</div>
+          <div class="resume__item-meta">Feb 2024 – Aug 2024 · Austin, TX</div>
+          <div class="resume__item-desc">
+            Analyzed student data; insights contributed to 15% increase in platform adoption. Automated ETL with SQL; reduced manual reporting time by 30%. Developed Tableau dashboards; supported regression analysis for interventions.
+          </div>
+        </div>
+      </div>
+
+      <h2>Education</h2>
+      <div class="resume__section">
+        <div class="resume__item">
+          <div class="resume__item-title">B.S., Biology (Computational) · The University of Texas at Austin</div>
+          <div class="resume__item-meta">May 2024</div>
+          <div class="resume__item-desc">
+            Coursework: Data Science, Regression Analysis, Biostatistics, Statistical Modeling, Genomics, Data Mining, Mathematical Statistics.
+          </div>
+        </div>
+      </div>
+
+      <h2>Technical Skills</h2>
+      <div class="resume__section">
+        <p><strong>Programming:</strong> Python, R, SQL</p>
+        <p><strong>Libraries & Tools:</strong> Pandas, NumPy, Scikit-learn, XGBoost, DESeq2, ggplot2, tidyverse</p>
+        <p><strong>Databases:</strong> MySQL, MS SQL Server</p>
+        <p><strong>Visualization:</strong> Tableau, Power BI, Matplotlib, Plotly</p>
+        <p><strong>Methodologies:</strong> EDA, Predictive Modeling, Regression, ETL, A/B Testing, Statistical Inference</p>
+      </div>
+
+      <h2>Projects</h2>
+      <div class="resume__section">
+        <div class="resume__item">
+          <div class="resume__item-title">Ambient Air Pollution Prediction</div>
+          <div class="resume__item-desc">
+            Built models (Random Forest, XGBoost, k‑NN, Lasso) to predict PM2.5 across the U.S.; performed EDA, feature selection, and cross‑validation using RMSE.
+          </div>
+        </div>
+        <div class="resume__item">
+          <div class="resume__item-title">IntelliVest Investment Analytics Platform</div>
+          <div class="resume__item-desc">
+            Developed a comprehensive investment analytics platform with real-time market data integration, portfolio optimization algorithms, and interactive dashboards.
+          </div>
+        </div>
+        <div class="resume__item">
+          <div class="resume__item-title">RNA‑Seq Gene Expression Analysis</div>
+          <div class="resume__item-desc">
+            Differential expression with DESeq2; normalization, QC, and log fold‑change; visualized results with PCA, volcano plots, and heatmaps.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
 

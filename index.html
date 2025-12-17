@@ -98,12 +98,8 @@
 
   <main>
     <section id="home" class="section hero">
+      <canvas id="particleCanvas" class="hero__particles" aria-hidden="true"></canvas>
       <div class="container">
-        <div class="hero__orbs" aria-hidden="true">
-          <span class="hero__orb hero__orb--1"></span>
-          <span class="hero__orb hero__orb--2"></span>
-          <span class="hero__orb hero__orb--3"></span>
-        </div>
         <h1 class="hero__title hidden">
           <span id="typed-text" aria-label="Intro title"></span>
         </h1>
@@ -112,9 +108,9 @@
           Python, SQL, Tableau.
         </p>
         <div class="hero__actions hidden">
-          <a href="#projects" class="btn btn--accent">View Projects</a>
-          <a href="#contact" class="btn btn--ghost">Contact</a>
-          <a href="assets/Mohammed-Taqi-Jalil-Resume.pdf" target="_blank" rel="noopener" class="btn btn--ghost">Download
+          <a href="#projects" class="btn btn--accent btn--magnetic">View Projects</a>
+          <a href="#contact" class="btn btn--ghost btn--magnetic">Contact</a>
+          <a href="assets/Mohammed-Taqi-Jalil-Resume.pdf" target="_blank" rel="noopener" class="btn btn--ghost btn--magnetic">Download
             Resume (PDF)</a>
         </div>
       </div>
@@ -134,19 +130,62 @@
             healthcare, education, and environmental datasets.
           </p>
           <div class="about__skills">
-            <div class="project-card__tags">
-              <span class="tag">Python</span>
+            <div class="skills-visualization">
+              <div class="skill-bar">
+                <div class="skill-bar__label">
+                  <span>Python</span>
+                  <span class="skill-bar__percent">95%</span>
+                </div>
+                <div class="skill-bar__track">
+                  <div class="skill-bar__fill" data-skill="95"></div>
+                </div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar__label">
+                  <span>SQL</span>
+                  <span class="skill-bar__percent">90%</span>
+                </div>
+                <div class="skill-bar__track">
+                  <div class="skill-bar__fill" data-skill="90"></div>
+                </div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar__label">
+                  <span>Tableau</span>
+                  <span class="skill-bar__percent">88%</span>
+                </div>
+                <div class="skill-bar__track">
+                  <div class="skill-bar__fill" data-skill="88"></div>
+                </div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar__label">
+                  <span>R</span>
+                  <span class="skill-bar__percent">85%</span>
+                </div>
+                <div class="skill-bar__track">
+                  <div class="skill-bar__fill" data-skill="85"></div>
+                </div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-bar__label">
+                  <span>Machine Learning</span>
+                  <span class="skill-bar__percent">82%</span>
+                </div>
+                <div class="skill-bar__track">
+                  <div class="skill-bar__fill" data-skill="82"></div>
+                </div>
+              </div>
+            </div>
+            <div class="project-card__tags" style="margin-top: 1.5rem;">
               <span class="tag">Pandas</span>
               <span class="tag">NumPy</span>
               <span class="tag">Matplotlib</span>
               <span class="tag">Scikit‑learn</span>
-              <span class="tag">R</span>
               <span class="tag">ggplot2</span>
               <span class="tag">tidyverse</span>
-              <span class="tag">SQL</span>
               <span class="tag">MySQL</span>
               <span class="tag">MS SQL Server</span>
-              <span class="tag">Tableau</span>
               <span class="tag">Power BI</span>
               <span class="tag">EDA</span>
               <span class="tag">Predictive Modeling</span>
@@ -168,7 +207,9 @@
         <h2 class="section__title hidden"><span class="eyebrow">Experience</span> Work Experience</h2>
         <div class="timeline timeline--alt">
           <article class="timeline__item hidden reveal-on-scroll">
-            <span class="timeline__dot" aria-hidden="true"></span>
+            <span class="timeline__dot" aria-hidden="true">
+              <div class="timeline__logo">SNH</div>
+            </span>
             <div class="timeline__content">
               <h3 class="timeline__role">Data Engineer Intern · SNH AI</h3>
               <p class="timeline__meta"><span class="badge">June 2025 – Present</span> · Austin, TX</p>
@@ -177,11 +218,19 @@
                 <li>Standardized heterogeneous XML to a unified golden dataset; validated via XSD.</li>
                 <li>Aligned data prep with ML training across cross‑functional stakeholders.</li>
               </ul>
+              <div class="timeline__tech-stack">
+                <span class="tag tag--small">Python</span>
+                <span class="tag tag--small">XML</span>
+                <span class="tag tag--small">XSD</span>
+                <span class="tag tag--small">Label Studio</span>
+              </div>
             </div>
           </article>
 
           <article class="timeline__item hidden reveal-on-scroll">
-            <span class="timeline__dot" aria-hidden="true"></span>
+            <span class="timeline__dot" aria-hidden="true">
+              <div class="timeline__logo">JS</div>
+            </span>
             <div class="timeline__content">
               <h3 class="timeline__role">Data Analyst Intern · JSoftUSA</h3>
               <p class="timeline__meta"><span class="badge">Feb 2024 – Aug 2024</span> · Austin, TX</p>
@@ -190,6 +239,12 @@
                 <li>Automated ETL with SQL; reduced manual reporting time by 30%.</li>
                 <li>Developed Tableau dashboards; supported regression analysis for interventions.</li>
               </ul>
+              <div class="timeline__tech-stack">
+                <span class="tag tag--small">SQL</span>
+                <span class="tag tag--small">Tableau</span>
+                <span class="tag tag--small">ETL</span>
+                <span class="tag tag--small">Regression Analysis</span>
+              </div>
             </div>
           </article>
         </div>
@@ -223,9 +278,9 @@
         </div>
 
         <div class="projects__grid">
-          <a href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank"
-            rel="noopener noreferrer" class="project-card project-card--link hidden reveal-on-scroll" data-cat="ml"
-            aria-label="View Ambient Air Pollution Prediction repository on GitHub">
+          <a href="#" class="project-card project-card--link hidden reveal-on-scroll" data-cat="ml"
+            data-project="air-pollution"
+            aria-label="View Ambient Air Pollution Prediction project details">
             <img src="assets/air-pollution-model.png" alt="Ambient Air Pollution Prediction Model preview"
               class="project-card__img" width="800" height="500" loading="lazy" decoding="async"
               srcset="assets/air-pollution-model.png 800w, assets/air-pollution-model.png 1200w"
@@ -252,9 +307,9 @@
             </div>
           </a>
 
-          <a href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank" rel="noopener noreferrer"
-            class="project-card project-card--link hidden reveal-on-scroll" data-cat="bio"
-            aria-label="View RNA-Seq Gene Expression Analysis repository on GitHub">
+          <a href="#" class="project-card project-card--link hidden reveal-on-scroll" data-cat="bio"
+            data-project="rna-seq"
+            aria-label="View RNA-Seq Gene Expression Analysis project details">
             <img src="assets/rna-seq-analysis.png" alt="RNA‑Seq Gene Expression Analysis preview"
               class="project-card__img" width="800" height="500" loading="lazy" decoding="async"
               srcset="assets/rna-seq-analysis.png 800w, assets/rna-seq-analysis.png 1200w"
@@ -281,9 +336,9 @@
             </div>
           </a>
 
-          <a href="https://github.com/MohammedJalil/intellivest" target="_blank" rel="noopener noreferrer"
-            class="project-card project-card--link hidden reveal-on-scroll" data-cat="fin"
-            aria-label="View IntelliVest Investment Analytics Platform repository on GitHub">
+          <a href="#" class="project-card project-card--link hidden reveal-on-scroll" data-cat="fin"
+            data-project="intellivest"
+            aria-label="View IntelliVest Investment Analytics Platform project details">
             <img src="assets/intellivest-dashboard.png" alt="IntelliVest Investment Analytics Platform preview"
               class="project-card__img" width="800" height="500" loading="lazy" decoding="async"
               srcset="assets/intellivest-dashboard.png 800w, assets/intellivest-dashboard.png 1200w"
@@ -366,10 +421,39 @@
     </div>
   </footer>
 
+  <div class="scroll-progress" aria-hidden="true"></div>
   <button id="scrollTop" class="scroll-top" aria-label="Scroll to top">↑</button>
   <div class="cursor-dot" aria-hidden="true"></div>
 
+  <!-- Project Modal -->
+  <div id="projectModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modalTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Close modal">×</button>
+      <div class="modal__body">
+        <h2 id="modalTitle" class="modal__title"></h2>
+        <div class="modal__image-container"></div>
+        <div class="modal__section">
+          <h3>Problem</h3>
+          <p class="modal__problem"></p>
+        </div>
+        <div class="modal__section">
+          <h3>Tech Stack</h3>
+          <div class="modal__tags"></div>
+        </div>
+        <div class="modal__section">
+          <h3>Outcome</h3>
+          <p class="modal__outcome"></p>
+        </div>
+        <div class="modal__actions">
+          <a href="#" class="btn btn--accent modal__github-link" target="_blank" rel="noopener">View on GitHub →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/script.js"></script>
+  <script src="js/particles.js"></script>
 </body>
 
 </html>

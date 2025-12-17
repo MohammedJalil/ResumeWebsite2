@@ -129,6 +129,10 @@
     initMobileDrawer();
     initProjectFilters();
     initProjectCards();
+    initScrollProgress();
+    initMagneticButtons();
+    initSkillBars();
+    initProjectModals();
     // Register service worker for PWA offline shell
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/js/sw.js').catch(() => { });
@@ -220,13 +224,27 @@ function initProjectFilters() {
   if (!filters.length || !cards.length) return;
   filters.forEach(btn => {
     btn.addEventListener('click', () => {
-      filters.forEach(b => b.classList.remove('is-active'));
+      filters.forEach(b => {
+        b.classList.remove('is-active');
+        b.setAttribute('aria-selected', 'false');
+      });
       btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
       const cat = btn.dataset.filter;
       cards.forEach(card => {
         const c = card.getAttribute('data-cat');
         const show = cat === 'all' || c === cat;
-        card.style.display = show ? '' : 'none';
+        if (show) {
+          card.style.display = '';
+          // Force image resize after display change
+          const img = card.querySelector('.project-card__img');
+          if (img) {
+            // Trigger reflow to ensure proper sizing
+            void img.offsetWidth;
+          }
+        } else {
+          card.style.display = 'none';
+        }
       });
     });
   });
@@ -245,20 +263,168 @@ function initProjectCards() {
       }
     });
 
-    // Add loading state feedback
-    card.addEventListener('click', () => {
-      const overlay = card.querySelector('.project-card__overlay');
-      if (overlay) {
-        const text = overlay.querySelector('p');
-        if (text) {
-          const originalText = text.textContent;
-          text.textContent = 'Opening...';
-          setTimeout(() => {
-            text.textContent = originalText;
-          }, 1000);
+    // Update overlay text for modal
+    const overlay = card.querySelector('.project-card__overlay');
+    if (overlay) {
+      const text = overlay.querySelector('p');
+      if (text) {
+        text.textContent = 'View Details →';
+      }
+    }
+  });
+}
+
+// Scroll Progress Bar
+function initScrollProgress() {
+  const progressBar = document.querySelector('.scroll-progress');
+  if (!progressBar) return;
+
+  function updateProgress() {
+    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (window.scrollY / windowHeight) * 100;
+    progressBar.style.width = `${scrolled}%`;
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+}
+
+// Magnetic Buttons
+function initMagneticButtons() {
+  const magneticButtons = document.querySelectorAll('.btn--magnetic');
+  if (!magneticButtons.length) return;
+
+  magneticButtons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      const moveX = x * 0.15;
+      const moveY = y * 0.15;
+
+      btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+// Animated Skill Bars
+function initSkillBars() {
+  const skillBars = document.querySelectorAll('.skill-bar__fill');
+  if (!skillBars.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const skillLevel = entry.target.getAttribute('data-skill');
+          entry.target.style.width = `${skillLevel}%`;
+          observer.unobserve(entry.target);
         }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  skillBars.forEach(bar => observer.observe(bar));
+}
+
+// Project Modals
+function initProjectModals() {
+  const projectCards = document.querySelectorAll('.project-card--link[data-project]');
+  const modal = document.getElementById('projectModal');
+  if (!modal || !projectCards.length) return;
+
+  const modalTitle = modal.querySelector('#modalTitle');
+  const modalImage = modal.querySelector('.modal__image-container');
+  const modalProblem = modal.querySelector('.modal__problem');
+  const modalTags = modal.querySelector('.modal__tags');
+  const modalOutcome = modal.querySelector('.modal__outcome');
+  const modalGithubLink = modal.querySelector('.modal__github-link');
+  const modalClose = modal.querySelector('.modal__close');
+  const modalBackdrop = modal.querySelector('.modal__backdrop');
+
+  // Project data
+  const projectData = {
+    'air-pollution': {
+      title: 'Ambient Air Pollution Prediction',
+      image: 'assets/air-pollution-model.png',
+      problem: 'Predicting PM2.5 levels across the U.S. is challenging due to complex environmental factors, spatial variability, and the need for accurate real-time forecasting to support public health decisions.',
+      tech: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'Random Forest'],
+      outcome: 'Built multiple predictive models (Random Forest, XGBoost, k-NN, Lasso) achieving competitive RMSE scores. Performed comprehensive EDA, feature selection, and cross-validation to ensure model reliability.',
+      github: 'https://github.com/MohammedJalil/Air-Pollution-Predictive-Model'
+    },
+    'rna-seq': {
+      title: 'RNA-Seq Gene Expression Analysis',
+      image: 'assets/rna-seq-analysis.png',
+      problem: 'Identifying differentially expressed genes in RNA-Seq data requires robust statistical methods to handle count data, normalization challenges, and multiple testing corrections.',
+      tech: ['R', 'DESeq2', 'Bioconductor', 'ggplot2'],
+      outcome: 'Successfully performed differential expression analysis using DESeq2, with proper normalization and QC. Generated publication-quality visualizations including PCA plots, volcano plots, and heatmaps to identify key gene expression patterns.',
+      github: 'https://github.com/MohammedJalil/rna-seq-analysis'
+    },
+    'intellivest': {
+      title: 'IntelliVest Investment Analytics Platform',
+      image: 'assets/intellivest-dashboard.png',
+      problem: 'Investors need real-time market data, portfolio optimization tools, and interactive visualizations to make informed investment decisions efficiently.',
+      tech: ['Python', 'Streamlit', 'Pandas', 'yfinance', 'Plotly', 'Machine Learning'],
+      outcome: 'Developed a comprehensive investment analytics platform with real-time market data integration, portfolio optimization algorithms, and interactive dashboards. The platform enables users to analyze stocks, optimize portfolios, and visualize performance metrics.',
+      github: 'https://github.com/MohammedJalil/intellivest'
+    }
+  };
+
+  function openModal(projectId) {
+    const data = projectData[projectId];
+    if (!data) return;
+
+    modalTitle.textContent = data.title;
+    modalImage.innerHTML = `<img src="${data.image}" alt="${data.title}" loading="lazy">`;
+    modalProblem.textContent = data.problem;
+    modalOutcome.textContent = data.outcome;
+    modalGithubLink.href = data.github;
+
+    // Update tags
+    modalTags.innerHTML = '';
+    data.tech.forEach(tech => {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = tech;
+      modalTags.appendChild(tag);
+    });
+
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  }
+
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Open modal on card click
+  projectCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const projectId = card.getAttribute('data-project');
+      if (projectId) {
+        openModal(projectId);
       }
     });
+  });
+
+  // Close modal
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+      closeModal();
+    }
   });
 }
 
