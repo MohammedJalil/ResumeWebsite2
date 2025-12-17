@@ -126,7 +126,11 @@
       } catch (error) {
         console.error('Chatbot error:', error);
         hideTypingIndicator(typingId);
-        showError('Sorry, I encountered an error. Please try again.');
+        let errorMessage = 'Sorry, I encountered an error. Please try again.';
+        if (error.message) {
+          errorMessage += ` (${error.message})`;
+        }
+        showError(errorMessage);
       } finally {
         isProcessing = false;
         sendButton.disabled = false;
