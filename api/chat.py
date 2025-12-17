@@ -139,11 +139,12 @@ Guidelines:
 When context is provided, use it to answer questions accurately. When no relevant context is found, you can still be helpful with general knowledge."""
 
 # Vercel serverless function handler
-def handler(request):
+# Vercel automatically detects this as the handler
+def handler(req, res):
     """Main handler function for Vercel"""
     try:
         # Handle CORS preflight
-        if request.method == 'OPTIONS':
+        if req.method == 'OPTIONS':
             return {
                 'statusCode': 200,
                 'headers': {
@@ -228,29 +229,19 @@ def handler(request):
         
         assistant_message = response.choices[0].message.content
         
-        return {
-            'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'response': assistant_message
-            })
-        }
+        res.status(200)
+        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.json({'response': assistant_message})
     
     except Exception as e:
         print(f"Error: {str(e)}")
         import traceback
         traceback.print_exc()
-        return {
-            'statusCode': 500,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            'body': json.dumps({
-                'error': 'Internal server error',
-                'message': str(e)
-            })
-        }
+        res.status(500)
+        res.setHeader('Content-Type', 'application/json')
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.json({
+            'error': 'Internal server error',
+            'message': str(e)
+        })
