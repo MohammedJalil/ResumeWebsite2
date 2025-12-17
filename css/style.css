@@ -550,7 +550,7 @@ a {
 }
 
 .project-card:hover {
-  transform: translateY(-5px);
+  transform: perspective(900px) rotateX(1.2deg) rotateY(-1.2deg) translateY(-5px);
   box-shadow: var(--elev-high);
   border-color: rgba(255, 255, 255, 0.22);
 }
@@ -618,10 +618,6 @@ a {
 .project-card {
   position: relative;
   transform-style: preserve-3d;
-}
-
-.project-card:hover {
-  transform: perspective(900px) rotateX(1.2deg) rotateY(-1.2deg) translateY(-5px);
 }
 
 /* Clickable project card styles */

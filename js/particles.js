@@ -9,6 +9,21 @@
     const ctx = canvas.getContext('2d');
     let particles = [];
     let animationFrameId;
+    
+    // Cache the accent color to avoid repeated DOM queries
+    let accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    
+    // Update accent color when theme changes
+    function updateAccentColor() {
+      accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    }
+    
+    // Listen for theme changes
+    const themeObserver = new MutationObserver(updateAccentColor);
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
 
     // Set canvas size
     function resizeCanvas() {
@@ -43,7 +58,7 @@
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        ctx.fillStyle = accentColor;
         ctx.fill();
       }
     }
