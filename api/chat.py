@@ -11,7 +11,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 # Initialize OpenAI client
-client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY'))
+openai_key = os.environ.get('OPENAI_API_KEY')
+if not openai_key:
+    print("WARNING: OPENAI_API_KEY not found in environment variables")
+client = OpenAI(api_key=openai_key) if openai_key else None
 
 # Load knowledge base
 def load_knowledge_base():
@@ -247,15 +250,38 @@ def handler(req):
         # Add current message
         messages.append({"role": "user", "content": message})
         
-        # Call OpenAI
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=messages,
-            temperature=0.7,
-            max_tokens=500
-        )
+        # Check if OpenAI client is initialized
+        if not client:
+            return {
+                'statusCode': 500,
+                'headers': CORS_HEADERS,
+                'body': json.dumps({
+                    'error': 'OpenAI API key not configured',
+                    'message': 'Please set OPENAI_API_KEY in Vercel environment variables'
+                })
+            }
         
-        assistant_message = response.choices[0].message.content
+        # Call OpenAI
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=messages,
+                temperature=0.7,
+                max_tokens=500
+            )
+            assistant_message = response.choices[0].message.content
+        except Exception as openai_error:
+            print(f"OpenAI API error: {openai_error}")
+            import traceback
+            traceback.print_exc()
+            return {
+                'statusCode': 500,
+                'headers': CORS_HEADERS,
+                'body': json.dumps({
+                    'error': 'OpenAI API error',
+                    'message': str(openai_error)
+                })
+            }
         
         return {
             'statusCode': 200,
