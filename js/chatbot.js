@@ -54,10 +54,17 @@
     // Send message
     inputForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      e.stopPropagation();
       if (isProcessing || !input.value.trim()) return;
-      await sendMessage(input.value.trim());
-      input.value = '';
-      autoResizeTextarea(input);
+      try {
+        await sendMessage(input.value.trim());
+        input.value = '';
+        autoResizeTextarea(input);
+      } catch (error) {
+        console.error('Error in form submission:', error);
+        // Error is already handled in sendMessage, but prevent any page refresh
+        e.preventDefault();
+      }
     });
 
     // Auto-resize textarea
