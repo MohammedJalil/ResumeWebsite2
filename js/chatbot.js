@@ -56,19 +56,15 @@
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
+      
       if (isProcessing || !input.value.trim()) return;
       
       const messageText = input.value.trim();
       input.value = '';
       autoResizeTextarea(input);
       
-      try {
-        await sendMessage(messageText);
-      } catch (error) {
-        // Error is already handled in sendMessage
-        return false;
-      }
-      return false;
+      // Call sendMessage - errors are handled inside
+      await sendMessage(messageText);
     });
 
     // Auto-resize textarea
@@ -107,15 +103,18 @@
       const typingId = showTypingIndicator();
 
       try {
+        // Log the request for debugging
+        const requestBody = {
+          message: message,
+          history: conversationHistory.slice(-10), // Last 10 messages for context
+        };
+        
         const response = await fetch(API_ENDPOINT, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            message: message,
-            history: conversationHistory.slice(-10), // Last 10 messages for context
-          }),
+          body: JSON.stringify(requestBody),
           mode: 'cors', // Explicitly set CORS mode
         });
 
@@ -158,6 +157,15 @@
         }
       } catch (error) {
         hideTypingIndicator(typingId);
+        
+        // Log error for debugging
+        console.error('Chatbot sendMessage error:', error);
+        console.error('API_ENDPOINT:', API_ENDPOINT);
+        console.error('Error details:', {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        });
         
         // Remove user message from history if it failed
         if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'user') {
