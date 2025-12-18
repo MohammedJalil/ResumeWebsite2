@@ -60,12 +60,9 @@ class handler(BaseHTTPRequestHandler):
             
             # Perform semantic search
             try:
-                search_results = self.semantic_search(message, chunks, top_k=3, vectorizer=TfidfVectorizer, cosine_similarity=cosine_similarity, np=np)
+                search_results = self.semantic_search(message, chunks, top_k=5, vectorizer=TfidfVectorizer, cosine_similarity=cosine_similarity, np=np)
                 context = self.build_context(search_results)
-            except Exception as search_error:
-                print(f"Semantic search error: {search_error}")
-                import traceback
-                traceback.print_exc()
+            except Exception:
                 # Fallback: use empty context if search fails
                 context = ""
                 search_results = []
@@ -73,15 +70,13 @@ class handler(BaseHTTPRequestHandler):
             # System prompt
             system_prompt = """You are an AI assistant for Mohammed-Taqi Jalil's portfolio website. You help visitors learn about his experience, projects, skills, and background.
 
-Guidelines:
-- Answer questions about Mohammed-Taqi's portfolio using the provided context when available
-- Be friendly, professional, and concise
-- If asked about something not in the context, you can provide general information or say you don't have specific details
-- For portfolio-related questions, prioritize accuracy and use the context provided
-- For general questions unrelated to the portfolio, you can answer like a helpful assistant
-- Always maintain a professional tone appropriate for a portfolio website
-
-When context is provided, use it to answer questions accurately. When no relevant context is found, you can still be helpful with general knowledge."""
+CRITICAL RULES:
+- ONLY use information provided in the context below. Do NOT make up or invent information.
+- If the context contains information about Mohammed-Taqi's projects, experience, or skills, you MUST use that exact information.
+- If asked about something not in the context, say "I don't have specific information about that in Mohammed-Taqi's portfolio. Would you like to know about his projects, experience, or skills instead?"
+- NEVER invent projects, companies, or experiences that aren't in the provided context.
+- Be friendly, professional, and concise.
+- Always maintain a professional tone appropriate for a portfolio website."""
             
             # Build messages for OpenAI
             messages = [{"role": "system", "content": system_prompt}]
@@ -90,7 +85,13 @@ When context is provided, use it to answer questions accurately. When no relevan
             if context:
                 messages.append({
                     "role": "system",
-                    "content": f"Relevant information about Mohammed-Taqi Jalil:\n\n{context}\n\nUse this information to answer questions accurately."
+                    "content": f"IMPORTANT: The following is the ONLY information available about Mohammed-Taqi Jalil. You MUST use ONLY this information when answering questions about him:\n\n{context}\n\nIf asked about something not mentioned above, you must say you don't have that information rather than making something up."
+                })
+            else:
+                # If no context found, add a reminder to be honest
+                messages.append({
+                    "role": "system",
+                    "content": "You do not have specific information about this topic in Mohammed-Taqi's portfolio. Please say you don't have that information rather than inventing details."
                 })
             
             # Add conversation history (last 10 messages)
@@ -118,18 +119,12 @@ When context is provided, use it to answer questions accurately. When no relevan
                 self.send_success_response({'response': assistant_message})
                 
             except Exception as openai_error:
-                print(f"OpenAI API error: {openai_error}")
-                import traceback
-                traceback.print_exc()
                 self.send_error_response(500, {
                     'error': 'OpenAI API error',
                     'message': str(openai_error)
                 })
         
         except Exception as e:
-            print(f"Error: {str(e)}")
-            import traceback
-            traceback.print_exc()
             self.send_error_response(500, {
                 'error': 'Internal server error',
                 'message': str(e)
@@ -138,11 +133,22 @@ When context is provided, use it to answer questions accurately. When no relevan
     def load_knowledge_base(self):
         """Load the knowledge base from JSON file"""
         try:
-            file_path = os.path.join(os.path.dirname(__file__), 'knowledge-base.json')
-            with open(file_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"Error loading knowledge base: {e}")
+            # Try multiple paths for Vercel compatibility
+            base_dir = os.path.dirname(__file__)
+            possible_paths = [
+                os.path.join(base_dir, 'knowledge-base.json'),
+                os.path.join(os.path.dirname(base_dir), 'api', 'knowledge-base.json'),
+                'knowledge-base.json'
+            ]
+            
+            for file_path in possible_paths:
+                if os.path.exists(file_path):
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        return json.load(f)
+            
+            # If file not found, return empty dict
+            return {}
+        except Exception:
             return {}
     
     def chunk_knowledge_base(self, kb):
@@ -186,8 +192,15 @@ When context is provided, use it to answer questions accurately. When no relevan
         
         if 'projects' in kb:
             for project in kb['projects']:
-                proj_text = f"Project: {project.get('title', '')} - {project.get('description', '')}. "
-                proj_text += f"Technologies: {', '.join(project.get('technologies', []))}"
+                proj_text = f"Project: {project.get('title', '')} ({project.get('category', '')}). "
+                proj_text += f"Description: {project.get('description', '')}. "
+                if project.get('problem'):
+                    proj_text += f"Problem: {project.get('problem', '')}. "
+                if project.get('outcome'):
+                    proj_text += f"Outcome: {project.get('outcome', '')}. "
+                proj_text += f"Technologies used: {', '.join(project.get('technologies', []))}"
+                if project.get('github'):
+                    proj_text += f" GitHub: {project.get('github', '')}"
                 chunks.append({
                     'text': proj_text,
                     'source': 'projects'
@@ -222,12 +235,22 @@ When context is provided, use it to answer questions accurately. When no relevan
             
             results = []
             for idx in top_indices:
-                if similarities[idx] > 0.1:
+                # Lower threshold to include more relevant results, especially for project queries
+                if similarities[idx] > 0.05:
                     results.append(chunks[idx])
             
+            # If no results found, return top chunks anyway (especially for "projects" queries)
+            if not results and chunks:
+                # For queries about projects, include all project chunks
+                query_lower = query.lower()
+                if 'project' in query_lower or 'work' in query_lower or 'build' in query_lower:
+                    project_chunks = [c for c in chunks if c.get('source') == 'projects']
+                    if project_chunks:
+                        return project_chunks[:top_k]
+                return chunks[:top_k]
+            
             return results
-        except Exception as e:
-            print(f"Error in semantic search: {e}")
+        except Exception:
             return chunks[:top_k] if chunks else []
     
     def build_context(self, search_results):

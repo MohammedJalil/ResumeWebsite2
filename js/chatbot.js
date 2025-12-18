@@ -65,9 +65,7 @@
       try {
         await sendMessage(messageText);
       } catch (error) {
-        console.error('Error in form submission:', error);
         // Error is already handled in sendMessage
-        // Prevent any default behavior
         return false;
       }
       return false;
@@ -125,7 +123,6 @@
           let errorText = '';
           try {
             errorText = await response.text();
-            console.error('API Error Response:', response.status, errorText);
           } catch (e) {
             errorText = `HTTP ${response.status}`;
           }
@@ -136,7 +133,6 @@
         try {
           data = await response.json();
         } catch (jsonError) {
-          console.error('JSON parse error:', jsonError);
           throw new Error('Invalid response from server');
         }
         
@@ -161,7 +157,6 @@
           clearHistoryButton.style.display = 'block';
         }
       } catch (error) {
-        console.error('Chatbot error:', error);
         hideTypingIndicator(typingId);
         
         // Remove user message from history if it failed
@@ -281,7 +276,7 @@
           return JSON.parse(stored);
         }
       } catch (error) {
-        console.error('Error loading chat history:', error);
+        // Silently fail if history can't be loaded
       }
       return [];
     }
@@ -292,14 +287,13 @@
         const limitedHistory = conversationHistory.slice(-50);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(limitedHistory));
       } catch (error) {
-        console.error('Error saving chat history:', error);
         // If storage is full, clear old history
         if (error.name === 'QuotaExceededError') {
           conversationHistory = conversationHistory.slice(-25);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(conversationHistory));
           } catch (e) {
-            console.error('Failed to save after clearing:', e);
+            // Silently fail if still can't save
           }
         }
       }
@@ -332,7 +326,6 @@
   window.addEventListener('error', (e) => {
     if (e.message && e.message.includes('chatbot')) {
       e.preventDefault();
-      console.error('Chatbot global error:', e);
     }
   });
   
@@ -340,7 +333,6 @@
   window.addEventListener('unhandledrejection', (e) => {
     if (e.reason && (e.reason.message && e.reason.message.includes('fetch') || e.reason.message && e.reason.message.includes('chatbot'))) {
       e.preventDefault();
-      console.error('Chatbot unhandled rejection:', e.reason);
     }
   });
 })();
