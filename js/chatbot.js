@@ -120,16 +120,31 @@
         }
         
         console.log('Making fetch request to:', endpoint);
+        console.log('Request body:', requestBody);
+        console.log('Current location:', typeof window !== 'undefined' ? window.location.href : 'N/A');
         
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestBody),
-          mode: 'cors',
-          credentials: 'omit',
-        });
+        // Try the fetch with error handling
+        let response;
+        try {
+          response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+            mode: 'cors',
+            credentials: 'omit',
+          });
+          console.log('Fetch response status:', response.status, response.statusText);
+        } catch (fetchError) {
+          console.error('Fetch error details:', {
+            name: fetchError.name,
+            message: fetchError.message,
+            stack: fetchError.stack,
+            endpoint: endpoint
+          });
+          throw fetchError;
+        }
 
         if (!response.ok) {
           let errorText = '';

@@ -20,7 +20,16 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
+  const url = new URL(req.url);
+  
+  // Don't cache API requests - let them go through normally
+  if (url.pathname.startsWith('/api/')) {
+    return; // Let the browser handle it normally
+  }
+  
+  // Only handle GET requests for static assets
   if (req.method !== 'GET') return;
+  
   e.respondWith(
     caches.match(req).then((cached) =>
       cached || fetch(req).then((res) => {
