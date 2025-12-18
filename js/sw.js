@@ -23,12 +23,10 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(req.url);
   
   // Don't cache API requests - let them go through normally
-  if (url.pathname.startsWith('/api/')) {
-    return; // Let the browser handle it normally
+  // Also skip POST requests entirely (they're always API calls)
+  if (url.pathname.startsWith('/api/') || req.method !== 'GET') {
+    return; // Let the browser handle it normally, don't intercept
   }
-  
-  // Only handle GET requests for static assets
-  if (req.method !== 'GET') return;
   
   e.respondWith(
     caches.match(req).then((cached) =>
