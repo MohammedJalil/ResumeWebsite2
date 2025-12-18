@@ -7,14 +7,20 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  // Skip waiting to activate immediately
+  self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)));
 });
 
 self.addEventListener('activate', (e) => {
+  // Take control of all pages immediately
   e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    )
+    Promise.all([
+      caches.keys().then((keys) =>
+        Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+      ),
+      self.clients.claim() // Take control of all clients immediately
+    ])
   );
 });
 

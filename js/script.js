@@ -135,7 +135,21 @@
     initProjectModals();
     // Register service worker for PWA offline shell
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/js/sw.js').catch(() => { });
+      navigator.serviceWorker.register('/js/sw.js', { updateViaCache: 'none' })
+        .then((registration) => {
+          // Force update on page load
+          registration.update();
+        })
+        .catch(() => { });
+      
+      // Unregister old service workers on page load to ensure clean state
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => {
+          if (registration.scope.includes(window.location.origin)) {
+            registration.update(); // Force update
+          }
+        });
+      });
     }
   });
 })();
