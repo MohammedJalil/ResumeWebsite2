@@ -124,6 +124,7 @@
         console.log('Current location:', typeof window !== 'undefined' && window.location ? window.location.href : 'N/A');
         
         // Try the fetch with error handling
+        // Use cache: 'no-store' to bypass service worker cache
         let response;
         try {
           response = await fetch(endpoint, {
@@ -134,6 +135,7 @@
             body: JSON.stringify(requestBody),
             mode: 'cors',
             credentials: 'omit',
+            cache: 'no-store', // Bypass any caching
           });
           console.log('Fetch response status:', response.status, response.statusText);
         } catch (fetchError) {
@@ -143,7 +145,25 @@
             stack: fetchError.stack,
             endpoint: endpoint
           });
-          throw fetchError;
+          // Try one more time with a slight delay in case of timing issues
+          console.log('Retrying fetch after 100ms...');
+          await new Promise(resolve => setTimeout(resolve, 100));
+          try {
+            response = await fetch(endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestBody),
+              mode: 'cors',
+              credentials: 'omit',
+              cache: 'no-store',
+            });
+            console.log('Retry successful, response status:', response.status);
+          } catch (retryError) {
+            console.error('Retry also failed:', retryError);
+            throw fetchError; // Throw original error
+          }
         }
 
         if (!response.ok) {
