@@ -59,8 +59,16 @@ class handler(BaseHTTPRequestHandler):
             chunks = self.chunk_knowledge_base(kb)
             
             # Perform semantic search
-            search_results = self.semantic_search(message, chunks, top_k=3, vectorizer=TfidfVectorizer, cosine_similarity=cosine_similarity, np=np)
-            context = self.build_context(search_results)
+            try:
+                search_results = self.semantic_search(message, chunks, top_k=3, vectorizer=TfidfVectorizer, cosine_similarity=cosine_similarity, np=np)
+                context = self.build_context(search_results)
+            except Exception as search_error:
+                print(f"Semantic search error: {search_error}")
+                import traceback
+                traceback.print_exc()
+                # Fallback: use empty context if search fails
+                context = ""
+                search_results = []
             
             # System prompt
             system_prompt = """You are an AI assistant for Mohammed-Taqi Jalil's portfolio website. You help visitors learn about his experience, projects, skills, and background.

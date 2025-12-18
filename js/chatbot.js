@@ -55,16 +55,22 @@
     inputForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       e.stopPropagation();
+      e.stopImmediatePropagation();
       if (isProcessing || !input.value.trim()) return;
+      
+      const messageText = input.value.trim();
+      input.value = '';
+      autoResizeTextarea(input);
+      
       try {
-        await sendMessage(input.value.trim());
-        input.value = '';
-        autoResizeTextarea(input);
+        await sendMessage(messageText);
       } catch (error) {
         console.error('Error in form submission:', error);
-        // Error is already handled in sendMessage, but prevent any page refresh
-        e.preventDefault();
+        // Error is already handled in sendMessage
+        // Prevent any default behavior
+        return false;
       }
+      return false;
     });
 
     // Auto-resize textarea
@@ -116,12 +122,24 @@
         });
 
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error('API Error Response:', errorText);
-          throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+          let errorText = '';
+          try {
+            errorText = await response.text();
+            console.error('API Error Response:', response.status, errorText);
+          } catch (e) {
+            errorText = `HTTP ${response.status}`;
+          }
+          throw new Error(`Server error (${response.status}): ${errorText.substring(0, 100)}`);
         }
 
-        const data = await response.json();
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          console.error('JSON parse error:', jsonError);
+          throw new Error('Invalid response from server');
+        }
+        
         hideTypingIndicator(typingId);
 
         // Check if response has error
@@ -145,9 +163,22 @@
       } catch (error) {
         console.error('Chatbot error:', error);
         hideTypingIndicator(typingId);
+        
+        // Remove user message from history if it failed
+        if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'user') {
+          conversationHistory.pop();
+          saveHistory();
+          // Remove the last user message from UI
+          const messages = messagesContainer.querySelectorAll('.chatbot__message--user');
+          if (messages.length > 0) {
+            messages[messages.length - 1].remove();
+          }
+        }
+        
         let errorMessage = 'Sorry, I encountered an error. Please try again.';
         if (error.message) {
-          errorMessage += ` (${error.message})`;
+          const shortMessage = error.message.length > 80 ? error.message.substring(0, 80) + '...' : error.message;
+          errorMessage = `Error: ${shortMessage}`;
         }
         showError(errorMessage);
       } finally {
@@ -296,5 +327,21 @@
   } else {
     initChatbot();
   }
+  
+  // Global error handler to prevent page refresh on unhandled errors
+  window.addEventListener('error', (e) => {
+    if (e.message && e.message.includes('chatbot')) {
+      e.preventDefault();
+      console.error('Chatbot global error:', e);
+    }
+  });
+  
+  // Prevent unhandled promise rejections from causing issues
+  window.addEventListener('unhandledrejection', (e) => {
+    if (e.reason && (e.reason.message && e.reason.message.includes('fetch') || e.reason.message && e.reason.message.includes('chatbot'))) {
+      e.preventDefault();
+      console.error('Chatbot unhandled rejection:', e.reason);
+    }
+  });
 })();
 
