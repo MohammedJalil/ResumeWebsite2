@@ -121,7 +121,7 @@
         
         console.log('Making fetch request to:', endpoint);
         console.log('Request body:', requestBody);
-        console.log('Current location:', typeof window !== 'undefined' ? window.location.href : 'N/A');
+        console.log('Current location:', typeof window !== 'undefined' && window.location ? window.location.href : 'N/A');
         
         // Try the fetch with error handling
         let response;
