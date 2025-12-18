@@ -110,9 +110,14 @@
         };
         
         // Use absolute URL if on Vercel to avoid path resolution issues
-        const endpoint = API_ENDPOINT.startsWith('http') 
-          ? API_ENDPOINT 
-          : window.location.origin + API_ENDPOINT;
+        let endpoint = API_ENDPOINT;
+        if (!endpoint.startsWith('http')) {
+          // Try to get origin, fallback to relative path if not available
+          if (typeof window !== 'undefined' && window.location && window.location.origin) {
+            endpoint = window.location.origin + API_ENDPOINT;
+          }
+          // If still relative, use as-is (browser will resolve it)
+        }
         
         console.log('Making fetch request to:', endpoint);
         
