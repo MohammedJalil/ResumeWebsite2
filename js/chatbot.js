@@ -109,13 +109,21 @@
           history: conversationHistory.slice(-10), // Last 10 messages for context
         };
         
-        const response = await fetch(API_ENDPOINT, {
+        // Use absolute URL if on Vercel to avoid path resolution issues
+        const endpoint = API_ENDPOINT.startsWith('http') 
+          ? API_ENDPOINT 
+          : window.location.origin + API_ENDPOINT;
+        
+        console.log('Making fetch request to:', endpoint);
+        
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(requestBody),
-          mode: 'cors', // Explicitly set CORS mode
+          mode: 'cors',
+          credentials: 'omit',
         });
 
         if (!response.ok) {
