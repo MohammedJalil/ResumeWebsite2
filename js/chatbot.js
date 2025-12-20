@@ -7,7 +7,10 @@
 
   function initChatbot() {
     const chatbot = document.getElementById('chatbot');
-    if (!chatbot) return;
+    if (!chatbot) {
+      console.warn('Chatbot: Element #chatbot not found');
+      return;
+    }
 
     const button = chatbot.querySelector('.chatbot__button') || chatbot.querySelector('#chatbotToggle');
     const window = chatbot.querySelector('.chatbot__window');
@@ -52,6 +55,11 @@
     });
 
     // Send message
+    if (!inputForm) {
+      console.error('Chatbot: Form element not found');
+      return;
+    }
+    
     inputForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -64,7 +72,12 @@
       autoResizeTextarea(input);
       
       // Call sendMessage - errors are handled inside
-      await sendMessage(messageText);
+      try {
+        await sendMessage(messageText);
+      } catch (error) {
+        console.error('Chatbot form submit error:', error);
+        showError('Failed to send message. Please try again.');
+      }
     });
 
     // Auto-resize textarea
@@ -191,6 +204,9 @@
         }
       } catch (error) {
         hideTypingIndicator(typingId);
+        
+        // Log error for debugging (minimal, production-safe)
+        console.error('Chatbot error:', error.message || error);
         
         // Remove user message from history if it failed
         if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'user') {
@@ -362,11 +378,10 @@
     }
   });
   
-  // Prevent unhandled promise rejections from causing issues
+  // Log unhandled promise rejections for debugging
   window.addEventListener('unhandledrejection', (e) => {
-    if (e.reason && (e.reason.message && e.reason.message.includes('fetch') || e.reason.message && e.reason.message.includes('chatbot'))) {
-      e.preventDefault();
-    }
+    console.error('Unhandled promise rejection:', e.reason);
+    // Don't prevent default - let errors show in console
   });
 })();
 
