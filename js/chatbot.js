@@ -192,15 +192,6 @@
       } catch (error) {
         hideTypingIndicator(typingId);
         
-        // Log error for debugging
-        console.error('Chatbot sendMessage error:', error);
-        console.error('API_ENDPOINT:', API_ENDPOINT);
-        console.error('Error details:', {
-          message: error.message,
-          stack: error.stack,
-          name: error.name
-        });
-        
         // Remove user message from history if it failed
         if (conversationHistory.length > 0 && conversationHistory[conversationHistory.length - 1].role === 'user') {
           conversationHistory.pop();
