@@ -144,9 +144,10 @@
       
       // Unregister old service workers on page load to ensure clean state
       navigator.serviceWorker.getRegistrations().then((registrations) => {
+        if (!registrations || registrations.length === 0) return;
         registrations.forEach((registration) => {
           try {
-            if (registration && registration.scope && registration.scope.includes(window.location.origin)) {
+            if (registration && registration.scope && window.location && window.location.origin && registration.scope.includes(window.location.origin)) {
               registration.update(); // Force update
             }
           } catch (e) {
@@ -154,7 +155,7 @@
           }
         });
       }).catch(() => {
-        // Ignore errors
+        // Ignore errors - service worker might not be supported or already unregistered
       });
     }
   });

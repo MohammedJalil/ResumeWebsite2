@@ -183,6 +183,12 @@
           } catch (e) {
             errorText = `HTTP ${response.status}`;
           }
+          
+          // Check if it's a 401 with HTML (Vercel auth page or function not found)
+          if (response.status === 401 && errorText.includes('<!doctype html>')) {
+            throw new Error('API authentication failed. Please check that OPENAI_API_KEY is set in Vercel environment variables.');
+          }
+          
           throw new Error(`Server error (${response.status}): ${errorText.substring(0, 100)}`);
         }
 
