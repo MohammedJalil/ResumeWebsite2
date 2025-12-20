@@ -371,10 +371,11 @@
     initChatbot();
   }
   
-  // Global error handler to prevent page refresh on unhandled errors
+  // Global error handler - log errors but don't prevent them
   window.addEventListener('error', (e) => {
     if (e.message && e.message.includes('chatbot')) {
-      e.preventDefault();
+      console.error('Chatbot global error:', e.message, e.filename, e.lineno);
+      // Don't prevent default - let errors show in console
     }
   });
   
