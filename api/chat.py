@@ -10,11 +10,27 @@ from http.server import BaseHTTPRequestHandler
 class handler(BaseHTTPRequestHandler):
     """Main handler class for Vercel"""
     
+    def do_GET(self):
+        """Handle GET requests for diagnostics"""
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        import os
+        has_key = 'Yes' if os.environ.get('OPENAI_API_KEY') else 'No'
+        response = {
+            'status': 'ok',
+            'function': 'chat',
+            'openai_key_configured': has_key,
+            'methods': ['GET', 'POST', 'OPTIONS']
+        }
+        self.wfile.write(json.dumps(response).encode('utf-8'))
+    
     def do_OPTIONS(self):
         """Handle CORS preflight requests"""
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
