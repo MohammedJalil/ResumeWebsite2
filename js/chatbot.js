@@ -6,11 +6,13 @@
   const API_ENDPOINT = '/api/chat';
 
   function initChatbot() {
+    console.log('Chatbot: Initializing...');
     const chatbot = document.getElementById('chatbot');
     if (!chatbot) {
       console.warn('Chatbot: Element #chatbot not found');
       return;
     }
+    console.log('Chatbot: Element found');
 
     const button = chatbot.querySelector('.chatbot__button') || chatbot.querySelector('#chatbotToggle');
     const window = chatbot.querySelector('.chatbot__window');
@@ -60,7 +62,14 @@
       return;
     }
     
+    if (!input) {
+      console.error('Chatbot: Input element not found');
+      return;
+    }
+    
+    console.log('Chatbot: Attaching form submit listener');
     inputForm.addEventListener('submit', async (e) => {
+      console.log('Chatbot: Form submit event triggered');
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();

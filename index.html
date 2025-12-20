@@ -471,7 +471,7 @@
       <div class="chatbot__messages" role="log" aria-live="polite"></div>
       <button class="chatbot__clear-history" style="display: none;">Clear History</button>
       <div class="chatbot__input-container">
-        <form class="chatbot__input-form" onsubmit="return false;">
+        <form class="chatbot__input-form" onsubmit="event.preventDefault(); return false;">
           <textarea class="chatbot__input" placeholder="Type your message..." rows="1" aria-label="Chat input"></textarea>
           <button type="submit" class="chatbot__send" aria-label="Send message">
             <svg class="chatbot__send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
