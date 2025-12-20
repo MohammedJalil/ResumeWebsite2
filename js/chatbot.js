@@ -98,7 +98,9 @@
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        inputForm.dispatchEvent(new Event('submit'));
+        e.stopPropagation();
+        console.log('Chatbot: Enter key pressed, dispatching submit');
+        inputForm.dispatchEvent(new Event('submit', { bubbles: false, cancelable: true }));
       }
     });
 
