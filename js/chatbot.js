@@ -119,10 +119,6 @@
           // If still relative, use as-is (browser will resolve it)
         }
         
-        console.log('Making fetch request to:', endpoint);
-        console.log('Request body:', requestBody);
-        console.log('Current location:', typeof window !== 'undefined' && window.location ? window.location.href : 'N/A');
-        
         // Try the fetch with error handling
         // Use cache: 'no-store' to bypass service worker cache
         let response;
@@ -137,16 +133,8 @@
             credentials: 'omit',
             cache: 'no-store', // Bypass any caching
           });
-          console.log('Fetch response status:', response.status, response.statusText);
         } catch (fetchError) {
-          console.error('Fetch error details:', {
-            name: fetchError.name,
-            message: fetchError.message,
-            stack: fetchError.stack,
-            endpoint: endpoint
-          });
           // Try one more time with a slight delay in case of timing issues
-          console.log('Retrying fetch after 100ms...');
           await new Promise(resolve => setTimeout(resolve, 100));
           try {
             response = await fetch(endpoint, {
@@ -159,9 +147,7 @@
               credentials: 'omit',
               cache: 'no-store',
             });
-            console.log('Retry successful, response status:', response.status);
           } catch (retryError) {
-            console.error('Retry also failed:', retryError);
             throw fetchError; // Throw original error
           }
         }

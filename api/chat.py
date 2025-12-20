@@ -22,6 +22,10 @@ class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         """Handle POST requests"""
         try:
+            # Suppress joblib multiprocessing warning (harmless in serverless)
+            import warnings
+            warnings.filterwarnings('ignore', category=UserWarning, module='joblib')
+            
             # Import here to avoid issues during module load
             from openai import OpenAI
             from sklearn.feature_extraction.text import TfidfVectorizer
