@@ -17,11 +17,29 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         import os
-        has_key = 'Yes' if os.environ.get('OPENAI_API_KEY') else 'No'
+        
+        openai_key = os.environ.get('OPENAI_API_KEY')
+        has_key = 'Yes' if openai_key else 'No'
+        key_length = len(openai_key) if openai_key else 0
+        key_prefix = openai_key[:7] + '...' if openai_key and len(openai_key) > 7 else 'N/A'
+        
+        # Try a simple test to see if we can reach OpenAI
+        can_reach_openai = 'Unknown'
+        try:
+            from openai import OpenAI
+            test_client = OpenAI(api_key=openai_key, timeout=5.0)
+            # Just check if we can create a client, don't make a real request
+            can_reach_openai = 'Client created'
+        except Exception as e:
+            can_reach_openai = f'Error: {str(e)[:50]}'
+        
         response = {
             'status': 'ok',
             'function': 'chat',
             'openai_key_configured': has_key,
+            'openai_key_length': key_length,
+            'openai_key_prefix': key_prefix,
+            'can_reach_openai': can_reach_openai,
             'methods': ['GET', 'POST', 'OPTIONS']
         }
         self.wfile.write(json.dumps(response).encode('utf-8'))
