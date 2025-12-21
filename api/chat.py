@@ -404,11 +404,24 @@ CRITICAL RULES:
     
     def send_error_response(self, status_code, error_data):
         """Send an error JSON response"""
-        self.send_response(status_code)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        self.wfile.write(json.dumps(error_data).encode('utf-8'))
+        try:
+            self.send_response(status_code)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            response_json = json.dumps(error_data)
+            self.wfile.write(response_json.encode('utf-8'))
+        except Exception as e:
+            # If we can't send JSON, try plain text
+            try:
+                self.send_response(status_code)
+                self.send_header('Content-Type', 'text/plain')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(f"Error: {str(error_data.get('message', 'Unknown error'))}".encode('utf-8'))
+            except:
+                # Last resort - just send status
+                pass
     
     def log_message(self, format, *args):
         """Override to prevent default logging"""
