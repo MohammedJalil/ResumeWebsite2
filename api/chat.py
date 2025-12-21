@@ -58,10 +58,10 @@ class handler(BaseHTTPRequestHandler):
                 return
             
             # Initialize OpenAI client with timeout
+            # Note: max_retries=0 because we handle retries manually
             client = OpenAI(
                 api_key=openai_key,
-                timeout=30.0,  # 30 second timeout
-                max_retries=2  # Retry up to 2 times on connection errors
+                timeout=45.0  # 45 second timeout (Vercel functions have 10s default, but can be up to 60s)
             )
             
             # Read request body
@@ -152,12 +152,51 @@ CRITICAL RULES:
                 except Exception as openai_error:
                     last_error = openai_error
                     error_str = str(openai_error).lower()
+                    error_type = type(openai_error).__name__
                     
-                    # Check if it's a connection/timeout error that we should retry
-                    is_retryable = any(keyword in error_str for keyword in [
-                        'connection', 'timeout', 'network', 'temporary', 
-                        'rate limit', '503', '502', '504'
-                    ])
+                    # Import OpenAI-specific exceptions for better error handling
+                    try:
+                        from openai import APIConnectionError, APITimeoutError, RateLimitError, APIError
+                        
+                        # Check for specific OpenAI exception types
+                        if isinstance(openai_error, APIConnectionError):
+                            is_retryable = True
+                            error_msg = 'Connection error. Please try again in a moment.'
+                        elif isinstance(openai_error, APITimeoutError):
+                            is_retryable = True
+                            error_msg = 'Request timed out. Please try again.'
+                        elif isinstance(openai_error, RateLimitError):
+                            is_retryable = True
+                            error_msg = 'Rate limit exceeded. Please try again in a moment.'
+                        elif isinstance(openai_error, APIError):
+                            # Check status code for retryable errors
+                            status_code = getattr(openai_error, 'status_code', None)
+                            if status_code in [502, 503, 504]:
+                                is_retryable = True
+                                error_msg = 'OpenAI service temporarily unavailable. Please try again.'
+                            else:
+                                is_retryable = False
+                                error_msg = f'OpenAI API error: {str(openai_error)}'
+                        else:
+                            # Generic exception - check error message
+                            is_retryable = any(keyword in error_str for keyword in [
+                                'connection', 'timeout', 'network', 'temporary', 
+                                'rate limit', '503', '502', '504', 'unreachable'
+                            ])
+                            error_msg = str(openai_error)
+                            if 'connection' in error_str:
+                                error_msg = 'Connection error. Please try again in a moment.'
+                            elif 'timeout' in error_str:
+                                error_msg = 'Request timed out. Please try again.'
+                    except ImportError:
+                        # Fallback if OpenAI exceptions aren't available
+                        is_retryable = any(keyword in error_str for keyword in [
+                            'connection', 'timeout', 'network', 'temporary', 
+                            'rate limit', '503', '502', '504'
+                        ])
+                        error_msg = str(openai_error)
+                        if 'connection' in error_str:
+                            error_msg = 'Connection error. Please try again in a moment.'
                     
                     if is_retryable and retry_count < max_retries:
                         retry_count += 1
@@ -167,17 +206,11 @@ CRITICAL RULES:
                         continue
                     else:
                         # Not retryable or max retries reached
-                        error_msg = str(openai_error)
-                        if 'connection' in error_str:
-                            error_msg = 'Connection error. Please try again in a moment.'
-                        elif 'timeout' in error_str:
-                            error_msg = 'Request timed out. Please try again.'
-                        elif 'rate limit' in error_str:
-                            error_msg = 'Rate limit exceeded. Please try again in a moment.'
-                        
                         self.send_error_response(500, {
                             'error': 'OpenAI API error',
-                            'message': error_msg
+                            'message': error_msg,
+                            'type': error_type,
+                            'retries': retry_count
                         })
                         return
         
