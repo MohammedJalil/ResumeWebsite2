@@ -59,9 +59,12 @@ class handler(BaseHTTPRequestHandler):
             
             # Initialize OpenAI client with timeout
             # Note: max_retries=0 because we handle retries manually
+            # Use explicit base_url to ensure requests go through
             client = OpenAI(
                 api_key=openai_key,
-                timeout=45.0  # 45 second timeout (Vercel functions have 10s default, but can be up to 60s)
+                timeout=20.0,  # 20 second timeout (reduced to fail faster)
+                max_retries=0,  # We handle retries manually
+                base_url="https://api.openai.com/v1"  # Explicit base URL
             )
             
             # Read request body
@@ -131,17 +134,18 @@ CRITICAL RULES:
             messages.append({"role": "user", "content": message})
             
             # Call OpenAI with retry logic
-            max_retries = 2
+            max_retries = 1  # Reduced retries to fail faster
             retry_count = 0
             last_error = None
             
             while retry_count <= max_retries:
                 try:
+                    # Make the API call with explicit timeout
                     response = client.chat.completions.create(
                         model="gpt-3.5-turbo",
                         messages=messages,
                         temperature=0.7,
-                        max_tokens=400  # Reduced to speed up response
+                        max_tokens=300  # Further reduced to speed up response
                     )
                     assistant_message = response.choices[0].message.content
                     
@@ -202,7 +206,7 @@ CRITICAL RULES:
                         retry_count += 1
                         # Wait a bit before retrying (exponential backoff)
                         import time
-                        time.sleep(min(1 * retry_count, 3))  # 1s, 2s, max 3s
+                        time.sleep(1)  # Fixed 1 second delay
                         continue
                     else:
                         # Not retryable or max retries reached
