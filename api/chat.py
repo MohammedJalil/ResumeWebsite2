@@ -57,7 +57,12 @@ class handler(BaseHTTPRequestHandler):
                 })
                 return
             
-            client = OpenAI(api_key=openai_key)
+            # Initialize OpenAI client with timeout
+            client = OpenAI(
+                api_key=openai_key,
+                timeout=30.0,  # 30 second timeout
+                max_retries=2  # Retry up to 2 times on connection errors
+            )
             
             # Read request body
             content_length = int(self.headers.get('Content-Length', 0))
@@ -125,24 +130,57 @@ CRITICAL RULES:
             # Add current message
             messages.append({"role": "user", "content": message})
             
-            # Call OpenAI
-            try:
-                response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=messages,
-                    temperature=0.7,
-                    max_tokens=500
-                )
-                assistant_message = response.choices[0].message.content
-                
-                # Send success response
-                self.send_success_response({'response': assistant_message})
-                
-            except Exception as openai_error:
-                self.send_error_response(500, {
-                    'error': 'OpenAI API error',
-                    'message': str(openai_error)
-                })
+            # Call OpenAI with retry logic
+            max_retries = 2
+            retry_count = 0
+            last_error = None
+            
+            while retry_count <= max_retries:
+                try:
+                    response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=messages,
+                        temperature=0.7,
+                        max_tokens=400,  # Reduced to speed up response
+                        timeout=25.0  # 25 second timeout per request
+                    )
+                    assistant_message = response.choices[0].message.content
+                    
+                    # Send success response
+                    self.send_success_response({'response': assistant_message})
+                    return  # Success, exit the retry loop
+                    
+                except Exception as openai_error:
+                    last_error = openai_error
+                    error_str = str(openai_error).lower()
+                    
+                    # Check if it's a connection/timeout error that we should retry
+                    is_retryable = any(keyword in error_str for keyword in [
+                        'connection', 'timeout', 'network', 'temporary', 
+                        'rate limit', '503', '502', '504'
+                    ])
+                    
+                    if is_retryable and retry_count < max_retries:
+                        retry_count += 1
+                        # Wait a bit before retrying (exponential backoff)
+                        import time
+                        time.sleep(min(1 * retry_count, 3))  # 1s, 2s, max 3s
+                        continue
+                    else:
+                        # Not retryable or max retries reached
+                        error_msg = str(openai_error)
+                        if 'connection' in error_str:
+                            error_msg = 'Connection error. Please try again in a moment.'
+                        elif 'timeout' in error_str:
+                            error_msg = 'Request timed out. Please try again.'
+                        elif 'rate limit' in error_str:
+                            error_msg = 'Rate limit exceeded. Please try again in a moment.'
+                        
+                        self.send_error_response(500, {
+                            'error': 'OpenAI API error',
+                            'message': error_msg
+                        })
+                        return
         
         except Exception as e:
             self.send_error_response(500, {
