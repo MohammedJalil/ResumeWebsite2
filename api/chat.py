@@ -228,19 +228,37 @@ CRITICAL RULES:
                         continue
                     else:
                         # Not retryable or max retries reached
-                        self.send_error_response(500, {
+                        # Include more details about the error
+                        error_details = {
                             'error': 'OpenAI API error',
                             'message': error_msg,
                             'type': error_type,
-                            'retries': retry_count
-                        })
+                            'retries': retry_count,
+                            'original_error': str(last_error)[:200] if last_error else 'Unknown'
+                        }
+                        self.send_error_response(500, error_details)
                         return
         
         except Exception as e:
-            self.send_error_response(500, {
-                'error': 'Internal server error',
-                'message': str(e)
-            })
+            # Log the full error for debugging
+            import traceback
+            error_trace = traceback.format_exc()
+            
+            # Try to send a detailed error response
+            try:
+                self.send_error_response(500, {
+                    'error': 'Internal server error',
+                    'message': str(e),
+                    'type': type(e).__name__,
+                    'traceback': error_trace.split('\n')[-5:] if error_trace else []  # Last 5 lines
+                })
+            except:
+                # If we can't send JSON, send plain text
+                self.send_response(500)
+                self.send_header('Content-Type', 'text/plain')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(f"Internal server error: {str(e)}".encode('utf-8'))
     
     def load_knowledge_base(self):
         """Load the knowledge base from JSON file"""
