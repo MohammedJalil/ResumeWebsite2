@@ -3,7 +3,13 @@
   'use strict';
 
   const STORAGE_KEY = 'chatbot-history';
-  const API_ENDPOINT = '/api/chat';
+  // Use local server if running on localhost, otherwise use production
+  const API_ENDPOINT = (typeof window !== 'undefined' && 
+                        window.location && 
+                        (window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1')) 
+                        ? 'http://localhost:3001/api/chat' 
+                        : '/api/chat';
 
   function initChatbot() {
     console.log('Chatbot: Initializing...');
