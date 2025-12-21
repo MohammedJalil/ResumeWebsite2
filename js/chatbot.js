@@ -217,7 +217,8 @@
           throw new Error('No response from server');
         }
         
-        addMessage('assistant', data.response);
+        // Add message with typing effect (word by word)
+        await addMessageWithTyping('assistant', data.response);
         conversationHistory.push({ role: 'assistant', content: data.response });
         saveHistory();
         
@@ -330,6 +331,7 @@
       messagesContainer.innerHTML = '';
       conversationHistory.forEach(msg => {
         if (msg.role === 'user' || msg.role === 'assistant') {
+          // For history, show immediately (no typing effect)
           addMessage(msg.role, msg.content);
         }
       });
