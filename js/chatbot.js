@@ -276,6 +276,45 @@
       scrollToBottom();
     }
 
+    async function addMessageWithTyping(role, content) {
+      // For user messages, show immediately
+      if (role === 'user') {
+        addMessage(role, content);
+        return;
+      }
+      
+      // For assistant messages, show word-by-word typing effect
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chatbot__message chatbot__message--${role}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'chatbot__message-avatar';
+      avatar.textContent = 'AI';
+      
+      const messageContent = document.createElement('div');
+      messageContent.className = 'chatbot__message-content';
+      messageContent.textContent = ''; // Start empty
+      
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(messageContent);
+      messagesContainer.appendChild(messageDiv);
+      
+      // Split content into words (preserving spaces and punctuation)
+      const words = content.split(/(\s+)/);
+      let currentText = '';
+      
+      // Type out word by word with a small delay
+      for (let i = 0; i < words.length; i++) {
+        currentText += words[i];
+        messageContent.textContent = currentText;
+        scrollToBottom();
+        
+        // Variable delay: shorter for spaces, longer for words
+        const delay = words[i].trim() ? 30 : 10; // 30ms per word, 10ms for spaces
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+
     function showTypingIndicator() {
       const typingDiv = document.createElement('div');
       typingDiv.className = 'chatbot__message chatbot__message--assistant';
