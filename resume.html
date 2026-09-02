@@ -3,205 +3,323 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Resume • Mohammed‑Taqi Jalil</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>Resume | Mohammed-Taqi Jalil, Data Engineer</title>
+  <meta name="description"
+    content="Resume of Mohammed-Taqi Jalil, Data Engineer at SNH AI in Austin, TX. Python, FastAPI, BigQuery, GCP." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   <style>
-    .resume-page {
-      min-height: 100vh;
-      padding: 2rem 0;
+    :root {
+      --paper: #faf6ef;
+      --ink: #211d19;
+      --ink-soft: #6d645b;
+      --rule: #e0d8c9;
+      --accent: #c1502e;
+      --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
     }
-    .resume {
-      width: min(900px, 92vw);
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
       margin: 0 auto;
-      background: rgba(106, 46, 53, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 3rem;
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 700px;
+      padding: 0 1.375rem 3rem;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-optical-sizing: auto;
+      font-size: 1rem;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
     }
-    .resume h1 {
-      margin: 0 0 0.5rem;
-      font-size: 2.2rem;
+
+    a {
       color: var(--accent);
-      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      transition: color 150ms ease;
     }
-    .resume__contact {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--muted);
-      font-size: 0.95rem;
+
+    a:hover {
+      color: var(--ink);
     }
-    .resume__contact a {
-      color: var(--accent);
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1.5rem 0 2.25rem;
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+    }
+
+    .toolbar a {
       text-decoration: none;
-      transition: color 0.2s ease;
+      color: var(--ink-soft);
     }
-    .resume__contact a:hover {
-      color: var(--accent-2);
-    }
-    .resume h2 {
-      margin: 2rem 0 1rem;
-      font-size: 1.4rem;
-      color: var(--accent-2);
-      font-weight: 700;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid rgba(182, 208, 148, 0.3);
-    }
-    .resume h2:first-of-type {
-      margin-top: 0;
-    }
-    .resume p {
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 0.75rem;
-    }
-    .resume__section {
-      margin-bottom: 1.5rem;
-    }
-    .resume__item {
-      margin-bottom: 1.25rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-    .resume__item::before {
-      content: '▸';
-      position: absolute;
-      left: 0;
+
+    .toolbar a:hover {
       color: var(--accent);
     }
-    .resume__item-title {
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.25rem;
+
+    .toolbar button {
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      color: var(--ink-soft);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: color 150ms ease;
     }
-    .resume__item-meta {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+
+    .toolbar button:hover {
+      color: var(--accent);
     }
-    .resume__item-desc {
-      color: var(--muted);
-      line-height: 1.6;
+
+    h1 {
+      margin: 0;
+      font-size: 1.875rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.15;
     }
+
+    .headline {
+      margin: 0.3rem 0 0.6rem;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .contact {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .contact a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .contact a:hover {
+      color: var(--accent);
+    }
+
+    h2 {
+      margin: 2.25rem 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink);
+    }
+
+    h2 .num {
+      color: var(--accent);
+      margin-right: 0.35rem;
+    }
+
+    p {
+      margin: 0 0 0.5rem;
+    }
+
+    .job {
+      margin-bottom: 1.4rem;
+    }
+
+    .job__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0 1rem;
+    }
+
+    .job__title {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .job__dates {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+
+    .job__org {
+      margin: 0.15rem 0 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+    }
+
+    .job ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    .job ul li {
+      margin-bottom: 0.3rem;
+      font-size: 0.9375rem;
+    }
+
+    .job ul li::marker {
+      color: var(--accent);
+    }
+
+    .skills p,
+    .project p,
+    .edu p {
+      font-size: 0.9375rem;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
     @media print {
-      .resume-page {
+      body {
+        max-width: none;
         padding: 0;
-      }
-      .resume {
         background: #fff;
-        color: #111;
-        border: none;
-        box-shadow: none;
-        backdrop-filter: none;
-        padding: 2rem;
+        font-size: 10.5pt;
       }
-      .resume h1, .resume h2 {
-        color: #111;
+
+      .toolbar {
+        display: none;
       }
-      .resume p, .resume__item-desc {
-        color: #333;
+
+      h2 {
+        margin-top: 1.1rem;
       }
-      .resume__contact a {
-        color: #000;
-        text-decoration: underline;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .headline {
+        color: var(--ink);
       }
     }
-    @media (max-width: 640px) {
-      .resume {
-        padding: 2rem 1.5rem;
-      }
-      .resume h1 {
-        font-size: 1.8rem;
-      }
-      .resume h2 {
-        font-size: 1.2rem;
+
+    @media (max-width: 480px) {
+      .job__head {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <div class="resume-page">
-    <main class="resume">
-      <h1>Mohammed‑Taqi Jalil</h1>
-      <div class="resume__contact">
-        Austin, TX 78660 · 
-        <a href="tel:+15126961614">512‑696‑1614</a> · 
-        <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a> · 
-        <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener">LinkedIn</a> / 
-        <a href="https://github.com/MohammedJalil/Projects" target="_blank" rel="noopener">GitHub</a>
-      </div>
-
-      <h2>Summary</h2>
-      <p>Data‑driven Computational Biology graduate with experience in data analysis, machine learning, and visualization. Specialized in Python, SQL, Tableau, and statistical modeling. Proven track record of delivering actionable insights through predictive modeling, ETL automation, and interactive dashboards.</p>
-
-      <h2>Experience</h2>
-      <div class="resume__section">
-        <div class="resume__item">
-          <div class="resume__item-title">Data Engineer Intern · SNH AI</div>
-          <div class="resume__item-meta">June 2025 – Present · Austin, TX</div>
-          <div class="resume__item-desc">
-            Built Label Studio workflows for streamlined annotation for AI agents. Standardized heterogeneous XML to a unified golden dataset; validated via XSD. Aligned data prep with ML training across cross‑functional stakeholders.
-          </div>
-        </div>
-        <div class="resume__item">
-          <div class="resume__item-title">Data Analyst Intern · JSoftUSA</div>
-          <div class="resume__item-meta">Feb 2024 – Aug 2024 · Austin, TX</div>
-          <div class="resume__item-desc">
-            Analyzed student data; insights contributed to 15% increase in platform adoption. Automated ETL with SQL; reduced manual reporting time by 30%. Developed Tableau dashboards; supported regression analysis for interventions.
-          </div>
-        </div>
-      </div>
-
-      <h2>Education</h2>
-      <div class="resume__section">
-        <div class="resume__item">
-          <div class="resume__item-title">B.S., Biology (Computational) · The University of Texas at Austin</div>
-          <div class="resume__item-meta">May 2024</div>
-          <div class="resume__item-desc">
-            Coursework: Data Science, Regression Analysis, Biostatistics, Statistical Modeling, Genomics, Data Mining, Mathematical Statistics.
-          </div>
-        </div>
-      </div>
-
-      <h2>Technical Skills</h2>
-      <div class="resume__section">
-        <p><strong>Programming:</strong> Python, R, SQL</p>
-        <p><strong>Libraries & Tools:</strong> Pandas, NumPy, Scikit-learn, XGBoost, DESeq2, ggplot2, tidyverse</p>
-        <p><strong>Databases:</strong> MySQL, MS SQL Server</p>
-        <p><strong>Visualization:</strong> Tableau, Power BI, Matplotlib, Plotly</p>
-        <p><strong>Methodologies:</strong> EDA, Predictive Modeling, Regression, ETL, A/B Testing, Statistical Inference</p>
-      </div>
-
-      <h2>Projects</h2>
-      <div class="resume__section">
-        <div class="resume__item">
-          <div class="resume__item-title">Ambient Air Pollution Prediction</div>
-          <div class="resume__item-desc">
-            Built models (Random Forest, XGBoost, k‑NN, Lasso) to predict PM2.5 across the U.S.; performed EDA, feature selection, and cross‑validation using RMSE.
-          </div>
-        </div>
-        <div class="resume__item">
-          <div class="resume__item-title">IntelliVest Investment Analytics Platform</div>
-          <div class="resume__item-desc">
-            Developed a comprehensive investment analytics platform with real-time market data integration, portfolio optimization algorithms, and interactive dashboards.
-          </div>
-        </div>
-        <div class="resume__item">
-          <div class="resume__item-title">RNA‑Seq Gene Expression Analysis</div>
-          <div class="resume__item-desc">
-            Differential expression with DESeq2; normalization, QC, and log fold‑change; visualized results with PCA, volcano plots, and heatmaps.
-          </div>
-        </div>
-      </div>
-    </main>
+  <div class="toolbar">
+    <a href="index.html">← back to site</a>
+    <button type="button" onclick="window.print()">print / save as pdf</button>
   </div>
+
+  <main>
+    <header>
+      <h1>Mohammed-Taqi Jalil</h1>
+      <p class="headline">Data Engineer</p>
+      <p class="contact">
+        Austin, TX ·
+        <a href="tel:+15126961614">512-696-1614</a> ·
+        <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a> ·
+        <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener">linkedin.com/in/mohammedtaqijalil</a> ·
+        <a href="https://github.com/MohammedJalil" target="_blank" rel="noopener">github.com/MohammedJalil</a>
+      </p>
+    </header>
+
+    <h2><span class="num">[01]</span> Summary</h2>
+    <p>
+      Data Engineer who helped take an AI-powered records-adjudication platform from prototype to
+      production. Own the platform's core data transformation service (Python/FastAPI) and work
+      across the stack: API development, data validation, BigQuery pipelines, automated testing,
+      and internal tooling.
+    </p>
+
+    <h2><span class="num">[02]</span> Experience</h2>
+    <div class="job">
+      <div class="job__head">
+        <h3 class="job__title">Data Engineer</h3>
+        <span class="job__dates">January 2026 - Present</span>
+      </div>
+      <p class="job__org">SNH AI · Austin, TX</p>
+      <ul>
+        <li>Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.</li>
+        <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.</li>
+        <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
+        <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.</li>
+        <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job__head">
+        <h3 class="job__title">Data Engineer Intern</h3>
+        <span class="job__dates">June 2025 - January 2026</span>
+      </div>
+      <p class="job__org">SNH AI · Austin, TX</p>
+      <ul>
+        <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
+        <li>Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.</li>
+        <li>Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.</li>
+        <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div class="job__head">
+        <h3 class="job__title">Data Analyst Intern</h3>
+        <span class="job__dates">February 2024 - August 2024</span>
+      </div>
+      <p class="job__org">JSoftUSA · Austin, TX</p>
+      <ul>
+        <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
+        <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
+        <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
+      </ul>
+    </div>
+
+    <h2><span class="num">[03]</span> Skills</h2>
+    <div class="skills">
+      <p><strong>Languages &amp; Frameworks:</strong> Python (FastAPI, Pandas, pytest), SQL (BigQuery, MySQL), TypeScript/React, XML/XSD, REST APIs</p>
+      <p><strong>Cloud &amp; Data:</strong> Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub), ETL / medallion architecture (bronze-silver-gold), data validation, Docker, Git/GitHub, Label Studio, Tableau</p>
+    </div>
+
+    <h2><span class="num">[04]</span> Projects</h2>
+    <div class="project">
+      <p><strong>Ambient Air Pollution Prediction</strong> (Python, Scikit-learn): ML models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5 across the U.S.; EDA, feature selection, and cross-validation.</p>
+      <p><strong>IntelliVest Investment Analytics Platform:</strong> investment analytics with real-time market data, portfolio optimization, and interactive dashboards.</p>
+      <p><strong>RNA-Seq Gene Expression Analysis</strong> (R, Bioconductor): differential expression with DESeq2, PCA/volcano/heatmap visualizations.</p>
+    </div>
+
+    <h2><span class="num">[05]</span> Education</h2>
+    <div class="edu">
+      <p><strong>The University of Texas at Austin</strong> · B.S. Biology (Computational) · May 2024</p>
+    </div>
+  </main>
 </body>
 </html>
-
-

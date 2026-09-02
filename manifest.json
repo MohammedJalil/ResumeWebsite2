@@ -1,11 +1,9 @@
 {
-  "name": "Mohammed‑Taqi Jalil • Portfolio",
+  "name": "Mohammed-Taqi Jalil | Data Engineer",
   "short_name": "MTJ Portfolio",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#2E2836",
-  "theme_color": "#2E2836",
+  "background_color": "#faf6ef",
+  "theme_color": "#faf6ef",
   "icons": []
 }
-
-

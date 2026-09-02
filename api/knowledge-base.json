@@ -1,103 +1,91 @@
 {
   "about": {
     "name": "Mohammed-Taqi Jalil",
-    "title": "Data Analyst & Computational Biology Graduate",
+    "title": "Data Engineer at SNH AI",
     "location": "Austin, TX",
-    "summary": "I'm Mohammed‑Taqi Jalil, a data‑driven Computational Biology graduate based in Austin, TX. I build predictive models, streamline ETL workflows, and craft clear dashboards that turn data into action. Comfortable across Python, R, SQL, and BI tooling, I enjoy delivering statistically sound insights for healthcare, education, and environmental datasets.",
+    "summary": "Mohammed-Taqi Jalil is a Data Engineer at SNH AI in Austin, TX who helped take an AI-powered records-adjudication platform from prototype to production with live enterprise customers. He joined as an intern, was promoted to full-time, and now owns the platform's core data transformation service (Python/FastAPI). He works across the stack: API development, data validation, BigQuery pipelines, automated testing, and internal tooling.",
     "skills": {
-      "programming": ["Python", "R", "SQL"],
-      "libraries": ["Pandas", "NumPy", "Scikit-learn", "XGBoost", "DESeq2", "ggplot2", "tidyverse"],
-      "databases": ["MySQL", "MS SQL Server"],
-      "visualization": ["Tableau", "Power BI", "Matplotlib", "Plotly"],
-      "methodologies": ["EDA", "Predictive Modeling", "Regression", "ETL", "A/B Testing", "Statistical Inference"],
-      "proficiency": {
-        "Python": 95,
-        "SQL": 90,
-        "Tableau": 88,
-        "R": 85,
-        "Machine Learning": 82
-      }
+      "languages_and_frameworks": ["Python (FastAPI, Pandas, pytest)", "SQL (BigQuery, MySQL)", "TypeScript/React", "XML/XSD", "REST APIs"],
+      "cloud_and_data": ["Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub)", "ETL / medallion architecture (bronze-silver-gold)", "Data validation", "Docker", "Git/GitHub", "Label Studio", "Tableau"]
     }
   },
   "experience": [
     {
       "company": "SNH AI",
-      "role": "Data Engineer Intern",
-      "period": "June 2025 – Present",
+      "role": "Data Engineer",
+      "period": "January 2026 - Present",
       "location": "Austin, TX",
       "responsibilities": [
-        "Built Label Studio workflows for streamlined annotation for AI agents",
-        "Standardized heterogeneous XML to a unified golden dataset; validated via XSD",
-        "Aligned data prep with ML training across cross‑functional stakeholders"
+        "Owns the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions",
+        "Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic",
+        "Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review",
+        "Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs",
+        "Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors"
+      ],
+      "technologies": ["Python", "FastAPI", "BigQuery", "GCP", "pytest", "React"]
+    },
+    {
+      "company": "SNH AI",
+      "role": "Data Engineer Intern",
+      "period": "June 2025 - January 2026",
+      "location": "Austin, TX",
+      "responsibilities": [
+        "Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models",
+        "Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation",
+        "Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources",
+        "Converted to full-time after the internship, taking ownership of the platform's core transformation service"
       ],
       "technologies": ["Python", "XML", "XSD", "Label Studio"]
     },
     {
       "company": "JSoftUSA",
       "role": "Data Analyst Intern",
-      "period": "Feb 2024 – Aug 2024",
+      "period": "February 2024 - August 2024",
       "location": "Austin, TX",
       "responsibilities": [
-        "Analyzed student data; insights contributed to 15% increase in platform adoption",
-        "Automated ETL with SQL; reduced manual reporting time by 30%",
-        "Developed Tableau dashboards; supported regression analysis for interventions"
+        "Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption",
+        "Automated ETL workflows using SQL scripts, decreasing manual report time by 30%",
+        "Built Tableau dashboards to track performance and resource use, improving educator efficiency"
       ],
-      "technologies": ["SQL", "Tableau", "ETL", "Regression Analysis"]
+      "technologies": ["SQL", "Tableau", "ETL"]
     }
   ],
   "education": {
     "institution": "The University of Texas at Austin",
-    "degree": "B.S., Biology (Computational)",
-    "graduation": "May 2024",
-    "coursework": [
-      "Data Science",
-      "Regression Analysis",
-      "Biostatistics",
-      "Statistical Modeling",
-      "Genomics",
-      "Data Mining",
-      "Mathematical Statistics"
-    ]
+    "degree": "B.S. Biology (Computational)",
+    "graduation": "May 2024"
   },
   "projects": [
     {
       "id": "air-pollution",
       "title": "Ambient Air Pollution Prediction",
       "category": "Machine Learning",
-      "description": "Built models (Random Forest, XGBoost, k‑NN, Lasso) to predict PM2.5 across the U.S.; performed EDA, feature selection, and cross‑validation using RMSE.",
-      "problem": "Predicting PM2.5 levels across the U.S. is challenging due to complex environmental factors, spatial variability, and the need for accurate real-time forecasting to support public health decisions.",
-      "outcome": "Built multiple predictive models (Random Forest, XGBoost, k-NN, Lasso) achieving competitive RMSE scores. Performed comprehensive EDA, feature selection, and cross-validation to ensure model reliability.",
-      "technologies": ["Python", "Pandas", "Scikit-learn", "XGBoost", "Random Forest"],
+      "description": "Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5 concentrations across the U.S., with EDA, feature selection, and cross-validation.",
+      "technologies": ["Python", "Scikit-learn"],
       "github": "https://github.com/MohammedJalil/Air-Pollution-Predictive-Model"
-    },
-    {
-      "id": "rna-seq",
-      "title": "RNA-Seq Gene Expression Analysis",
-      "category": "Bioinformatics",
-      "description": "Differential expression with DESeq2; normalization, QC, and log fold‑change; visualized results with PCA, volcano plots, and heatmaps.",
-      "problem": "Identifying differentially expressed genes in RNA-Seq data requires robust statistical methods to handle count data, normalization challenges, and multiple testing corrections.",
-      "outcome": "Successfully performed differential expression analysis using DESeq2, with proper normalization and QC. Generated publication-quality visualizations including PCA plots, volcano plots, and heatmaps to identify key gene expression patterns.",
-      "technologies": ["R", "DESeq2", "Bioconductor", "ggplot2"],
-      "github": "https://github.com/MohammedJalil/rna-seq-analysis"
     },
     {
       "id": "intellivest",
       "title": "IntelliVest Investment Analytics Platform",
       "category": "Financial Analytics",
-      "description": "Developed a comprehensive investment analytics platform with real-time market data integration, portfolio optimization algorithms, and interactive dashboards for informed decision-making.",
-      "problem": "Investors need real-time market data, portfolio optimization tools, and interactive visualizations to make informed investment decisions efficiently.",
-      "outcome": "Developed a comprehensive investment analytics platform with real-time market data integration, portfolio optimization algorithms, and interactive dashboards. The platform enables users to analyze stocks, optimize portfolios, and visualize performance metrics.",
-      "technologies": ["Python", "Streamlit", "Pandas", "yfinance", "Plotly", "Machine Learning"],
+      "description": "Investment analytics platform with real-time market data, portfolio optimization, and interactive dashboards for informed decision-making.",
+      "technologies": ["Python", "Streamlit", "Plotly"],
       "github": "https://github.com/MohammedJalil/intellivest"
+    },
+    {
+      "id": "rna-seq",
+      "title": "RNA-Seq Gene Expression Analysis",
+      "category": "Bioinformatics",
+      "description": "Differential gene expression analysis with DESeq2, visualized through PCA, volcano plots, and heatmaps.",
+      "technologies": ["R", "Bioconductor"],
+      "github": "https://github.com/MohammedJalil/rna-seq-analysis"
     }
   ],
   "contact": {
     "email": "mohammed.jalil.email@gmail.com",
     "phone": "512-696-1614",
-    "location": "Austin, TX 78660",
+    "location": "Austin, TX",
     "linkedin": "https://www.linkedin.com/in/mohammedtaqijalil/",
-    "github": "https://github.com/MohammedJalil/Projects"
+    "github": "https://github.com/MohammedJalil"
   }
 }
-
-

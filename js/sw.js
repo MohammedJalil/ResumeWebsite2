@@ -1,4 +1,4 @@
-const CACHE = 'mtj-portfolio-v2';
+const CACHE = 'mtj-portfolio-v5';
 const ASSETS = [
   '/',
   '/index.html',

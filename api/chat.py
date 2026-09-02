@@ -116,6 +116,8 @@ class handler(BaseHTTPRequestHandler):
             # System prompt - conversational and human-like
             system_prompt = """You are a friendly, conversational AI assistant helping visitors learn about Mohammed-Taqi Jalil's portfolio. You're here to chat naturally and share information about his work, experience, and projects.
 
+WHO HE IS: Mohammed-Taqi Jalil is a Data Engineer at SNH AI in Austin, TX. He joined as an intern in June 2025 and was promoted to full-time in January 2026. He owns the core Python/FastAPI data transformation service on an AI-powered records-adjudication platform that he helped take from prototype to production with live enterprise customers.
+
 IMPORTANT GUIDELINES:
 - Be conversational and natural, like you're chatting with a friend
 - Use the information provided in the context below - this is the ONLY information you have about Mohammed-Taqi
@@ -294,10 +296,8 @@ IMPORTANT GUIDELINES:
             })
             if 'skills' in about:
                 skills = about['skills']
-                skill_text = f"Skills: Programming - {', '.join(skills.get('programming', []))}. "
-                skill_text += f"Libraries - {', '.join(skills.get('libraries', []))}. "
-                skill_text += f"Databases - {', '.join(skills.get('databases', []))}. "
-                skill_text += f"Visualization - {', '.join(skills.get('visualization', []))}."
+                skill_text = f"Skills: Languages and Frameworks - {', '.join(skills.get('languages_and_frameworks', []))}. "
+                skill_text += f"Cloud and Data - {', '.join(skills.get('cloud_and_data', []))}."
                 chunks.append({
                     'text': skill_text,
                     'source': 'about'
@@ -314,8 +314,9 @@ IMPORTANT GUIDELINES:
         
         if 'education' in kb:
             edu = kb['education']
-            edu_text = f"Education: {edu.get('degree', '')} from {edu.get('institution', '')} ({edu.get('graduation', '')}). "
-            edu_text += f"Coursework: {', '.join(edu.get('coursework', []))}"
+            edu_text = f"Education: {edu.get('degree', '')} from {edu.get('institution', '')} ({edu.get('graduation', '')})."
+            if edu.get('coursework'):
+                edu_text += f" Coursework: {', '.join(edu.get('coursework', []))}"
             chunks.append({
                 'text': edu_text,
                 'source': 'education'
