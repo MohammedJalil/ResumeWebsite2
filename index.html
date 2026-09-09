@@ -4,30 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mohammed-Taqi Jalil, Data Engineer</title>
+  <title>Mohammed-Taqi Jalil — Data Engineer</title>
   <meta name="description"
-    content="Mohammed-Taqi Jalil, Data Engineer at SNH AI in Austin, TX. Helped take an AI-powered records-adjudication platform from prototype to production. Python, FastAPI, BigQuery." />
-  <meta name="theme-color" content="#faf6ef" />
+    content="Mohammed-Taqi Jalil, Data Engineer at SNH AI in Austin, TX. 3D WebGL Studio & Data Engineering Dossier. Python, FastAPI, BigQuery Medallion Architecture." />
+  <meta name="theme-color" content="#0c0d11" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Mohammed-Taqi Jalil, Data Engineer" />
+  <meta property="og:title" content="Mohammed-Taqi Jalil — Data Engineer" />
   <meta property="og:description"
-    content="Data Engineer at SNH AI. Helped take an AI-powered records-adjudication platform from prototype to production. Python, FastAPI, BigQuery." />
+    content="Data Engineer at SNH AI. Helped take an AI-powered compliance platform from prototype to production. Python, FastAPI, BigQuery." />
   <meta property="og:url" content="" />
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Mohammed-Taqi Jalil, Data Engineer" />
+  <meta name="twitter:title" content="Mohammed-Taqi Jalil — Data Engineer" />
   <meta name="twitter:description"
-    content="Data Engineer at SNH AI. Helped take an AI-powered records-adjudication platform from prototype to production. Python, FastAPI, BigQuery." />
+    content="Data Engineer at SNH AI in Austin, TX. Python, FastAPI, BigQuery." />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
   <link rel="stylesheet" href="css/style.css" />
+
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,236 +48,468 @@
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
+  <!-- Real 3D WebGL Three.js Canvas Container -->
+  <div id="canvas3dContainer"></div>
 
-  <header class="masthead">
-    <a class="masthead__name" href="/">Mohammed-Taqi Jalil</a>
-    <nav class="masthead__nav" aria-label="Primary">
-      <a href="#experience">experience</a>
-      <a href="#projects">projects</a>
-      <a href="resume.html">resume</a>
-    </nav>
+  <!-- Studio Asset Loader Overlay -->
+  <div id="studioLoader" class="studio-loader">
+    <div class="studio-loader__spinner"></div>
+    <div class="studio-loader__title">INITIALIZING 3D SPATIAL STUDIO</div>
+    <div id="studioLoaderBar" class="studio-loader__bar">
+      <div id="studioLoaderProgress" class="studio-loader__progress" style="width: 0%;"></div>
+    </div>
+    <div id="studioLoaderText" class="studio-loader__sub">Loading models &amp; baked illumination... 0%</div>
+  </div>
+
+  <!-- Top Floating HUD -->
+  <header class="hud-bar">
+    <div class="hud-group">
+      <div class="nav-btn" style="cursor: default; font-weight: 600; color: #fff;">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+        Mohammed-Taqi Jalil
+      </div>
+      <span id="austinClock" class="nav-btn" style="cursor: default; opacity: 0.85;">--:--:-- CDT</span>
+      <!-- Hover indicator for 3D items -->
+      <div id="sceneHoverPill" class="nav-btn nav-btn--primary opacity-0 transition-opacity duration-200 pointer-events-none" style="display: none;"></div>
+    </div>
+
+    <div class="hud-group">
+      <button id="stepBackBtn" type="button" onclick="window.returnTo3DRoom()" class="nav-btn nav-btn--primary step-back-btn hidden">
+        <span>◀</span> Step Back to 3D Room <span style="opacity: 0.7; font-size: 0.65rem; margin-left: 0.2rem;">(ESC)</span>
+      </button>
+      <button class="nav-btn" data-copy="mohammed.jalil.email@gmail.com" title="Copy email address">
+        <span>✉</span> Copy Email
+      </button>
+      <a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer" class="nav-btn">
+        <span>🐙</span> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer" class="nav-btn">
+        <span>in</span> LinkedIn
+      </a>
+      <a href="resume.html" class="nav-btn nav-btn--primary">
+        <span>📄</span> Resume
+      </a>
+    </div>
   </header>
 
-  <main id="main">
-    <section class="hero">
-      <h1 class="hero__headline">Data engineer,<br /><em>prototype to production.</em></h1>
-      <p class="hero__meta">Mohammed-Taqi Jalil · SNH AI · Austin, TX</p>
-      <p class="hero__lede">
-        I helped take an AI-powered records-adjudication platform from early prototype to
-        production with live enterprise customers. I own the service that turns messy
-        multi-vendor court XML into the structured data behind every automated compliance
-        decision.
-      </p>
+  <!-- 3D Room Bottom Callout (Visible in Room View) -->
+  <div id="roomCtaBar" class="room-bottom-cta">
+    <button onclick="window.studioScene3D.setCameraState('monitor')" class="nav-btn nav-btn--primary" style="padding: 0.6rem 1.25rem; font-size: 0.8125rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.8);">
+      <span>🔍</span> Click Monitor to Enter Workstation
+    </button>
+    <button onclick="window.studioScene3D.openDossierDirectly()" class="nav-btn" style="padding: 0.6rem 1rem; font-size: 0.8125rem;">
+      <span>📜</span> Browse Full Dossier &darr;
+    </button>
+    <div class="room-hint-pill">
+      <span>🖱️ Drag to look</span>
+      <span style="opacity: 0.4;">·</span>
+      <span>📜 Scroll to zoom</span>
+    </div>
+  </div>
 
-      <dl class="stats">
-        <div class="stats__item">
-          <dt>role</dt>
-          <dd>Data Engineer</dd>
+  <!-- In-Screen Workstation Dossier Overlay (Revealed on Monitor Zoom or Scroll) -->
+  <div id="monitorOverlay" class="monitor-overlay">
+    <div class="page-container">
+      
+      <!-- Sticky Dossier Nav Bar -->
+      <div class="dossier-nav-bar">
+        <button type="button" class="back-to-room-btn nav-btn nav-btn--primary" onclick="window.returnTo3DRoom()">
+          <span>◀</span> Back to 3D Desk Studio <kbd class="kbd-hint">ESC</kbd>
+        </button>
+        <div class="dossier-nav-meta">
+          <span class="dossier-pill">Engineering Dossier</span>
+          <span class="dossier-dot">·</span>
+          <span>Austin, TX</span>
         </div>
-        <div class="stats__item">
-          <dt>stack</dt>
-          <dd>Python · FastAPI · BigQuery</dd>
-        </div>
-        <div class="stats__item">
-          <dt>shipped</dt>
-          <dd>100+ merged PRs</dd>
-        </div>
-        <div class="stats__item">
-          <dt>since</dt>
-          <dd>Jun 2025</dd>
-        </div>
-      </dl>
+      </div>
 
-      <svg id="pipeline" class="pipeline" viewBox="0 0 660 162" width="660" height="162" role="img"
-        aria-label="Diagram: vendor XML documents flow through parse, validate, enrich into structured JSON, ending in a decision.">
-        <!-- vendor XML: overlapping documents -->
-        <path class="ink draw d1" pathLength="1" d="M26,45 L64,40 L69,104 L31,110 Z" />
-        <path class="ink draw d1" pathLength="1" d="M44,36 L84,33 L88,99 L48,103 Z" />
-        <path class="ink draw d1" pathLength="1" d="M62,44 L98,41 L112,54 L115,112 L66,116 Z" />
-        <path class="ink draw d1" pathLength="1" d="M98,41 L100,54 L112,54" />
-        <path class="ink ink--soft fade" d="M74,66 l30,-1" />
-        <path class="ink ink--soft fade" d="M75,78 l32,-1" />
-        <path class="ink ink--soft fade" d="M75,90 l26,-1" />
-        <path class="ink ink--soft fade" d="M76,102 l30,-1" />
+      <!-- Editorial Hero -->
+      <section class="hero">
+        <h1 class="hero__headline">
+          Data engineer,<br />
+          <em>prototype to production.</em>
+        </h1>
+        <p class="hero__meta">
+          <span>Mohammed-Taqi Jalil</span>
+          <span>·</span>
+          <span>SNH AI</span>
+          <span>·</span>
+          <span>Austin, TX</span>
+          <span>·</span>
+          <span style="color: var(--accent-emerald);">Fueled by Flat Track</span>
+        </p>
+        <p class="hero__lede">
+          I helped take an AI-powered compliance platform from early prototype to production with live enterprise customers. I own the core data transformation service that turns heterogeneous raw records into the structured features behind automated decisions.
+        </p>
 
-        <!-- flow: vendors into the service -->
-        <path class="flow fade" d="M120,62 C162,58 210,74 251,86" />
-        <path class="flow fade" d="M122,88 C165,90 210,92 251,93" />
-        <path class="flow fade" d="M119,110 C162,116 212,106 251,100" />
-
-        <!-- the service capsule -->
-        <rect class="ink draw d2" pathLength="1" x="255" y="68" width="178" height="50" rx="25" />
-        <text class="lbl fade" x="344" y="98" text-anchor="middle">parse · validate · enrich</text>
-
-        <!-- flow: service to structured output -->
-        <path class="flow fade" d="M437,93 C452,92 466,92 480,91" />
-
-        <!-- structured JSON document -->
-        <path class="ink draw d3" pathLength="1" d="M484,56 L523,54 L536,67 L538,128 L488,131 Z" />
-        <path class="ink draw d3" pathLength="1" d="M523,54 L524,67 L536,67" />
-        <path class="ink ink--soft fade" d="M496,82 l30,-1" />
-        <path class="ink ink--soft fade" d="M496,94 l32,-1" />
-        <path class="ink ink--soft fade" d="M497,106 l26,-1" />
-
-        <!-- flow: output to decision -->
-        <path class="flow fade" d="M542,92 C556,91 566,91 582,91" />
-
-        <!-- decision -->
-        <circle class="ink draw d4" pathLength="1" cx="606" cy="91" r="16" />
-        <path class="check draw d4" pathLength="1" d="M598,91 L604,98 L615,81" />
-
-        <!-- labels -->
-        <text class="lbl fade" x="70" y="150" text-anchor="middle">vendor XML</text>
-        <text class="lbl fade" x="511" y="150" text-anchor="middle">structured JSON</text>
-        <text class="lbl fade" x="606" y="150" text-anchor="middle">decision</text>
-      </svg>
-    </section>
-
-    <section id="experience" class="section">
-      <h2 class="section__heading"><span class="section__num">[01]</span> Experience</h2>
-
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Engineer</h3>
-          <span class="entry__dates">January 2026 - Present</span>
-        </div>
-        <p class="entry__org">SNH AI · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.</li>
-          <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.
-            <aside class="mnote">Merged, not just opened.</aside>
-          </li>
-          <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
-          <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.
-            <aside class="mnote">Root cause first, patch second.</aside>
-          </li>
-          <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
-        </ul>
-        <p class="tech">python fastapi bigquery gcp pytest react</p>
-      </article>
-
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Engineer Intern</h3>
-          <span class="entry__dates">June 2025 - January 2026</span>
-        </div>
-        <p class="entry__org">SNH AI · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
-          <li>Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.</li>
-          <li>Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.</li>
-          <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.
-            <aside class="mnote">Intern to owner of the core service in seven months.</aside>
-          </li>
-        </ul>
-        <p class="tech">python xml xsd label studio</p>
-      </article>
-
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Analyst Intern</h3>
-          <span class="entry__dates">February 2024 - August 2024</span>
-        </div>
-        <p class="entry__org">JSoftUSA · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
-          <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
-          <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
-        </ul>
-        <p class="tech">sql tableau etl</p>
-      </article>
-    </section>
-
-    <section id="projects" class="section">
-      <h2 class="section__heading"><span class="section__num">[02]</span> Projects</h2>
-
-      <ol class="projects">
-        <li class="project">
-          <span class="project__num" aria-hidden="true">01</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank"
-                rel="noopener noreferrer">Ambient Air Pollution Prediction</a>
-            </h3>
-            <p class="project__desc">
-              Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5
-              concentrations across the U.S., with EDA, feature selection, and cross-validation.
-            </p>
-            <p class="tech">python scikit-learn</p>
+        <!-- Key Metrics Strip -->
+        <div class="stat-strip">
+          <div class="stat-item">
+            <div class="stat-label">Track Record</div>
+            <div class="stat-value">100+ Merged PRs</div>
           </div>
-        </li>
-        <li class="project">
-          <span class="project__num" aria-hidden="true">02</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/intellivest" target="_blank"
-                rel="noopener noreferrer">IntelliVest Investment Analytics Platform</a>
-            </h3>
-            <p class="project__desc">
-              Investment analytics platform with real-time market data, portfolio optimization,
-              and interactive dashboards for informed decision-making.
-            </p>
-            <p class="tech">python streamlit plotly</p>
+          <div class="stat-item">
+            <div class="stat-label">Core Stack</div>
+            <div class="stat-value">Python · FastAPI · BQ</div>
           </div>
-        </li>
-        <li class="project">
-          <span class="project__num" aria-hidden="true">03</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank"
-                rel="noopener noreferrer">RNA-Seq Gene Expression Analysis</a>
-            </h3>
-            <p class="project__desc">
-              Differential gene expression analysis with DESeq2, visualized through PCA,
-              volcano plots, and heatmaps.
-            </p>
-            <p class="tech">r bioconductor</p>
+          <div class="stat-item">
+            <div class="stat-label">Progression</div>
+            <div class="stat-value">Intern &rarr; Owner (7mo)</div>
           </div>
-        </li>
-      </ol>
-    </section>
-
-    <section id="skills" class="section">
-      <h2 class="section__heading"><span class="section__num">[03]</span> Skills</h2>
-      <p class="skills__line"><strong>Languages &amp; Frameworks:</strong> Python (FastAPI, Pandas, pytest), SQL (BigQuery, MySQL), TypeScript/React, XML/XSD, REST APIs</p>
-      <p class="skills__line"><strong>Cloud &amp; Data:</strong> Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub), ETL / medallion architecture (bronze-silver-gold), data validation, Docker, Git/GitHub, Label Studio, Tableau</p>
-    </section>
-
-    <section id="education" class="section">
-      <h2 class="section__heading"><span class="section__num">[04]</span> Education</h2>
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">The University of Texas at Austin</h3>
-          <span class="entry__dates">May 2024</span>
+          <div class="stat-item">
+            <div class="stat-label">Education</div>
+            <div class="stat-value">UT Austin (Comp Bio)</div>
+          </div>
         </div>
-        <p class="entry__org">B.S. Biology (Computational)</p>
-      </article>
-    </section>
+      </section>
 
-    <section id="ask" class="section">
-      <h2 class="section__heading"><span class="section__num">[05]</span> Ask this site a question</h2>
-      <p class="ask__hint">Answers are generated from the content of this site.</p>
-      <div class="ask__thread" id="askThread" role="log" aria-live="polite"></div>
-      <form class="ask__form" id="askForm">
-        <input type="text" class="ask__input" id="askInput" autocomplete="off"
-          placeholder="e.g. what does he work on at SNH AI?" aria-label="Your question" />
-        <button type="submit" class="ask__send">ask</button>
-      </form>
-    </section>
-  </main>
+      <!-- [01] Austin Field Notes: Coffee Compass -->
+      <section id="coffee" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[01]</span> Austin Field Notes · The Coffee Compass
+        </h2>
+        <p class="section__desc">
+          Where I write code, read systems papers, and recharge across Austin. Select a roaster below to inspect tasting notes, brew profiles, and neighborhood character.
+        </p>
 
-  <footer class="colophon">
-    <p>Set in Fraunces &amp; IBM Plex Mono. Built by hand.</p>
-    <p>
-      <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a> ·
-      <a href="tel:+15126961614">512-696-1614</a> ·
-      <a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer">github</a> ·
-      <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer">linkedin</a>
-    </p>
-    <p>© <span id="year"></span> Mohammed-Taqi Jalil</p>
-  </footer>
+        <div class="coffee-box">
+          <div class="coffee-roasters-nav">
+            <button class="coffee-spot-btn is-active" data-roaster="houndstooth">
+              <span>☕</span> Houndstooth (Downtown/Lamar)
+            </button>
+            <button class="coffee-spot-btn" data-roaster="fleet">
+              <span>⚡</span> Fleet Coffee (East Austin)
+            </button>
+            <button class="coffee-spot-btn" data-roaster="flattrack">
+              <span>🏍️</span> Flat Track (East Chavez)
+            </button>
+            <button class="coffee-spot-btn" data-roaster="greatergoods">
+              <span>🌿</span> Greater Goods (East 5th)
+            </button>
+          </div>
 
+          <div class="coffee-body">
+            <span id="coffeeSpotTag" class="coffee-tag">Morning Deep Work</span>
+            <h3 id="coffeeSpotName" class="coffee-title">Houndstooth Coffee</h3>
+
+            <div class="coffee-specs-grid">
+              <div>
+                <div class="coffee-spec-label">Neighborhood</div>
+                <div id="coffeeSpotNeigh" class="coffee-spec-val">Downtown & North Lamar</div>
+              </div>
+              <div>
+                <div class="coffee-spec-label">Favorite Order</div>
+                <div id="coffeeSpotOrder" class="coffee-spec-val">Double Cortado (Washed Ethiopian)</div>
+              </div>
+              <div>
+                <div class="coffee-spec-label">Bean Source</div>
+                <div id="coffeeSpotBeans" class="coffee-spec-val">Pattern Coffee Roasters</div>
+              </div>
+            </div>
+
+            <p id="coffeeSpotNotes" class="coffee-notes-text">
+              My quintessential engineering focus spot. Architectural, restrained interior, ultra-consistent extraction. The cortado has silky micro-foam with bright citrus and floral notes.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- [02] Hardware Bench & Tactile Mechanical Switch Tester -->
+      <section id="hardware" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[02]</span> Hardware Bench · The Mechanical Switch Tester
+        </h2>
+        <p class="section__desc">
+          My daily driver setup features a custom 75% mechanical keyboard with tactile switches. Click the keys below to test the acoustic profiles synthesized in real-time via the Web Audio API.
+        </p>
+
+        <div class="switch-tester-box">
+          <div class="switch-toolbar">
+            <div class="switch-selector">
+              <button class="switch-type-btn is-active" data-switch="tactile">
+                62g Tactile (Boba U4T)
+              </button>
+              <button class="switch-type-btn" data-switch="linear">
+                45g Linear (Oil King)
+              </button>
+              <button class="switch-type-btn" data-switch="clicky">
+                67g Clicky (Box White)
+              </button>
+            </div>
+            <div id="switchLastKey" style="font-size: 0.72rem; color: var(--accent-bright); font-weight: 500;">
+              [TEST KEYPAD ACTIVE]
+            </div>
+          </div>
+
+          <div class="switch-grid-area">
+            <div class="test-keypad">
+              <button class="test-key-btn" data-key="ESC">ESC</button>
+              <button class="test-key-btn" data-key="Q">Q</button>
+              <button class="test-key-btn" data-key="W">W</button>
+              <button class="test-key-btn" data-key="E">E</button>
+              <button class="test-key-btn" data-key="R">R</button>
+              <button class="test-key-btn" data-key="T">T</button>
+              <button class="test-key-btn" data-key="Y">Y</button>
+              <button class="test-key-btn" data-key="ENTER">ENTER ⏎</button>
+              <button class="test-key-btn test-key-btn--space" data-key="SPACE">SPACEBAR ␣</button>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; font-size: 0.75rem; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+              <span><strong>Desk Specs:</strong> Custom 75% Mechanical (Lubed & Filmed)</span>
+              <span>·</span>
+              <span>Hario V60 Ceramic Dripper</span>
+              <span>·</span>
+              <span>Sennheiser HD 6XX</span>
+              <span>·</span>
+              <span>Tokyo Night Theme</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- [03] BigQuery SQL Career & Personal Console -->
+      <section id="sql-console" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[03]</span> BigQuery Career & Personal Console
+        </h2>
+        <p class="section__desc">
+          Query my background, engineering milestones, Austin roasters, or hardware setup using standard SQL. Click a pre-indexed dataset below or write a query.
+        </p>
+
+        <div class="sql-box">
+          <!-- Preset Query Chips -->
+          <div class="sql-chips-bar">
+            <button class="sql-chip is-active" data-query="SELECT * FROM snh_ai.engineering_impact">
+              snh_ai.engineering_impact
+            </button>
+            <button class="sql-chip" data-query="SELECT roaster, neighborhood, favorite_order, vibe_notes FROM austin.coffee_roasters">
+              austin.coffee_roasters
+            </button>
+            <button class="sql-chip" data-query="SELECT device, specification, mods_details, usage FROM hardware.desk_setup">
+              hardware.desk_setup
+            </button>
+            <button class="sql-chip" data-query="SELECT role, organization, dates, location, primary_stack FROM career.timeline">
+              career.timeline
+            </button>
+            <button class="sql-chip" data-query="SELECT project, domain, models_tech, key_outcome FROM projects.machine_learning">
+              projects.machine_learning
+            </button>
+          </div>
+
+          <!-- SQL Text Area -->
+          <div class="sql-input-area">
+            <textarea id="sqlQueryInput" class="sql-textarea" spellcheck="false" rows="2">SELECT * FROM snh_ai.engineering_impact</textarea>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="sql-toolbar">
+            <div id="sqlResultsMeta" class="sql-meta-bar">
+              <span class="sql-status-success">✓ Query complete</span>
+              <span class="sql-meta-sep">·</span>
+              <span>0.015 sec elapsed</span>
+              <span class="sql-meta-sep">·</span>
+              <span>5 rows</span>
+            </div>
+            <button id="sqlRunBtn" class="sql-run-btn">
+              <span>▶</span> Run Query <span style="opacity: 0.6; font-size: 0.65rem; margin-left: 0.25rem;">(⌘⏎)</span>
+            </button>
+          </div>
+
+          <!-- Results Table -->
+          <div id="sqlResultsTable" class="sql-results-container"></div>
+        </div>
+      </section>
+
+      <!-- [04] Experience Dossier -->
+      <section id="experience" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[04]</span> Experience
+        </h2>
+
+        <article class="entry">
+          <div class="entry__head">
+            <h3 class="entry__title">Data Engineer</h3>
+            <span class="entry__dates">January 2026 - Present</span>
+          </div>
+          <p class="entry__org">SNH AI · Austin, TX</p>
+          <ul class="entry__list">
+            <li>Own the Python/FastAPI service that transforms raw record feeds into the structured features driving automated compliance decisions.</li>
+            <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.
+              <span class="mnote">Merged, not just opened.</span>
+            </li>
+            <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
+            <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.
+              <span class="mnote">Root cause first, patch second.</span>
+            </li>
+            <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
+          </ul>
+          <div class="tech-tags">
+            <span class="tech-tag">python</span>
+            <span class="tech-tag">fastapi</span>
+            <span class="tech-tag">bigquery</span>
+            <span class="tech-tag">gcp</span>
+            <span class="tech-tag">pytest</span>
+            <span class="tech-tag">react</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__head">
+            <h3 class="entry__title">Data Engineer Intern</h3>
+            <span class="entry__dates">June 2025 - January 2026</span>
+          </div>
+          <p class="entry__org">SNH AI · Austin, TX</p>
+          <ul class="entry__list">
+            <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
+            <li>Developed Python pipelines standardizing heterogeneous data feeds into a unified golden dataset for model training and evaluation.</li>
+            <li>Created and validated schema definitions to enforce consistency across diverse data sources.</li>
+            <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.
+              <span class="mnote">Intern to owner of the core service in seven months.</span>
+            </li>
+          </ul>
+          <div class="tech-tags">
+            <span class="tech-tag">python</span>
+            <span class="tech-tag">data validation</span>
+            <span class="tech-tag">label studio</span>
+            <span class="tech-tag">etl</span>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__head">
+            <h3 class="entry__title">Data Analyst Intern</h3>
+            <span class="entry__dates">February 2024 - August 2024</span>
+          </div>
+          <p class="entry__org">JSoftUSA · Austin, TX</p>
+          <ul class="entry__list">
+            <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
+            <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
+            <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
+          </ul>
+          <div class="tech-tags">
+            <span class="tech-tag">sql</span>
+            <span class="tech-tag">tableau</span>
+            <span class="tech-tag">etl</span>
+          </div>
+        </article>
+      </section>
+
+      <!-- [05] Featured Projects -->
+      <section id="projects" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[05]</span> Projects
+        </h2>
+
+        <div class="projects-grid">
+          <div class="project-card">
+            <h3 class="project-card__title">
+              <a href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank" rel="noopener noreferrer">
+                Ambient Air Pollution Prediction &rarr;
+              </a>
+            </h3>
+            <p class="project-card__desc">
+              Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5 concentrations across the U.S., with exploratory data analysis, feature selection, and cross-validation.
+            </p>
+            <div class="tech-tags">
+              <span class="tech-tag">python</span>
+              <span class="tech-tag">scikit-learn</span>
+              <span class="tech-tag">xgboost</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h3 class="project-card__title">
+              <a href="https://github.com/MohammedJalil/intellivest" target="_blank" rel="noopener noreferrer">
+                IntelliVest Investment Analytics Platform &rarr;
+              </a>
+            </h3>
+            <p class="project-card__desc">
+              Investment analytics platform with real-time market data, portfolio optimization, and interactive dashboards for informed decision-making.
+            </p>
+            <div class="tech-tags">
+              <span class="tech-tag">python</span>
+              <span class="tech-tag">streamlit</span>
+              <span class="tech-tag">plotly</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h3 class="project-card__title">
+              <a href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank" rel="noopener noreferrer">
+                RNA-Seq Gene Expression Analysis &rarr;
+              </a>
+            </h3>
+            <p class="project-card__desc">
+              Differential gene expression analysis with DESeq2, visualized through PCA, volcano plots, and heatmaps.
+            </p>
+            <div class="tech-tags">
+              <span class="tech-tag">r</span>
+              <span class="tech-tag">bioconductor</span>
+              <span class="tech-tag">deseq2</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- [06] Education -->
+      <section id="education" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[06]</span> Education
+        </h2>
+        <article class="entry" style="padding-bottom: 0;">
+          <div class="entry__head">
+            <h3 class="entry__title">The University of Texas at Austin</h3>
+            <span class="entry__dates">May 2024</span>
+          </div>
+          <p class="entry__org">B.S. Biology (Computational)</p>
+        </article>
+      </section>
+
+      <!-- [07] Ask This Site a Question (AI Chatbot) -->
+      <section id="ask" class="section">
+        <h2 class="section__heading">
+          <span class="section__num">[07]</span> Ask this site a question
+        </h2>
+        <div class="ask-box">
+          <p class="ask__hint">Answers are generated from the content and background of this site.</p>
+          <div class="ask__thread" id="askThread" role="log" aria-live="polite"></div>
+          <form class="ask__form" id="askForm">
+            <input type="text" class="ask__input" id="askInput" autocomplete="off"
+              placeholder="e.g. what coffee roasters does he like in Austin or what is his stack?" aria-label="Your question" />
+            <button type="submit" class="ask__send">ask</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Dossier Bottom Exit Action -->
+      <div class="dossier-bottom-bar">
+        <button type="button" class="back-to-room-btn nav-btn nav-btn--primary cta-glow" onclick="window.returnTo3DRoom()">
+          <span>◀</span> Return to 3D Spatial Room <span class="kbd-hint">ESC</span>
+        </button>
+      </div>
+
+      <!-- Colophon / Footer -->
+      <footer class="colophon">
+        <div>
+          <span>Set in Fraunces &amp; IBM Plex Mono.</span>
+          <span style="margin: 0 0.5rem;">·</span>
+          <span>© <span id="year"></span> Mohammed-Taqi Jalil</span>
+        </div>
+        <div>
+          <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a>
+          <span style="margin: 0 0.5rem;">·</span>
+          <a href="tel:+15126961614">512-696-1614</a>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/three.min.js"></script>
+  <script src="js/GLTFLoader.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/scene3d.js"></script>
   <script src="js/script.js"></script>
   <script src="js/chat.js"></script>
 </body>
