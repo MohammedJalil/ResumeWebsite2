@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prototype B · Swiss | Mohammed-Taqi Jalil</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,800;0,900;1,400&display=swap" />
+  <style>
+    :root {
+      --paper: #eeebe4;
+      --ink: #0e0e0e;
+      --mute: #6f6c66;
+      --sig: #ff4a00;
+      --g: clamp(16px, 2vw, 28px);
+      --pad: clamp(16px, 3vw, 40px);
+      --f: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.45;
+      font-feature-settings: 'ss01', 'tnum';
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    ::selection { background: var(--sig); color: var(--paper); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--g);
+      padding: 0 var(--pad);
+    }
+
+    /* Column guides */
+    .guides {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      padding: 0 var(--pad);
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--g);
+      transition: opacity 0.4s ease;
+    }
+
+    .guides i { border-left: 1px solid rgba(14, 14, 14, 0.07); border-right: 1px solid rgba(14, 14, 14, 0.07); }
+    body.no-guides .guides { opacity: 0; }
+
+    header, main, footer { position: relative; z-index: 1; }
+
+    /* Meta bar */
+    .meta {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--paper);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .meta > * { grid-column: span 3; }
+    .meta nav { display: flex; gap: 18px; justify-content: flex-end; }
+    .meta nav a:hover { color: var(--sig); }
+    .meta .m { color: var(--mute); }
+
+    /* Hero */
+    .hero { position: relative; padding-top: clamp(40px, 8vh, 90px); padding-bottom: 60px; overflow: hidden; }
+
+    .disc {
+      position: absolute;
+      right: -8vw;
+      top: 12vh;
+      width: 46vw;
+      height: 46vw;
+      border-radius: 50%;
+      background: var(--sig);
+      mix-blend-mode: multiply;
+      transform: translate3d(0, calc(var(--s, 0) * 0.35px), 0) scale(calc(1 + var(--s, 0) * 0.0004));
+      z-index: 0;
+    }
+
+    .name {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 0 var(--pad);
+      font-size: clamp(64px, 15.2vw, 260px);
+      font-weight: 800;
+      line-height: 0.8;
+      letter-spacing: -0.065em;
+    }
+
+    .name .ln { display: block; overflow: hidden; padding: 0.04em 0 0.06em; }
+    .name .ch { display: inline-block; transform: translateY(105%); animation: up 1s cubic-bezier(.2, .8, .1, 1) forwards; }
+
+    @keyframes up { to { transform: none; } }
+
+    .hero__row { margin-top: clamp(40px, 7vh, 80px); position: relative; z-index: 1; align-items: end; }
+
+    .idx { grid-column: 1 / span 3; font-size: 13px; font-weight: 500; }
+    .idx ol { margin: 10px 0 0; padding: 0; list-style: none; }
+    .idx li { display: flex; gap: 10px; padding: 3px 0; border-top: 1px solid rgba(14, 14, 14, 0.18); }
+    .idx li span { color: var(--mute); width: 26px; }
+    .idx a:hover { color: var(--sig); }
+
+    .claim {
+      grid-column: 4 / span 6;
+      margin: 0;
+      font-size: clamp(30px, 3.8vw, 58px);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .claim i { font-weight: 400; }
+    .dot { display: inline-block; width: 0.22em; height: 0.22em; margin-left: 0.04em; border-radius: 50%; background: var(--sig); }
+
+    .lede { grid-column: 10 / span 3; margin: 0; font-size: 15px; line-height: 1.45; }
+
+    /* Section heads */
+    .sec { padding-top: clamp(70px, 12vh, 140px); }
+
+    .sec__hd { align-items: end; padding-bottom: 14px; border-bottom: 2px solid var(--ink); margin-bottom: 0; }
+    .sec__no { grid-column: span 3; font-size: 13px; font-weight: 500; }
+    .sec__t { grid-column: 4 / -1; margin: 0; font-size: clamp(40px, 7vw, 110px); font-weight: 800; line-height: 0.85; letter-spacing: -0.06em; }
+
+    /* Experience rows */
+    .rows { padding: 0 var(--pad); }
+
+    details.row { border-bottom: 1px solid var(--ink); }
+
+    details.row summary {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--g);
+      align-items: baseline;
+      padding: 22px 0;
+      list-style: none;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, padding 0.35s cubic-bezier(.2, .8, .1, 1);
+    }
+
+    details.row summary::-webkit-details-marker { display: none; }
+
+    .row__yr { grid-column: span 3; font-size: 14px; font-weight: 500; }
+    .row__role { grid-column: 4 / span 5; font-size: clamp(24px, 3vw, 44px); font-weight: 600; letter-spacing: -0.035em; line-height: 1; }
+    .row__org { grid-column: 9 / span 3; font-size: 15px; }
+    .row__x { grid-column: 12; justify-self: end; font-size: 28px; font-weight: 400; line-height: 1; transition: transform 0.35s ease, color 0.2s ease; }
+
+    details.row summary:hover { background: var(--ink); color: var(--paper); padding-left: 14px; padding-right: 14px; }
+    details.row summary:hover .row__x { color: var(--sig); }
+    details.row[open] .row__x { transform: rotate(45deg); color: var(--sig); }
+
+    .row__body { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--g); padding: 4px 0 34px; animation: open 0.5s cubic-bezier(.2, .8, .1, 1); }
+    .row__body ul { grid-column: 4 / span 6; margin: 0; padding: 0; list-style: none; counter-reset: b; }
+    .row__body li { position: relative; padding: 10px 0 10px 40px; border-top: 1px solid rgba(14, 14, 14, 0.14); font-size: 17px; line-height: 1.45; counter-increment: b; }
+    .row__body li::before { content: counter(b, decimal-leading-zero); position: absolute; left: 0; top: 12px; font-size: 12px; font-weight: 600; color: var(--sig); }
+    .row__body aside { grid-column: 10 / span 3; font-size: 13px; color: var(--mute); }
+    .row__body aside b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 4px; }
+    .row__body aside p { margin: 0 0 16px; }
+
+    @keyframes open { from { opacity: 0; transform: translateY(-8px); } }
+
+    /* Figures */
+    .figs { padding-top: 0; }
+    .fig { grid-column: span 3; padding: 20px 0 0; border-top: 1px solid var(--ink); margin-top: 40px; }
+    .fig__n { margin: 0; font-size: clamp(64px, 9vw, 150px); font-weight: 800; line-height: 0.85; letter-spacing: -0.07em; }
+    .fig__n sup { font-size: 0.34em; font-weight: 600; letter-spacing: -0.02em; color: var(--sig); vertical-align: top; margin-left: 0.04em; position: relative; top: 0.25em; }
+    .fig__l { margin: 16px 0 0; max-width: 18em; font-size: 14px; }
+
+    /* Projects */
+    .proj a {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: var(--g);
+      align-items: baseline;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .proj__n { grid-column: span 1; font-size: 14px; font-weight: 500; }
+    .proj__cat { grid-column: 2 / span 2; font-size: 14px; color: var(--mute); }
+    .proj__t { grid-column: 4 / span 6; font-size: clamp(30px, 4.6vw, 72px); font-weight: 700; letter-spacing: -0.05em; line-height: 0.92; transition: color 0.2s ease, transform 0.4s cubic-bezier(.2, .8, .1, 1); }
+    .proj__d { grid-column: 10 / span 3; font-size: 14px; }
+    .proj a:hover .proj__t { color: var(--sig); transform: translateX(14px); }
+    .proj__thumb { display: none; }
+
+    .peek {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 30;
+      width: 340px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate3d(var(--x, 0), var(--y, 0), 0) rotate(var(--r, 0deg)) scale(0.9);
+      transition: opacity 0.25s ease, transform 0.18s ease-out;
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.4);
+    }
+
+    .peek.on { opacity: 1; transform: translate3d(var(--x, 0), var(--y, 0), 0) rotate(var(--r, 0deg)) scale(1); }
+    .peek img { display: block; width: 100%; }
+
+    @media (hover: none) {
+      .peek { display: none; }
+      .proj__thumb { display: block; grid-column: 1 / -1; margin-top: 18px; width: 100%; }
+    }
+
+    /* Stack + off-clock columns */
+    .cols { padding-top: 28px; }
+    .col { grid-column: span 3; }
+    .col h3 { margin: 0 0 12px; font-size: 13px; font-weight: 600; }
+    .col ul { margin: 0; padding: 0; list-style: none; }
+    .col li { padding: 7px 0; border-top: 1px solid rgba(14, 14, 14, 0.18); font-size: 18px; font-weight: 500; letter-spacing: -0.02em; }
+    .col li span { display: block; font-size: 13px; font-weight: 400; color: var(--mute); letter-spacing: 0; }
+
+    /* Contact */
+    .contact { padding-top: clamp(90px, 16vh, 180px); padding-bottom: 30px; }
+    .big {
+      display: block;
+      padding: 0 var(--pad);
+      font-size: clamp(64px, 14.5vw, 250px);
+      font-weight: 800;
+      line-height: 0.82;
+      letter-spacing: -0.065em;
+    }
+
+    .big .o { color: var(--sig); }
+    .mail { grid-column: 4 / span 9; margin-top: 30px; font-size: clamp(22px, 3.2vw, 48px); font-weight: 600; letter-spacing: -0.035em; }
+    .mail a { background: linear-gradient(var(--sig), var(--sig)) 0 100% / 0% 4px no-repeat; transition: background-size 0.5s cubic-bezier(.2, .8, .1, 1); }
+    .mail a:hover { background-size: 100% 4px; }
+
+    .foot { margin-top: 90px; padding-top: 14px; padding-bottom: 20px; border-top: 1px solid var(--ink); font-size: 13px; }
+    .foot > * { grid-column: span 3; margin: 0; }
+    .foot a:hover { color: var(--sig); }
+
+    .rv { opacity: 0; transform: translateY(30px); transition: opacity 0.9s cubic-bezier(.2, .8, .1, 1), transform 0.9s cubic-bezier(.2, .8, .1, 1); }
+    .rv.on { opacity: 1; transform: none; }
+
+    .kbd { position: fixed; right: var(--pad); bottom: 16px; z-index: 25; font-size: 11px; color: var(--mute); transition: opacity 0.3s ease; }
+    .kbd b { display: inline-block; padding: 1px 6px; border: 1px solid var(--mute); border-radius: 3px; font-weight: 500; }
+
+    @media (max-width: 900px) {
+      .meta > * { grid-column: span 6; }
+      .meta .hide-sm { display: none; }
+      .idx { display: none; }
+      .claim { grid-column: 1 / -1; }
+      .lede { grid-column: 1 / -1; margin-top: 24px; max-width: 32em; }
+      .sec__no { grid-column: 1 / -1; margin-bottom: 10px; }
+      .sec__t { grid-column: 1 / -1; }
+      .row__yr { grid-column: 1 / span 6; }
+      .row__x { grid-column: 12; }
+      .row__role { grid-column: 1 / span 11; margin-top: 8px; }
+      .row__org { grid-column: 1 / -1; margin-top: 6px; }
+      .row__body ul, .row__body aside { grid-column: 1 / -1; }
+      .row__body aside { margin-top: 20px; }
+      .fig { grid-column: span 6; }
+      .proj__n { grid-column: span 2; }
+      .proj__cat { grid-column: 3 / -1; }
+      .proj__t { grid-column: 1 / -1; margin-top: 10px; }
+      .proj__d { grid-column: 1 / -1; margin-top: 10px; }
+      .col { grid-column: span 6; margin-bottom: 28px; }
+      .mail { grid-column: 1 / -1; }
+      .foot > * { grid-column: span 6; margin-bottom: 6px; }
+      .disc { width: 70vw; height: 70vw; top: 24vh; right: -20vw; }
+      .kbd { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0s !important; transition-duration: 0.001ms !important; }
+      .disc { transform: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="guides" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+  <header class="meta grid">
+    <span>Mohammed-Taqi Jalil</span>
+    <span class="m hide-sm">Data Engineer, SNH AI</span>
+    <span class="m hide-sm">Austin, TX · <span id="t">--:--</span> CT</span>
+    <nav><a href="#work">Work</a><a href="#contact">Contact</a><a href="../resume.html">Resume</a></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="disc" aria-hidden="true"></div>
+      <h1 class="name" aria-label="Mohammed-Taqi Jalil">
+        <span class="ln" data-split>Mohammed-</span>
+        <span class="ln" data-split>Taqi Jalil</span>
+      </h1>
+      <div class="grid hero__row">
+        <nav class="idx" aria-label="Index">
+          Index
+          <ol>
+            <li><span>01</span><a href="#work">Experience</a></li>
+            <li><span>02</span><a href="#figures">Figures</a></li>
+            <li><span>03</span><a href="#projects">Projects</a></li>
+            <li><span>04</span><a href="#stack">Stack</a></li>
+            <li><span>05</span><a href="#contact">Contact</a></li>
+          </ol>
+        </nav>
+        <p class="claim rv">Data engineer, <i>prototype</i> to production<span class="dot"></span></p>
+        <p class="lede rv">I helped take an AI-powered records-adjudication platform from early prototype to production with live enterprise customers. I own the service that turns messy multi-vendor court XML into the structured data behind every automated compliance decision.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="work">
+      <div class="grid sec__hd rv"><span class="sec__no">(01)</span><h2 class="sec__t">Experience</h2></div>
+      <div class="rows">
+        <details class="row" open>
+          <summary><span class="row__yr">2026 — Now</span><span class="row__role">Data Engineer</span><span class="row__org">SNH AI, Austin</span><span class="row__x" aria-hidden="true">+</span></summary>
+          <div class="row__body">
+            <ul>
+              <li>Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.</li>
+              <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.</li>
+              <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
+              <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.</li>
+              <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
+            </ul>
+            <aside><b>Stack</b><p>Python, FastAPI, BigQuery, GCP, pytest, React</p><b>Note</b><p>Merged, not just opened. Root cause first, patch second.</p></aside>
+          </div>
+        </details>
+        <details class="row">
+          <summary><span class="row__yr">2025 — 2026</span><span class="row__role">Data Engineer Intern</span><span class="row__org">SNH AI, Austin</span><span class="row__x" aria-hidden="true">+</span></summary>
+          <div class="row__body">
+            <ul>
+              <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
+              <li>Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.</li>
+              <li>Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.</li>
+              <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.</li>
+            </ul>
+            <aside><b>Stack</b><p>Python, XML, XSD, Label Studio</p><b>Note</b><p>Intern to owner of the core service in seven months.</p></aside>
+          </div>
+        </details>
+        <details class="row">
+          <summary><span class="row__yr">2024</span><span class="row__role">Data Analyst Intern</span><span class="row__org">JSoftUSA, Austin</span><span class="row__x" aria-hidden="true">+</span></summary>
+          <div class="row__body">
+            <ul>
+              <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
+              <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
+              <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
+            </ul>
+            <aside><b>Stack</b><p>SQL, Tableau, ETL</p></aside>
+          </div>
+        </details>
+        <details class="row">
+          <summary><span class="row__yr">2024</span><span class="row__role">B.S. Biology (Computational)</span><span class="row__org">UT Austin</span><span class="row__x" aria-hidden="true">+</span></summary>
+          <div class="row__body">
+            <ul><li>Coursework in genomics algorithms, biostatistics, data structures, and Python.</li></ul>
+            <aside><b>Graduated</b><p>May 2024</p></aside>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="sec figs" id="figures">
+      <div class="grid sec__hd rv" style="margin-top:clamp(70px,12vh,140px)"><span class="sec__no">(02)</span><h2 class="sec__t">Figures</h2></div>
+      <div class="grid">
+        <div class="fig rv"><p class="fig__n">100<sup>+</sup></p><p class="fig__l">Merged pull requests across parsing, enrichment, validation and decision logic.</p></div>
+        <div class="fig rv" style="transition-delay:.08s"><p class="fig__n">7<sup>mo</sup></p><p class="fig__l">From intern to owner of the platform's core transformation service.</p></div>
+        <div class="fig rv" style="transition-delay:.16s"><p class="fig__n">15<sup>%</sup></p><p class="fig__l">Increase in platform adoption from student data analysis at JSoftUSA.</p></div>
+        <div class="fig rv" style="transition-delay:.24s"><p class="fig__n">30<sup>%</sup></p><p class="fig__l">Less manual reporting time after automating SQL ETL workflows.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="projects">
+      <div class="grid sec__hd rv"><span class="sec__no">(03)</span><h2 class="sec__t">Projects</h2></div>
+      <div class="rows proj">
+        <a href="https://github.com/MohammedJalil/intellivest" target="_blank" rel="noopener noreferrer" data-img="../assets/intellivest-dashboard.png">
+          <span class="proj__n">A</span><span class="proj__cat">Financial analytics</span><span class="proj__t">IntelliVest</span>
+          <span class="proj__d">Investment analytics with real-time market data, portfolio optimization, and interactive dashboards. Python, Streamlit, Plotly.</span>
+          <img class="proj__thumb" src="../assets/intellivest-dashboard.png" alt="" loading="lazy" />
+        </a>
+        <a href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank" rel="noopener noreferrer" data-img="../assets/air-pollution-model.png">
+          <span class="proj__n">B</span><span class="proj__cat">Machine learning</span><span class="proj__t">Air Pollution Prediction</span>
+          <span class="proj__d">Random Forest, XGBoost, k-NN and Lasso predicting PM2.5 concentrations across the U.S. Python, scikit-learn.</span>
+          <img class="proj__thumb" src="../assets/air-pollution-model.png" alt="" loading="lazy" />
+        </a>
+        <a href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank" rel="noopener noreferrer" data-img="../assets/rna-seq-analysis.png">
+          <span class="proj__n">C</span><span class="proj__cat">Bioinformatics</span><span class="proj__t">RNA-Seq Expression</span>
+          <span class="proj__d">Differential gene expression with DESeq2, visualized through PCA, volcano plots, and heatmaps. R, Bioconductor.</span>
+          <img class="proj__thumb" src="../assets/rna-seq-analysis.png" alt="" loading="lazy" />
+        </a>
+      </div>
+    </section>
+
+    <section class="sec" id="stack">
+      <div class="grid sec__hd rv"><span class="sec__no">(04)</span><h2 class="sec__t">Stack &amp; off hours</h2></div>
+      <div class="grid cols rv">
+        <div class="col"><h3>Languages</h3><ul><li>Python<span>FastAPI, Pandas, pytest</span></li><li>SQL<span>BigQuery, MySQL</span></li><li>TypeScript / React</li><li>XML / XSD</li></ul></div>
+        <div class="col"><h3>Cloud &amp; data</h3><ul><li>GCP<span>BigQuery, Cloud Run, Pub/Sub</span></li><li>Medallion ETL<span>bronze · silver · gold</span></li><li>Docker, Git</li><li>Label Studio, Tableau</li></ul></div>
+        <div class="col"><h3>Coffee, Austin</h3><ul><li>Houndstooth<span>Double cortado, deep work</span></li><li>Fleet<span>Espresso tonic</span></li><li>Flat Track<span>Colombian pour over</span></li><li>Greater Goods<span>Weekend reading</span></li></ul></div>
+        <div class="col"><h3>Bench</h3><ul><li>75% mechanical<span>Boba U4T / Oil King</span></li><li>Hario V60<span>Timemore C2, 1:16</span></li><li>Sennheiser HD 6XX</li><li>Neovim<span>Tokyo Night Storm</span></li></ul></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="contact" id="contact">
+    <a class="big" href="mailto:mohammed.jalil.email@gmail.com">Write<br />me<span class="o">.</span></a>
+    <div class="grid"><p class="mail"><a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a></p></div>
+    <div class="grid foot">
+      <p>© <span id="y"></span> Mohammed-Taqi Jalil</p>
+      <p><a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer">GitHub ↗</a></p>
+      <p><a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></p>
+      <p><a href="tel:+15126961614">512-696-1614</a></p>
+    </div>
+  </footer>
+
+  <div class="peek" aria-hidden="true"><img alt="" /></div>
+  <p class="kbd" aria-hidden="true">press <b>G</b> for grid</p>
+
+  <script>
+    (function () {
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      document.querySelectorAll('[data-split]').forEach(function (ln, li) {
+        var text = ln.textContent;
+        ln.textContent = '';
+        ln.setAttribute('aria-hidden', 'true');
+        Array.from(text).forEach(function (c, i) {
+          var s = document.createElement('span');
+          s.className = 'ch';
+          s.textContent = c === ' ' ? '\u00a0' : c;
+          s.style.animationDelay = (0.15 + li * 0.18 + i * 0.035) + 's';
+          ln.appendChild(s);
+        });
+      });
+
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
+
+      var disc = document.querySelector('.disc');
+      var kbd = document.querySelector('.kbd');
+      window.addEventListener('scroll', function () {
+        if (!reduce) disc.style.setProperty('--s', window.scrollY);
+        kbd.style.opacity = window.scrollY > 120 ? '0' : '1';
+      }, { passive: true });
+
+      var t = document.getElementById('t');
+      try {
+        var fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit' });
+        var tick = function () { t.textContent = fmt.format(new Date()); };
+        tick(); setInterval(tick, 30000);
+      } catch (e) {}
+      document.getElementById('y').textContent = new Date().getFullYear();
+
+      document.addEventListener('keydown', function (e) {
+        if ((e.key === 'g' || e.key === 'G') && !e.metaKey && !e.ctrlKey && document.activeElement === document.body) {
+          document.body.classList.toggle('no-guides');
+        }
+      });
+
+      var peek = document.querySelector('.peek');
+      var img = peek.querySelector('img');
+      var lastX = 0;
+      document.querySelectorAll('.proj a').forEach(function (a) {
+        a.addEventListener('pointerenter', function () { img.src = a.dataset.img; peek.classList.add('on'); });
+        a.addEventListener('pointerleave', function () { peek.classList.remove('on'); });
+        a.addEventListener('pointermove', function (e) {
+          var r = reduce ? 0 : Math.max(-8, Math.min(8, (e.clientX - lastX) * 0.6));
+          lastX = e.clientX;
+          peek.style.setProperty('--x', (e.clientX + 24) + 'px');
+          peek.style.setProperty('--y', (e.clientY - 120) + 'px');
+          peek.style.setProperty('--r', r + 'deg');
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>

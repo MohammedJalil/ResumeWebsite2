@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prototype C · Parsed | Mohammed-Taqi Jalil</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" />
+  <style>
+    :root {
+      --bg: #f3f2ed;
+      --pane: #fffefb;
+      --line: #e2dfd6;
+      --ink: #1d1f23;
+      --mute: #7b7f87;
+      --faint: #b9bcc2;
+      --key: #8b3fd9;
+      --str: #0b7a6b;
+      --num: #c2410c;
+      --tag: #1f6feb;
+      --attr: #b45309;
+      --hl: #fff1b8;
+      --ok: #15803d;
+      --mono: 'JetBrains Mono', ui-monospace, monospace;
+      --serif: 'Newsreader', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 28px;
+    }
+
+    a { color: inherit; }
+
+    ::selection { background: var(--hl); }
+
+    /* Top bar: file tabs as navigation */
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: stretch;
+      height: 44px;
+      background: rgba(243, 242, 237, 0.92);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 12.5px;
+    }
+
+    .bar__crumb { display: flex; align-items: center; padding: 0 18px; color: var(--mute); white-space: nowrap; border-right: 1px solid var(--line); }
+    .bar__crumb b { color: var(--ink); font-weight: 500; }
+
+    .tabs { display: flex; overflow-x: auto; scrollbar-width: none; }
+    .tabs a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      border-right: 1px solid var(--line);
+      color: var(--mute);
+      text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .tabs a i { font-style: normal; font-size: 10px; }
+    .tabs a.on { background: var(--pane); color: var(--ink); }
+    .tabs a.on::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--str); }
+    .tabs a:hover { color: var(--ink); }
+
+    .i-md { color: #1f6feb; } .i-run { color: var(--ok); } .i-json { color: #ca8a04; } .i-dir { color: var(--attr); } .i-yml { color: #db2777; } .i-sh { color: var(--mute); }
+
+    /* Status bar */
+    .status {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 20;
+      display: flex;
+      gap: 18px;
+      height: 26px;
+      align-items: center;
+      padding: 0 14px;
+      background: #1d1f23;
+      color: #d1d5db;
+      font-family: var(--mono);
+      font-size: 11px;
+    }
+
+    .status .sp { margin-left: auto; }
+    .status .g { color: #4ade80; }
+
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+
+    /* Hero */
+    .hero { padding: 72px 0 40px; }
+    .hero h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6.2vw, 88px); line-height: 1; letter-spacing: -0.025em; max-width: 14ch; }
+    .hero h1 em { color: var(--str); }
+    .hero__sub { max-width: 44rem; margin: 26px 0 0; font-size: 18px; color: #3f434a; }
+    .hero__sub b { font-weight: 600; color: var(--ink); }
+
+    /* Run widget */
+    .run { display: grid; grid-template-columns: 1.1fr 0.62fr 1.1fr; gap: 14px; margin-top: 44px; }
+
+    .pane { background: var(--pane); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+    .pane__hd { display: flex; align-items: center; gap: 4px; padding: 0 6px; height: 38px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 12px; }
+    .pane__hd .lbl { padding: 0 8px; color: var(--mute); }
+    .pane__hd .sp { margin-left: auto; }
+
+    .vtab { padding: 5px 10px; border: 0; border-radius: 6px; background: none; color: var(--mute); font: inherit; cursor: pointer; }
+    .vtab.on { background: var(--bg); color: var(--ink); }
+    .vtab:hover { color: var(--ink); }
+
+    .rerun { padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--pane); color: var(--ink); font: inherit; cursor: pointer; }
+    .rerun:hover { border-color: var(--str); color: var(--str); }
+
+    .code { margin: 0; padding: 12px 0; font-family: var(--mono); font-size: 12.8px; line-height: 1.75; min-height: 330px; counter-reset: ln; overflow-x: auto; }
+    .code .l { display: block; padding: 0 14px 0 0; white-space: pre; counter-increment: ln; transition: background 0.35s ease; }
+    .code .l::before { content: counter(ln); display: inline-block; width: 38px; padding-right: 14px; text-align: right; color: var(--faint); user-select: none; }
+    .code .l.hl { background: var(--hl); }
+    .code .l.new { animation: flash 0.9s ease; }
+    .code .caret::after { content: ''; display: inline-block; width: 7px; height: 15px; margin-left: 2px; vertical-align: -2px; background: var(--ink); animation: blink 1s steps(2) infinite; }
+
+    @keyframes flash { from { background: #d1fae5; } }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .tg { color: var(--tag); } .at { color: var(--attr); } .st { color: var(--str); } .ky { color: var(--key); } .nu { color: var(--num); } .cm { color: var(--faint); font-style: italic; } .pu { color: var(--mute); }
+    .dec { color: var(--ok); font-weight: 600; background: #dcfce7; border-radius: 4px; padding: 1px 4px; }
+
+    .mid { padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 14px; }
+    .fn { font-family: var(--mono); font-size: 13px; }
+    .fn .ky { font-weight: 600; }
+    .steps { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+    .steps li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; font-family: var(--mono); font-size: 12.5px; color: var(--mute); transition: all 0.3s ease; }
+    .steps li .ic { width: 16px; text-align: center; }
+    .steps li.go { color: var(--ink); border-color: #fcd34d; background: #fffbeb; }
+    .steps li.ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+    .log { flex: 1; margin: 0; padding: 10px 12px; min-height: 110px; background: var(--bg); border-radius: 8px; font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--mute); white-space: pre-wrap; }
+    .log b { color: var(--ink); font-weight: 500; }
+    .log .g { color: var(--ok); }
+
+    .run__note { margin: 16px 0 0; font-family: var(--mono); font-size: 12px; color: var(--mute); }
+
+    /* File sections */
+    .file { margin-top: 90px; }
+    .file__hd { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+    .file__hd h2 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(32px, 4vw, 52px); letter-spacing: -0.02em; line-height: 1; }
+    .file__hd code { font-family: var(--mono); font-size: 13px; color: var(--mute); }
+
+    .doc { background: var(--pane); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .doc .code { min-height: 0; font-size: 13px; }
+    .doc .l { display: grid; grid-template-columns: 52px 1fr; white-space: pre-wrap; }
+    .doc .l::before { width: auto; }
+    .doc .prose { display: block; padding: 2px 0 2px 6ch; font-family: var(--sans); font-size: 14.5px; line-height: 1.6; color: #2d3138; white-space: normal; }
+
+    /* projects explorer */
+    .explorer { display: grid; grid-template-columns: 260px 1fr; }
+    .tree { margin: 0; padding: 14px 0; list-style: none; border-right: 1px solid var(--line); font-family: var(--mono); font-size: 13px; }
+    .tree li { padding: 0; }
+    .tree .root { padding: 4px 18px; color: var(--mute); }
+    .tree button { display: flex; gap: 8px; width: 100%; padding: 6px 18px 6px 34px; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+    .tree button:hover { background: var(--bg); }
+    .tree button.on { background: #e7f3ef; color: var(--str); }
+    .preview { padding: 28px 34px 34px; }
+    .preview .crumb { font-family: var(--mono); font-size: 12px; color: var(--mute); }
+    .preview h3 { margin: 10px 0 12px; font-family: var(--serif); font-weight: 500; font-size: 34px; letter-spacing: -0.015em; line-height: 1.1; }
+    .preview img { display: block; width: 100%; max-width: 720px; border: 1px solid var(--line); border-radius: 8px; margin: 18px 0; }
+    .preview p { max-width: 42rem; margin: 0 0 14px; color: #3f434a; }
+    .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; padding: 0; list-style: none; }
+    .badges li { padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; font-family: var(--mono); font-size: 11.5px; color: var(--mute); }
+    .preview a.gh { font-family: var(--mono); font-size: 13px; color: var(--str); }
+
+    /* markdown pane */
+    .md { padding: 30px 36px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .md h3 { margin: 0 0 14px; font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--key); }
+    .md h3::before { content: '## '; color: var(--faint); }
+    .md ul { margin: 0; padding: 0; list-style: none; }
+    .md li { padding: 12px 0; border-top: 1px solid var(--line); }
+    .md li b { font-family: var(--serif); font-weight: 500; font-size: 21px; }
+    .md li span { display: block; font-size: 14px; color: var(--mute); }
+    .md li i { font-family: var(--serif); font-size: 16px; color: #3f434a; }
+
+    /* contact shell */
+    .sh { padding: 22px 26px 26px; font-family: var(--mono); font-size: 14px; line-height: 2; }
+    .sh .p { color: var(--str); user-select: none; }
+    .sh .o { color: #3f434a; padding-left: 18px; }
+    .sh a { color: var(--tag); text-decoration: none; border-bottom: 1px dotted var(--tag); }
+    .sh a:hover { border-bottom-style: solid; }
+    .copy { margin-left: 10px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 5px; background: var(--pane); font: inherit; font-size: 11px; color: var(--mute); cursor: pointer; }
+    .copy:hover { color: var(--ink); border-color: var(--ink); }
+
+    footer { margin: 70px 0 30px; font-family: var(--mono); font-size: 12px; color: var(--mute); }
+
+    @media (max-width: 980px) {
+      .run { grid-template-columns: 1fr; }
+      .code { min-height: 0; }
+      .explorer { grid-template-columns: 1fr; }
+      .tree { border-right: 0; border-bottom: 1px solid var(--line); }
+      .md { grid-template-columns: 1fr; }
+      .bar__crumb { display: none; }
+      .status .hide-sm { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { padding: 0 14px; }
+      .hero { padding-top: 44px; }
+      .code { font-size: 11.5px; }
+      .preview, .md, .sh { padding: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bar">
+    <div class="bar__crumb">~/<b>mohammed-taqi-jalil</b>/portfolio</div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#top" class="on"><i class="i-md">M↓</i>README.md</a>
+      <a href="#experience"><i class="i-json">{ }</i>experience.json</a>
+      <a href="#projects"><i class="i-dir">▸</i>projects/</a>
+      <a href="#stack"><i class="i-yml">≡</i>stack.yaml</a>
+      <a href="#offhours"><i class="i-md">M↓</i>off_hours.md</a>
+      <a href="#contact"><i class="i-sh">$</i>contact.sh</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="top">
+      <h1>Every record deserves a clean parse. <em>Including mine.</em></h1>
+      <p class="hero__sub">I'm <b>Mohammed-Taqi Jalil</b>, a data engineer at SNH AI in Austin. I own the Python/FastAPI
+        service that turns messy multi-vendor court XML into the structured data behind automated compliance
+        decisions. So here's my own record, run through the same idea.</p>
+
+      <div class="run" id="run">
+        <div class="pane">
+          <div class="pane__hd">
+            <button type="button" class="vtab on" data-v="a">vendor_a.xml</button>
+            <button type="button" class="vtab" data-v="b">vendor_b.xml</button>
+          </div>
+          <pre class="code" id="src" aria-label="Source XML"></pre>
+        </div>
+
+        <div class="pane">
+          <div class="pane__hd"><span class="lbl">transform.py</span><span class="sp"></span><button type="button" class="rerun" id="rerun">▶ run</button></div>
+          <div class="mid">
+            <div class="fn"><span class="ky">def</span> <span class="tg">transform</span>(<span class="at">record</span>) <span class="pu">→</span> <span class="at">Candidate</span></div>
+            <ol class="steps" id="steps">
+              <li data-s="parse"><span class="ic">○</span>parse</li>
+              <li data-s="validate"><span class="ic">○</span>validate · xsd</li>
+              <li data-s="enrich"><span class="ic">○</span>enrich · normalize</li>
+              <li data-s="decide"><span class="ic">○</span>decide</li>
+            </ol>
+            <pre class="log" id="log" aria-live="polite"></pre>
+          </div>
+        </div>
+
+        <div class="pane">
+          <div class="pane__hd"><span class="lbl">candidate.json</span><span class="sp"></span><span class="lbl" id="fields">0 fields</span></div>
+          <pre class="code" id="out" aria-label="Structured JSON output"></pre>
+        </div>
+      </div>
+      <p class="run__note">// two vendors, two shapes, one schema. switch vendors and run it again.</p>
+    </section>
+
+    <section class="file" id="experience">
+      <div class="file__hd"><h2>Experience</h2><code>experience.json</code></div>
+      <div class="doc"><pre class="code" id="expCode"></pre></div>
+    </section>
+
+    <section class="file" id="projects">
+      <div class="file__hd"><h2>Side builds</h2><code>projects/</code></div>
+      <div class="doc explorer">
+        <ul class="tree" id="tree">
+          <li class="root">▾ projects</li>
+        </ul>
+        <div class="preview" id="preview"></div>
+      </div>
+    </section>
+
+    <section class="file" id="stack">
+      <div class="file__hd"><h2>Stack</h2><code>stack.yaml</code></div>
+      <div class="doc"><pre class="code" id="stackCode"></pre></div>
+    </section>
+
+    <section class="file" id="offhours">
+      <div class="file__hd"><h2>Off hours</h2><code>off_hours.md · preview</code></div>
+      <div class="doc md">
+        <div>
+          <h3>coffee.austin</h3>
+          <ul>
+            <li><b>Houndstooth Coffee</b><span>Downtown &amp; North Lamar · morning deep work</span><i>Double Cortado, washed Ethiopian</i></li>
+            <li><b>Fleet Coffee</b><span>East Austin · east side ritual</span><i>Espresso Tonic or Flat White</i></li>
+            <li><b>Flat Track Coffee</b><span>East Caesar Chavez · high-energy fuel</span><i>House drip or Colombian pour over</i></li>
+            <li><b>Greater Goods Roasting</b><span>East 5th St · weekend reading</span><i>Single-origin pour over</i></li>
+          </ul>
+        </div>
+        <div>
+          <h3>the.bench</h3>
+          <ul>
+            <li><b>Custom 75% mechanical</b><span>lubed &amp; filmed · Boba U4T / Gateron Oil King</span></li>
+            <li><b>Hario V60 + Timemore C2</b><span>washed Ethiopian, 1:16</span></li>
+            <li><b>Sennheiser HD 6XX</b><span>with DAC/amp · deep work soundtrack</span></li>
+            <li><b>VS Code / Neovim</b><span>Tokyo Night Storm</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="file" id="contact">
+      <div class="file__hd"><h2>Say hello</h2><code>contact.sh</code></div>
+      <div class="doc sh">
+        <div><span class="p">$</span> whoami</div>
+        <div class="o">Mohammed-Taqi Jalil · data engineer · Austin, TX</div>
+        <div><span class="p">$</span> echo $EMAIL</div>
+        <div class="o"><a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a><button type="button" class="copy" id="copy">copy</button></div>
+        <div><span class="p">$</span> open --links</div>
+        <div class="o"><a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer">github</a> · <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer">linkedin</a> · <a href="../resume.html">resume</a> · <a href="tel:+15126961614">512-696-1614</a></div>
+        <div><span class="p">$</span> <span class="caret"></span></div>
+      </div>
+    </section>
+
+    <footer>// © <span id="yr"></span> Mohammed-Taqi Jalil · built by hand, parsed by eye</footer>
+  </main>
+
+  <div class="status" aria-hidden="true">
+    <span class="g">● main</span>
+    <span class="hide-sm">⟳ 0 errors · 0 warnings</span>
+    <span class="sp" id="lnCol">Ln 1, Col 1</span>
+    <span class="hide-sm">UTF-8</span>
+    <span id="clock">Austin --:--</span>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ---------- tiny highlighters (static strings only) ---------- */
+      function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+      function hlXml(s) {
+        return esc(s)
+          .replace(/([\w:-]+)=(&quot;.*?&quot;)/g, '<span class="at">$1</span>=<span class="st">$2</span>')
+          .replace(/(&lt;\/?[\w?_.:-]+)/g, '<span class="tg">$1</span>')
+          .replace(/(\/?\??&gt;)/g, '<span class="tg">$1</span>');
+      }
+      var P = function (t) { return '<span class="pu">' + t + '</span>'; };
+      var K = function (k) { return '<span class="ky">&quot;' + k + '&quot;</span>' + P(':') + ' '; };
+      var S = function (s) { return '<span class="st">&quot;' + esc(s) + '&quot;</span>'; };
+      var V = function (v) { return Array.isArray(v) ? P('[') + v.map(S).join(P(', ')) + P(']') : S(v); };
+      function line(html, cls) {
+        var el = document.createElement('span');
+        el.className = 'l' + (cls ? ' ' + cls : '');
+        el.innerHTML = '<span>' + html + '</span>';
+        return el;
+      }
+
+      /* ---------- the transform demo ---------- */
+      var VENDORS = {
+        a: {
+          lines: [
+            '<?xml version="1.0"?>',
+            '<CANDIDATE_RECORD SRC="VENDOR_A">',
+            '  <FULL_NM>JALIL, MOHAMMED-TAQI</FULL_NM>',
+            '  <TTL>DATA ENGR</TTL>',
+            '  <EMPLR>SNH AI</EMPLR>',
+            '  <LOC>AUSTIN TX</LOC>',
+            '  <START_DT>20250601</START_DT>',
+            '  <STACK>PYTHON|FASTAPI|BIGQUERY</STACK>',
+            '  <PR_MERGED>100+</PR_MERGED>',
+            '  <EDU>UT AUSTIN;BS BIOLOGY (COMP)</EDU>',
+            '</CANDIDATE_RECORD>'
+          ],
+          map: [2, 3, 4, 5, 6, 7, 8, 9],
+          enrich: 'name "JALIL, MOHAMMED-TAQI" → "Mohammed-Taqi Jalil"\n  loc  "AUSTIN TX" → "Austin, TX"\n  date "20250601" → "2025-06"'
+        },
+        b: {
+          lines: [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<rec type="person" v="2">',
+            '  <nm first="Mohammed-Taqi" last="Jalil"/>',
+            '  <pos org="SNH AI" since="2025-06">Data Engineer</pos>',
+            '  <addr city="Austin" st="TX"/>',
+            '  <skills>',
+            '    <s>Python</s><s>FastAPI</s><s>BigQuery</s>',
+            '  </skills>',
+            '  <metric k="merged_prs">100+</metric>',
+            '  <school deg="B.S. Biology (Computational)">UT Austin</school>',
+            '</rec>'
+          ],
+          map: [2, 3, 3, 4, 3, 6, 8, 9],
+          enrich: 'name  first + last → "Mohammed-Taqi Jalil"\n  loc   city + st → "Austin, TX"\n  stack <s>[] → list'
+        }
+      };
+
+      var FIELDS = [
+        ['name', 'Mohammed-Taqi Jalil'],
+        ['role', 'Data Engineer'],
+        ['org', 'SNH AI'],
+        ['location', 'Austin, TX'],
+        ['since', '2025-06'],
+        ['stack', ['Python', 'FastAPI', 'BigQuery']],
+        ['merged_prs', '100+'],
+        ['education', 'B.S. Biology, UT Austin']
+      ];
+
+      var src = document.getElementById('src');
+      var out = document.getElementById('out');
+      var log = document.getElementById('log');
+      var fieldsEl = document.getElementById('fields');
+      var steps = {};
+      document.querySelectorAll('#steps li').forEach(function (li) { steps[li.dataset.s] = li; });
+      var vendor = 'a';
+      var runId = 0;
+      var wait = function (ms) { return new Promise(function (r) { setTimeout(r, reduce ? 0 : ms); }); };
+
+      function setStep(name, state) {
+        var li = steps[name];
+        li.classList.remove('go', 'ok');
+        if (state) li.classList.add(state);
+        li.querySelector('.ic').textContent = state === 'ok' ? '✓' : state === 'go' ? '◐' : '○';
+      }
+      function logLine(html) { log.insertAdjacentHTML('beforeend', html + '\n'); }
+
+      async function run() {
+        var id = ++runId;
+        var v = VENDORS[vendor];
+        var alive = function () { return id === runId; };
+        src.textContent = ''; out.textContent = ''; log.textContent = '';
+        fieldsEl.textContent = '0 fields';
+        Object.keys(steps).forEach(function (k) { setStep(k, null); });
+
+        for (var i = 0; i < v.lines.length; i++) {
+          if (!alive()) return;
+          src.appendChild(line(hlXml(v.lines[i])));
+          await wait(55);
+        }
+        var srcLines = src.querySelectorAll('.l');
+        await wait(350);
+        if (!alive()) return;
+
+        setStep('parse', 'go');
+        logLine('<b>[parse]</b> reading ' + (vendor === 'a' ? 'vendor_a' : 'vendor_b') + '.xml');
+        out.appendChild(line('<span class="pu">{</span>'));
+        for (var f = 0; f < FIELDS.length; f++) {
+          if (!alive()) return;
+          srcLines.forEach(function (l) { l.classList.remove('hl'); });
+          var s = srcLines[v.map[f]];
+          if (s) s.classList.add('hl');
+          out.appendChild(line('  ' + K(FIELDS[f][0]) + V(FIELDS[f][1]) + P(','), 'new'));
+          fieldsEl.textContent = (f + 1) + ' fields';
+          await wait(380);
+        }
+        srcLines.forEach(function (l) { l.classList.remove('hl'); });
+        setStep('parse', 'ok');
+        logLine('<b>[parse]</b> ' + FIELDS.length + ' fields extracted');
+
+        await wait(300); if (!alive()) return;
+        setStep('validate', 'go');
+        await wait(450); if (!alive()) return;
+        setStep('validate', 'ok');
+        logLine('<b>[validate]</b> <span class="g">✓ candidate.xsd</span>');
+
+        await wait(250); if (!alive()) return;
+        setStep('enrich', 'go');
+        await wait(450); if (!alive()) return;
+        setStep('enrich', 'ok');
+        logLine('<b>[enrich]</b> ' + esc(v.enrich));
+
+        await wait(300); if (!alive()) return;
+        setStep('decide', 'go');
+        await wait(500); if (!alive()) return;
+        out.appendChild(line('  <span class="ky">&quot;decision&quot;</span><span class="pu">:</span> <span class="dec">&quot;worth a conversation&quot;</span>', 'new'));
+        out.appendChild(line('<span class="pu">}</span>'));
+        fieldsEl.textContent = (FIELDS.length + 1) + ' fields · 0 errors';
+        setStep('decide', 'ok');
+        logLine('<b>[decide]</b> <span class="g">✓ adjudicated without manual review</span>');
+      }
+
+      document.querySelectorAll('.vtab').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll('.vtab').forEach(function (x) { x.classList.toggle('on', x === b); });
+          vendor = b.dataset.v;
+          run();
+        });
+      });
+      document.getElementById('rerun').addEventListener('click', run);
+
+      var started = false;
+      new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting && !started) { started = true; run(); }
+      }, { threshold: 0.3 }).observe(document.getElementById('run'));
+
+      /* ---------- experience.json ---------- */
+      var EXP = [
+        { role: 'Data Engineer', org: 'SNH AI · Austin, TX', period: 'Jan 2026 – present', note: 'current',
+          did: [
+            'Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.',
+            'Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.',
+            'Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.',
+            'Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.',
+            'Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.'
+          ], stack: ['python', 'fastapi', 'bigquery', 'gcp', 'pytest', 'react'] },
+        { role: 'Data Engineer Intern', org: 'SNH AI · Austin, TX', period: 'Jun 2025 – Jan 2026', note: 'intern → owner in seven months',
+          did: [
+            'Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform\'s AI models.',
+            'Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.',
+            'Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.',
+            'Converted to full-time after the internship, taking ownership of the platform\'s core transformation service.'
+          ], stack: ['python', 'xml', 'xsd', 'label studio'] },
+        { role: 'Data Analyst Intern', org: 'JSoftUSA · Austin, TX', period: 'Feb 2024 – Aug 2024',
+          did: [
+            'Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.',
+            'Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.',
+            'Built Tableau dashboards to track performance and resource use, improving educator efficiency.'
+          ], stack: ['sql', 'tableau', 'etl'] },
+        { role: 'B.S. Biology (Computational)', org: 'The University of Texas at Austin', period: 'May 2024',
+          did: ['Coursework: genomics algorithms, biostatistics, data structures, Python.'], stack: [] }
+      ];
+
+      var expCode = document.getElementById('expCode');
+      expCode.appendChild(line(P('[')));
+      EXP.forEach(function (e, ei) {
+        expCode.appendChild(line('  ' + P('{') + (e.note ? '  <span class="cm">// ' + esc(e.note) + '</span>' : '')));
+        expCode.appendChild(line('    ' + K('role') + S(e.role) + P(',')));
+        expCode.appendChild(line('    ' + K('org') + S(e.org) + P(',')));
+        expCode.appendChild(line('    ' + K('period') + S(e.period) + P(',')));
+        expCode.appendChild(line('    ' + K('did') + P('[')));
+        e.did.forEach(function (d) {
+          expCode.appendChild(line('<span class="prose">' + esc(d) + '</span>'));
+        });
+        expCode.appendChild(line('    ' + P(']') + (e.stack.length ? P(',') : '')));
+        if (e.stack.length) expCode.appendChild(line('    ' + K('stack') + P('[') + e.stack.map(S).join(P(', ')) + P(']')));
+        expCode.appendChild(line('  ' + P('}') + (ei < EXP.length - 1 ? P(',') : '')));
+      });
+      expCode.appendChild(line(P(']')));
+
+      /* ---------- projects explorer ---------- */
+      var PROJ = [
+        { dir: 'intellivest/', cat: 'financial analytics', title: 'IntelliVest Investment Analytics Platform', img: '../assets/intellivest-dashboard.png',
+          desc: 'Investment analytics platform with real-time market data, portfolio optimization, and interactive dashboards for informed decision-making.',
+          tech: ['python', 'streamlit', 'plotly'], url: 'https://github.com/MohammedJalil/intellivest' },
+        { dir: 'air_pollution/', cat: 'machine learning', title: 'Ambient Air Pollution Prediction', img: '../assets/air-pollution-model.png',
+          desc: 'Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5 concentrations across the U.S., with EDA, feature selection, and cross-validation.',
+          tech: ['python', 'scikit-learn'], url: 'https://github.com/MohammedJalil/Air-Pollution-Predictive-Model' },
+        { dir: 'rna_seq/', cat: 'bioinformatics', title: 'RNA-Seq Gene Expression Analysis', img: '../assets/rna-seq-analysis.png',
+          desc: 'Differential gene expression analysis with DESeq2, visualized through PCA, volcano plots, and heatmaps.',
+          tech: ['r', 'bioconductor'], url: 'https://github.com/MohammedJalil/rna-seq-analysis' }
+      ];
+      var tree = document.getElementById('tree');
+      var preview = document.getElementById('preview');
+      function show(i) {
+        var p = PROJ[i];
+        tree.querySelectorAll('button').forEach(function (b, k) { b.classList.toggle('on', k === i); });
+        preview.innerHTML = '';
+        var crumb = document.createElement('div'); crumb.className = 'crumb'; crumb.textContent = 'projects/' + p.dir + 'README.md · ' + p.cat;
+        var h = document.createElement('h3'); h.textContent = p.title;
+        var ul = document.createElement('ul'); ul.className = 'badges';
+        p.tech.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+        var d = document.createElement('p'); d.textContent = p.desc;
+        var img = document.createElement('img'); img.src = p.img; img.alt = p.title + ' screenshot'; img.loading = 'lazy';
+        var a = document.createElement('a'); a.className = 'gh'; a.href = p.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = '$ git clone ' + p.url.replace('https://', '') + ' ↗';
+        [crumb, h, ul, d, img, a].forEach(function (n) { preview.appendChild(n); });
+      }
+      PROJ.forEach(function (p, i) {
+        var li = document.createElement('li');
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = '▸ ' + p.dir;
+        b.addEventListener('click', function () { show(i); });
+        li.appendChild(b); tree.appendChild(li);
+      });
+      show(0);
+
+      /* ---------- stack.yaml ---------- */
+      var Y = [
+        ['cm', '# the toolkit'],
+        ['k', 'languages:'],
+        ['i', 'python: [fastapi, pandas, pytest]'],
+        ['i', 'sql: [bigquery, mysql]'],
+        ['i', 'typescript: [react]'],
+        ['i', 'formats: [xml, xsd, rest apis]'],
+        ['k', 'cloud_and_data:'],
+        ['i', 'gcp: [bigquery, cloud run, pub/sub]'],
+        ['i', 'architecture: medallion  # bronze → silver → gold'],
+        ['i', 'practices: [etl, data validation]'],
+        ['i', 'tooling: [docker, git, github, label studio, tableau]']
+      ];
+      var stackCode = document.getElementById('stackCode');
+      Y.forEach(function (y) {
+        var h;
+        if (y[0] === 'cm') h = '<span class="cm">' + esc(y[1]) + '</span>';
+        else if (y[0] === 'k') h = '<span class="ky">' + esc(y[1]) + '</span>';
+        else {
+          var parts = y[1].split(': ');
+          var rest = esc(parts.slice(1).join(': ')).replace(/(#.*)$/, '<span class="cm">$1</span>');
+          h = '  <span class="at">' + esc(parts[0]) + '</span><span class="pu">:</span> <span class="st">' + rest + '</span>';
+        }
+        stackCode.appendChild(line(h));
+      });
+
+      /* ---------- chrome ---------- */
+      document.getElementById('yr').textContent = new Date().getFullYear();
+      document.getElementById('copy').addEventListener('click', function (e) {
+        var btn = e.currentTarget;
+        (navigator.clipboard ? navigator.clipboard.writeText('mohammed.jalil.email@gmail.com') : Promise.reject())
+          .then(function () { btn.textContent = 'copied ✓'; }, function () { btn.textContent = 'select + copy'; });
+        setTimeout(function () { btn.textContent = 'copy'; }, 1800);
+      });
+      var clock = document.getElementById('clock');
+      try {
+        var fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit' });
+        var tick = function () { clock.textContent = 'Austin ' + fmt.format(new Date()); };
+        tick(); setInterval(tick, 30000);
+      } catch (err) {}
+
+      var lnCol = document.getElementById('lnCol');
+      window.addEventListener('scroll', function () {
+        var max = document.documentElement.scrollHeight - innerHeight;
+        var ln = Math.max(1, Math.round((scrollY / Math.max(1, max)) * 420));
+        lnCol.textContent = 'Ln ' + ln + ', Col 1';
+      }, { passive: true });
+
+      var tabs = Array.from(document.querySelectorAll('.tabs a'));
+      var tio = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          tabs.forEach(function (t) { t.classList.toggle('on', t.getAttribute('href') === '#' + e.target.id); });
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      ['top', 'experience', 'projects', 'stack', 'offhours', 'contact'].forEach(function (id) { tio.observe(document.getElementById(id)); });
+    })();
+  </script>
+</body>
+
+</html>
