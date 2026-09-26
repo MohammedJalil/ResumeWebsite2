@@ -4,6 +4,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      var designs = ['gold', 'swiss', 'parsed'];
+      try {
+        var pick = new URLSearchParams(location.search).get('design');
+        if (designs.indexOf(pick) < 0) pick = sessionStorage.getItem('design');
+        if (designs.indexOf(pick) < 0) {
+          pick = /bot|crawl|spider|slurp|preview|lighthouse/i.test(navigator.userAgent)
+            ? 'gold'
+            : designs[Math.floor(Math.random() * designs.length)];
+        }
+        sessionStorage.setItem('design', pick);
+        if (pick !== 'gold') location.replace('/' + pick + '.html' + location.hash);
+      } catch (e) {}
+    })();
+  </script>
   <title>Mohammed-Taqi Jalil, Data Engineer</title>
   <meta name="description"
     content="Mohammed-Taqi Jalil, Data Engineer at SNH AI in Austin, TX. Helped take an AI-powered records-adjudication platform from prototype to production. Python, FastAPI, BigQuery." />

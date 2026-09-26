@@ -1,7 +1,9 @@
-const CACHE = 'mtj-portfolio-v6';
+const CACHE = 'mtj-portfolio-v7';
 const ASSETS = [
   '/',
   '/index.html',
+  '/swiss.html',
+  '/parsed.html',
   '/css/style.css',
   '/js/script.js',
   '/js/chat.js'
@@ -35,6 +37,21 @@ self.addEventListener('fetch', (e) => {
     return; // Let the browser handle it normally, don't intercept
   }
   
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res.ok && !res.redirected) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(req).then((cached) => cached || caches.match('/')))
+    );
+    return;
+  }
+
   e.respondWith(
     caches.match(req).then((cached) =>
       cached || fetch(req).then((res) => {
