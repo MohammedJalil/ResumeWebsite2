@@ -1,9 +1,10 @@
-const CACHE = 'mtj-portfolio-v5';
+const CACHE = 'mtj-portfolio-v6';
 const ASSETS = [
   '/',
   '/index.html',
   '/css/style.css',
-  '/js/script.js'
+  '/js/script.js',
+  '/js/chat.js'
 ];
 
 self.addEventListener('install', (e) => {

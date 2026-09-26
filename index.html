@@ -7,7 +7,8 @@
   <title>Mohammed-Taqi Jalil, Data Engineer</title>
   <meta name="description"
     content="Mohammed-Taqi Jalil, Data Engineer at SNH AI in Austin, TX. Helped take an AI-powered records-adjudication platform from prototype to production. Python, FastAPI, BigQuery." />
-  <meta name="theme-color" content="#faf6ef" />
+  <meta name="theme-color" content="#07080a" />
+  <meta name="color-scheme" content="dark" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Mohammed-Taqi Jalil, Data Engineer" />
   <meta property="og:description"
@@ -23,11 +24,15 @@
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" />
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    (function (r) {
+      r.classList.add('js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && innerHeight >= 560) r.classList.add('scrolly');
+    })(document.documentElement);
+  </script>
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -49,233 +54,397 @@
 
 <body>
   <a href="#main" class="skip-link">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
 
-  <header class="masthead">
-    <a class="masthead__name" href="/">Mohammed-Taqi Jalil</a>
-    <nav class="masthead__nav" aria-label="Primary">
-      <a href="#experience">experience</a>
-      <a href="#projects">projects</a>
-      <a href="resume.html">resume</a>
+  <header class="nav" id="nav">
+    <a class="nav__mark" href="#top" aria-label="Mohammed-Taqi Jalil, back to top">
+      <span class="nav__mono">MTJ</span>
+      <span class="nav__role">data engineer</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#pipeline"><span>01</span>pipeline</a>
+      <a href="#layers"><span>02</span>layers</a>
+      <a href="#builds"><span>03</span>builds</a>
+      <a href="#ask"><span>04</span>ask</a>
+      <a href="resume.html" class="nav__cta">resume</a>
     </nav>
+    <div class="nav__progress" aria-hidden="true"><span id="progress"></span></div>
   </header>
 
   <main id="main">
-    <section class="hero">
-      <h1 class="hero__headline">Data engineer,<br /><em>prototype to production.</em></h1>
-      <p class="hero__meta">Mohammed-Taqi Jalil · SNH AI · Austin, TX</p>
-      <p class="hero__lede">
-        I helped take an AI-powered records-adjudication platform from early prototype to
-        production with live enterprise customers. I own the service that turns messy
-        multi-vendor court XML into the structured data behind every automated compliance
-        decision.
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <canvas id="field" class="hero__field" aria-hidden="true"></canvas>
+      <div class="hero__aura" aria-hidden="true"></div>
+      <p class="hero__fallback-name" aria-hidden="true">Mohammed-Taqi<br />Jalil</p>
+
+      <div class="wrap hero__inner">
+        <div class="hero__left">
+          <p class="status"><span class="status__dot"></span>Data Engineer · SNH AI · Austin, TX</p>
+          <h1 class="hero__title">
+            <span class="sr-only">Mohammed-Taqi Jalil. </span>
+            <span class="rise"><span>Data engineer,</span></span>
+            <span class="rise"><em class="metal">prototype to production.</em></span>
+          </h1>
+        </div>
+        <div class="hero__right">
+          <p class="hero__lede">
+            I helped take an AI-powered records-adjudication platform from early prototype to
+            production with live enterprise customers. I own the service that turns messy
+            multi-vendor court XML into the structured data behind every automated compliance
+            decision.
+          </p>
+          <div class="hero__ctas">
+            <a class="btn btn--gold" href="#pipeline" data-magnetic>Follow the data <span aria-hidden="true">↓</span></a>
+            <a class="btn btn--ghost" href="resume.html" data-magnetic>Resume</a>
+          </div>
+        </div>
+      </div>
+
+      <p class="hero__hint" aria-hidden="true">
+        <span class="hint--fine">move through the data</span>
+        <span class="hint--coarse">tap to scatter</span>
       </p>
-
-      <dl class="stats">
-        <div class="stats__item">
-          <dt>role</dt>
-          <dd>Data Engineer</dd>
-        </div>
-        <div class="stats__item">
-          <dt>stack</dt>
-          <dd>Python · FastAPI · BigQuery</dd>
-        </div>
-        <div class="stats__item">
-          <dt>shipped</dt>
-          <dd>100+ merged PRs</dd>
-        </div>
-        <div class="stats__item">
-          <dt>since</dt>
-          <dd>Jun 2025</dd>
-        </div>
-      </dl>
-
-      <svg id="pipeline" class="pipeline" viewBox="0 0 660 162" width="660" height="162" role="img"
-        aria-label="Diagram: vendor XML documents flow through parse, validate, enrich into structured JSON, ending in a decision.">
-        <!-- vendor XML: overlapping documents -->
-        <path class="ink draw d1" pathLength="1" d="M26,45 L64,40 L69,104 L31,110 Z" />
-        <path class="ink draw d1" pathLength="1" d="M44,36 L84,33 L88,99 L48,103 Z" />
-        <path class="ink draw d1" pathLength="1" d="M62,44 L98,41 L112,54 L115,112 L66,116 Z" />
-        <path class="ink draw d1" pathLength="1" d="M98,41 L100,54 L112,54" />
-        <path class="ink ink--soft fade" d="M74,66 l30,-1" />
-        <path class="ink ink--soft fade" d="M75,78 l32,-1" />
-        <path class="ink ink--soft fade" d="M75,90 l26,-1" />
-        <path class="ink ink--soft fade" d="M76,102 l30,-1" />
-
-        <!-- flow: vendors into the service -->
-        <path class="flow fade" d="M120,62 C162,58 210,74 251,86" />
-        <path class="flow fade" d="M122,88 C165,90 210,92 251,93" />
-        <path class="flow fade" d="M119,110 C162,116 212,106 251,100" />
-
-        <!-- the service capsule -->
-        <rect class="ink draw d2" pathLength="1" x="255" y="68" width="178" height="50" rx="25" />
-        <text class="lbl fade" x="344" y="98" text-anchor="middle">parse · validate · enrich</text>
-
-        <!-- flow: service to structured output -->
-        <path class="flow fade" d="M437,93 C452,92 466,92 480,91" />
-
-        <!-- structured JSON document -->
-        <path class="ink draw d3" pathLength="1" d="M484,56 L523,54 L536,67 L538,128 L488,131 Z" />
-        <path class="ink draw d3" pathLength="1" d="M523,54 L524,67 L536,67" />
-        <path class="ink ink--soft fade" d="M496,82 l30,-1" />
-        <path class="ink ink--soft fade" d="M496,94 l32,-1" />
-        <path class="ink ink--soft fade" d="M497,106 l26,-1" />
-
-        <!-- flow: output to decision -->
-        <path class="flow fade" d="M542,92 C556,91 566,91 582,91" />
-
-        <!-- decision -->
-        <circle class="ink draw d4" pathLength="1" cx="606" cy="91" r="16" />
-        <path class="check draw d4" pathLength="1" d="M598,91 L604,98 L615,81" />
-
-        <!-- labels -->
-        <text class="lbl fade" x="70" y="150" text-anchor="middle">vendor XML</text>
-        <text class="lbl fade" x="511" y="150" text-anchor="middle">structured JSON</text>
-        <text class="lbl fade" x="606" y="150" text-anchor="middle">decision</text>
-      </svg>
     </section>
 
-    <section id="experience" class="section">
-      <h2 class="section__heading"><span class="section__num">[01]</span> Experience</h2>
+    <!-- PIPELINE (scrollytelling) -->
+    <section class="pipe" id="pipeline" aria-labelledby="pipe-title">
+      <div class="pipe__sticky">
+        <div class="wrap">
+          <header class="section-head" data-reveal>
+            <p class="kicker"><span>01</span> / the pipeline</p>
+            <h2 id="pipe-title" class="section-title" data-scramble>What I own, end to end.</h2>
+          </header>
 
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Engineer</h3>
-          <span class="entry__dates">January 2026 - Present</span>
-        </div>
-        <p class="entry__org">SNH AI · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.</li>
-          <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.
-            <aside class="mnote">Merged, not just opened.</aside>
-          </li>
-          <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
-          <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.
-            <aside class="mnote">Root cause first, patch second.</aside>
-          </li>
-          <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
-        </ul>
-        <p class="tech">python fastapi bigquery gcp pytest react</p>
-      </article>
-
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Engineer Intern</h3>
-          <span class="entry__dates">June 2025 - January 2026</span>
-        </div>
-        <p class="entry__org">SNH AI · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
-          <li>Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.</li>
-          <li>Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.</li>
-          <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.
-            <aside class="mnote">Intern to owner of the core service in seven months.</aside>
-          </li>
-        </ul>
-        <p class="tech">python xml xsd label studio</p>
-      </article>
-
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">Data Analyst Intern</h3>
-          <span class="entry__dates">February 2024 - August 2024</span>
-        </div>
-        <p class="entry__org">JSoftUSA · Austin, TX</p>
-        <ul class="entry__list">
-          <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
-          <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
-          <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
-        </ul>
-        <p class="tech">sql tableau etl</p>
-      </article>
-    </section>
-
-    <section id="projects" class="section">
-      <h2 class="section__heading"><span class="section__num">[02]</span> Projects</h2>
-
-      <ol class="projects">
-        <li class="project">
-          <span class="project__num" aria-hidden="true">01</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank"
-                rel="noopener noreferrer">Ambient Air Pollution Prediction</a>
-            </h3>
-            <p class="project__desc">
-              Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5
-              concentrations across the U.S., with EDA, feature selection, and cross-validation.
-            </p>
-            <p class="tech">python scikit-learn</p>
+          <div class="pipe__stage" data-reveal>
+            <svg class="pipe__svg" viewBox="0 40 1000 140" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <defs>
+                <linearGradient id="metalGrad" gradientUnits="userSpaceOnUse" x1="100" y1="0" x2="900" y2="0">
+                  <stop offset="0" stop-color="#7c95b3" />
+                  <stop offset="0.3" stop-color="#d08a4e" />
+                  <stop offset="0.62" stop-color="#cfd6df" />
+                  <stop offset="1" stop-color="#f4c55c" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-50%" width="140%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="b" />
+                  <feMerge>
+                    <feMergeNode in="b" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <path id="pipePath" class="pipe__track"
+                d="M100,110 C166,40 233,180 300,110 C366,40 433,180 500,110 C566,40 633,180 700,110 C766,40 833,180 900,110" />
+              <path class="pipe__fill" pathLength="1" filter="url(#glow)"
+                d="M100,110 C166,40 233,180 300,110 C366,40 433,180 500,110 C566,40 633,180 700,110 C766,40 833,180 900,110" />
+              <g class="pipe__packets">
+                <circle r="3.5"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#pipePath" /></animateMotion></circle>
+                <circle r="2.5"><animateMotion dur="5s" begin="1.25s" repeatCount="indefinite"><mpath href="#pipePath" /></animateMotion></circle>
+                <circle r="3"><animateMotion dur="5s" begin="2.5s" repeatCount="indefinite"><mpath href="#pipePath" /></animateMotion></circle>
+                <circle r="2"><animateMotion dur="5s" begin="3.75s" repeatCount="indefinite"><mpath href="#pipePath" /></animateMotion></circle>
+              </g>
+              <g class="pipe__nodes">
+                <g class="pipe__node" data-node="0"><circle cx="100" cy="110" r="22" /><circle class="core" cx="100" cy="110" r="6" /></g>
+                <g class="pipe__node" data-node="1"><circle cx="300" cy="110" r="22" /><circle class="core" cx="300" cy="110" r="6" /></g>
+                <g class="pipe__node" data-node="2"><circle cx="500" cy="110" r="22" /><circle class="core" cx="500" cy="110" r="6" /></g>
+                <g class="pipe__node" data-node="3"><circle cx="700" cy="110" r="22" /><circle class="core" cx="700" cy="110" r="6" /></g>
+                <g class="pipe__node" data-node="4"><circle cx="900" cy="110" r="22" /><circle class="core" cx="900" cy="110" r="6" /></g>
+              </g>
+            </svg>
+            <ol class="pipe__labels" aria-hidden="true">
+              <li data-node="0">ingest</li>
+              <li data-node="1">parse</li>
+              <li data-node="2">validate</li>
+              <li data-node="3">enrich</li>
+              <li data-node="4">decide</li>
+            </ol>
           </div>
-        </li>
-        <li class="project">
-          <span class="project__num" aria-hidden="true">02</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/intellivest" target="_blank"
-                rel="noopener noreferrer">IntelliVest Investment Analytics Platform</a>
-            </h3>
-            <p class="project__desc">
-              Investment analytics platform with real-time market data, portfolio optimization,
-              and interactive dashboards for informed decision-making.
-            </p>
-            <p class="tech">python streamlit plotly</p>
-          </div>
-        </li>
-        <li class="project">
-          <span class="project__num" aria-hidden="true">03</span>
-          <div class="project__body">
-            <h3 class="project__title">
-              <a href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank"
-                rel="noopener noreferrer">RNA-Seq Gene Expression Analysis</a>
-            </h3>
-            <p class="project__desc">
-              Differential gene expression analysis with DESeq2, visualized through PCA,
-              volcano plots, and heatmaps.
-            </p>
-            <p class="tech">r bioconductor</p>
-          </div>
-        </li>
-      </ol>
-    </section>
 
-    <section id="skills" class="section">
-      <h2 class="section__heading"><span class="section__num">[03]</span> Skills</h2>
-      <p class="skills__line"><strong>Languages &amp; Frameworks:</strong> Python (FastAPI, Pandas, pytest), SQL (BigQuery, MySQL), TypeScript/React, XML/XSD, REST APIs</p>
-      <p class="skills__line"><strong>Cloud &amp; Data:</strong> Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub), ETL / medallion architecture (bronze-silver-gold), data validation, Docker, Git/GitHub, Label Studio, Tableau</p>
-    </section>
-
-    <section id="education" class="section">
-      <h2 class="section__heading"><span class="section__num">[04]</span> Education</h2>
-      <article class="entry">
-        <div class="entry__head">
-          <h3 class="entry__title">The University of Texas at Austin</h3>
-          <span class="entry__dates">May 2024</span>
+          <ol class="pipe__steps">
+            <li class="step" data-step="0">
+              <p class="step__tag">stage 01 · ingest</p>
+              <h3 class="step__title">Raw court-record XML, from many vendors.</h3>
+              <p class="step__body">Every vendor sends records in its own shape. That mess is the input to everything downstream.</p>
+            </li>
+            <li class="step" data-step="1">
+              <p class="step__tag">stage 02 · parse</p>
+              <h3 class="step__title">One Python/FastAPI service turns it into structure.</h3>
+              <p class="step__body">I own the transformation service that converts heterogeneous vendor XML into the structured features the platform runs on.</p>
+            </li>
+            <li class="step" data-step="2">
+              <p class="step__tag">stage 03 · validate</p>
+              <h3 class="step__title">Schemas and tests keep bad data out.</h3>
+              <p class="step__body">XSD schemas enforce consistency on incoming XML; pytest coverage guards parsing, enrichment, and decision logic.</p>
+            </li>
+            <li class="step" data-step="3">
+              <p class="step__tag">stage 04 · enrich</p>
+              <h3 class="step__title">Bronze, silver, gold, in BigQuery.</h3>
+              <p class="step__body">When production breaks, I trace records through the medallion pipeline to the root cause: parser failures, ID-mapping bugs.</p>
+            </li>
+            <li class="step" data-step="4">
+              <p class="step__tag">stage 05 · decide</p>
+              <h3 class="step__title">Automated compliance decisions.</h3>
+              <p class="step__body">Jurisdiction-specific logic (offense age, dispositions, court exclusions) expands the share of records adjudicated without manual review.</p>
+            </li>
+          </ol>
         </div>
-        <p class="entry__org">B.S. Biology (Computational)</p>
-      </article>
+      </div>
     </section>
 
-    <section id="ask" class="section">
-      <h2 class="section__heading"><span class="section__num">[05]</span> Ask this site a question</h2>
-      <p class="ask__hint">Answers are generated from the content of this site.</p>
-      <div class="ask__thread" id="askThread" role="log" aria-live="polite"></div>
-      <form class="ask__form" id="askForm">
-        <input type="text" class="ask__input" id="askInput" autocomplete="off"
-          placeholder="e.g. what does he work on at SNH AI?" aria-label="Your question" />
-        <button type="submit" class="ask__send">ask</button>
-      </form>
+    <!-- NUMBERS -->
+    <section class="numbers" aria-label="Highlights">
+      <div class="wrap numbers__grid">
+        <div class="num" data-reveal>
+          <p class="num__value"><span data-count="100">100</span><span class="num__unit">+</span></p>
+          <p class="num__label">merged pull requests across parsing, enrichment, validation &amp; decision logic</p>
+        </div>
+        <div class="num" data-reveal>
+          <p class="num__value"><span data-count="7">7</span><span class="num__unit">mo</span></p>
+          <p class="num__label">from intern to owner of the platform's core transformation service</p>
+        </div>
+        <div class="num" data-reveal>
+          <p class="num__value"><span data-count="15">15</span><span class="num__unit">%</span></p>
+          <p class="num__label">increase in platform adoption from student data analysis at JSoftUSA</p>
+        </div>
+        <div class="num" data-reveal>
+          <p class="num__value"><span data-count="30">30</span><span class="num__unit">%</span></p>
+          <p class="num__label">less manual reporting time after automating SQL ETL workflows</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LAYERS (experience + education) -->
+    <section class="layers" id="layers" aria-labelledby="layers-title">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+          <p class="kicker"><span>02</span> / refinement layers</p>
+          <h2 id="layers-title" class="section-title" data-scramble>Raw to gold.</h2>
+          <p class="section-sub">A career read like a medallion pipeline: every layer cleaner, more trusted, and closer to the decision than the last.</p>
+        </header>
+
+        <div class="timeline">
+          <div class="timeline__rail" aria-hidden="true"><span id="rail"></span></div>
+
+          <article class="layer layer--source" data-reveal data-spotlight>
+            <div class="layer__meta">
+              <span class="badge">source</span>
+              <span class="layer__dates">May 2024</span>
+            </div>
+            <div class="layer__grid">
+              <div>
+                <h3 class="layer__title">The University of Texas at Austin</h3>
+                <p class="layer__org">B.S. Biology (Computational)</p>
+                <p class="layer__note">// sequences before schemas: where the data habit started.</p>
+              </div>
+              <figure class="layer__photo">
+                <img src="assets/ProfileImage.jpg" alt="Mohammed-Taqi Jalil in a suit at UT Austin's 2024 commencement" loading="lazy" width="546" height="773" />
+              </figure>
+            </div>
+          </article>
+
+          <article class="layer layer--bronze" data-reveal data-spotlight>
+            <div class="layer__meta">
+              <span class="badge">bronze</span>
+              <span class="layer__dates">Feb 2024 – Aug 2024</span>
+            </div>
+            <h3 class="layer__title">Data Analyst Intern</h3>
+            <p class="layer__org">JSoftUSA · Austin, TX</p>
+            <ul class="layer__list">
+              <li>Analyzed student attendance and performance data, uncovering trends that led to a 15% increase in platform adoption.</li>
+              <li>Automated ETL workflows using SQL scripts, decreasing manual report time by 30%.</li>
+              <li>Built Tableau dashboards to track performance and resource use, improving educator efficiency.</li>
+            </ul>
+            <ul class="chips" aria-label="Technologies">
+              <li>sql</li><li>tableau</li><li>etl</li>
+            </ul>
+          </article>
+
+          <article class="layer layer--silver" data-reveal data-spotlight>
+            <div class="layer__meta">
+              <span class="badge">silver</span>
+              <span class="layer__dates">Jun 2025 – Jan 2026</span>
+            </div>
+            <h3 class="layer__title">Data Engineer Intern</h3>
+            <p class="layer__org">SNH AI · Austin, TX</p>
+            <ul class="layer__list">
+              <li>Built data labeling workflows in Label Studio for annotating charges, dispositions, and record sources used to train and evaluate the platform's AI models.</li>
+              <li>Developed Python pipelines standardizing heterogeneous vendor XML into a unified golden dataset for model training and evaluation.</li>
+              <li>Created and validated XSD schemas to enforce consistency of incoming XML across diverse data sources.</li>
+              <li>Converted to full-time after the internship, taking ownership of the platform's core transformation service.
+                <span class="annot">// Intern to owner of the core service in seven months.</span>
+              </li>
+            </ul>
+            <ul class="chips" aria-label="Technologies">
+              <li>python</li><li>xml</li><li>xsd</li><li>label studio</li>
+            </ul>
+          </article>
+
+          <article class="layer layer--gold" data-reveal data-spotlight>
+            <div class="layer__meta">
+              <span class="badge">gold</span>
+              <span class="layer__dates">Jan 2026 – Present</span>
+              <span class="layer__live"><span class="status__dot"></span>current</span>
+            </div>
+            <h3 class="layer__title">Data Engineer</h3>
+            <p class="layer__org">SNH AI · Austin, TX</p>
+            <ul class="layer__list">
+              <li>Own the Python/FastAPI service that transforms raw court-record XML from multiple vendors into the structured features driving automated compliance decisions.</li>
+              <li>Helped take the product from prototype to production launch, supporting multi-week client UAT and shipping 100+ merged pull requests across parsing, enrichment, validation, and decision logic.
+                <span class="annot">// Merged, not just opened.</span>
+              </li>
+              <li>Implemented jurisdiction-specific decision logic (offense age, dispositions, court exclusions) with pytest coverage, expanding the share of records adjudicated without manual review.</li>
+              <li>Diagnosed production incidents by tracing records through a BigQuery bronze/silver/gold pipeline, fixing parser failures and ID-mapping bugs.
+                <span class="annot">// Root cause first, patch second.</span>
+              </li>
+              <li>Built internal React dashboard features (record search, labeling, live rule evaluation) used daily by engineers and auditors.</li>
+            </ul>
+            <ul class="chips" aria-label="Technologies">
+              <li>python</li><li>fastapi</li><li>bigquery</li><li>gcp</li><li>pytest</li><li>react</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUILDS (projects) -->
+    <section class="builds" id="builds" aria-labelledby="builds-title">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+          <p class="kicker"><span>03</span> / side builds</p>
+          <h2 id="builds-title" class="section-title" data-scramble>Things I built for fun.</h2>
+        </header>
+
+        <div class="builds__grid">
+          <a class="build build--wide" href="https://github.com/MohammedJalil/intellivest" target="_blank"
+            rel="noopener noreferrer" data-reveal data-tilt data-spotlight>
+            <div class="build__media">
+              <img src="assets/intellivest-dashboard.png" alt="IntelliVest portfolio dashboard showing a one-year performance trend and portfolio metrics" loading="lazy" width="775" height="584" />
+            </div>
+            <div class="build__body">
+              <p class="build__cat"><span>01</span> financial analytics</p>
+              <h3 class="build__title">IntelliVest Investment Analytics Platform</h3>
+              <p class="build__desc">Investment analytics platform with real-time market data, portfolio optimization, and interactive dashboards for informed decision-making.</p>
+              <ul class="chips"><li>python</li><li>streamlit</li><li>plotly</li></ul>
+              <span class="build__go" aria-hidden="true">view on github ↗</span>
+            </div>
+          </a>
+
+          <a class="build" href="https://github.com/MohammedJalil/Air-Pollution-Predictive-Model" target="_blank"
+            rel="noopener noreferrer" data-reveal data-tilt data-spotlight>
+            <div class="build__media">
+              <img src="assets/air-pollution-model.png" alt="PM2.5 model comparison showing Random Forest with the lowest RMSE" loading="lazy" width="800" height="500" />
+            </div>
+            <div class="build__body">
+              <p class="build__cat"><span>02</span> machine learning</p>
+              <h3 class="build__title">Ambient Air Pollution Prediction</h3>
+              <p class="build__desc">Machine learning models (Random Forest, XGBoost, k-NN, Lasso) predicting PM2.5 concentrations across the U.S., with EDA, feature selection, and cross-validation.</p>
+              <ul class="chips"><li>python</li><li>scikit-learn</li></ul>
+              <span class="build__go" aria-hidden="true">view on github ↗</span>
+            </div>
+          </a>
+
+          <a class="build" href="https://github.com/MohammedJalil/rna-seq-analysis" target="_blank"
+            rel="noopener noreferrer" data-reveal data-tilt data-spotlight>
+            <div class="build__media">
+              <img src="assets/rna-seq-analysis.png" alt="Differential gene expression volcano plot and summary statistics" loading="lazy" width="771" height="622" />
+            </div>
+            <div class="build__body">
+              <p class="build__cat"><span>03</span> bioinformatics</p>
+              <h3 class="build__title">RNA-Seq Gene Expression Analysis</h3>
+              <p class="build__desc">Differential gene expression analysis with DESeq2, visualized through PCA, volcano plots, and heatmaps.</p>
+              <ul class="chips"><li>r</li><li>bioconductor</li></ul>
+              <span class="build__go" aria-hidden="true">view on github ↗</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section class="stack" id="skills" aria-labelledby="stack-title">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+          <p class="kicker"><span>··</span> / stack</p>
+          <h2 id="stack-title" class="section-title" data-scramble>The toolkit.</h2>
+        </header>
+      </div>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          <span>Python</span><span>FastAPI</span><span>BigQuery</span><span>pytest</span><span>Pandas</span><span>SQL</span><span>Cloud Run</span><span>Pub/Sub</span><span>XML / XSD</span><span>REST APIs</span><span>Docker</span>
+          <span>Python</span><span>FastAPI</span><span>BigQuery</span><span>pytest</span><span>Pandas</span><span>SQL</span><span>Cloud Run</span><span>Pub/Sub</span><span>XML / XSD</span><span>REST APIs</span><span>Docker</span>
+        </div>
+      </div>
+      <div class="marquee marquee--rev" aria-hidden="true">
+        <div class="marquee__track">
+          <span>TypeScript</span><span>React</span><span>GCP</span><span>MySQL</span><span>Medallion architecture</span><span>Data validation</span><span>Label Studio</span><span>Tableau</span><span>Git</span><span>scikit-learn</span><span>R</span>
+          <span>TypeScript</span><span>React</span><span>GCP</span><span>MySQL</span><span>Medallion architecture</span><span>Data validation</span><span>Label Studio</span><span>Tableau</span><span>Git</span><span>scikit-learn</span><span>R</span>
+        </div>
+      </div>
+
+      <div class="wrap stack__lists" data-reveal>
+        <div>
+          <h3 class="stack__h">Languages &amp; Frameworks</h3>
+          <p>Python (FastAPI, Pandas, pytest), SQL (BigQuery, MySQL), TypeScript/React, XML/XSD, REST APIs</p>
+        </div>
+        <div>
+          <h3 class="stack__h">Cloud &amp; Data</h3>
+          <p>Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub), ETL / medallion architecture (bronze-silver-gold), data validation, Docker, Git/GitHub, Label Studio, Tableau</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASK -->
+    <section class="ask" id="ask" aria-labelledby="ask-title">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+          <p class="kicker"><span>04</span> / query this site</p>
+          <h2 id="ask-title" class="section-title" data-scramble>Ask me anything.</h2>
+          <p class="section-sub">An assistant that answers from the content of this site.</p>
+        </header>
+
+        <div class="term" data-reveal>
+          <div class="term__bar">
+            <span class="term__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="term__title">ask@mtj: ~/portfolio</span>
+          </div>
+          <div class="term__body">
+            <p class="term__boot" aria-hidden="true"><span class="term__ok">✓</span> knowledge base loaded · experience, projects, skills, education</p>
+            <div class="ask__thread" id="askThread" role="log" aria-live="polite"></div>
+            <div class="term__chips" aria-label="Suggested questions">
+              <button type="button" class="qchip" data-q="What does he work on at SNH AI?">what does he work on at SNH AI?</button>
+              <button type="button" class="qchip" data-q="What's his strongest technical skill?">strongest skill?</button>
+              <button type="button" class="qchip" data-q="Tell me about the IntelliVest project.">tell me about IntelliVest</button>
+            </div>
+            <form class="ask__form" id="askForm">
+              <span class="ask__prompt" aria-hidden="true">❯</span>
+              <input type="text" class="ask__input" id="askInput" autocomplete="off"
+                placeholder="type a question and press enter" aria-label="Your question" />
+              <button type="submit" class="ask__send">run</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="colophon">
-    <p>Set in Fraunces &amp; IBM Plex Mono. Built by hand.</p>
-    <p>
-      <a href="mailto:mohammed.jalil.email@gmail.com">mohammed.jalil.email@gmail.com</a> ·
-      <a href="tel:+15126961614">512-696-1614</a> ·
-      <a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer">github</a> ·
-      <a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer">linkedin</a>
-    </p>
-    <p>© <span id="year"></span> Mohammed-Taqi Jalil</p>
+  <footer class="outro">
+    <div class="wrap">
+      <p class="kicker"><span>EOF</span> / contact</p>
+      <h2 class="outro__title">Let's turn messy data<br class="br-wide" /> into <em class="metal">gold.</em></h2>
+      <a class="outro__mail" href="mailto:mohammed.jalil.email@gmail.com" data-magnetic>mohammed.jalil.email@gmail.com <span aria-hidden="true">↗</span></a>
+      <ul class="outro__links">
+        <li><a href="https://github.com/MohammedJalil" target="_blank" rel="noopener noreferrer">github</a></li>
+        <li><a href="https://www.linkedin.com/in/mohammedtaqijalil/" target="_blank" rel="noopener noreferrer">linkedin</a></li>
+        <li><a href="tel:+15126961614">512-696-1614</a></li>
+        <li><a href="resume.html">resume</a></li>
+      </ul>
+      <div class="outro__base">
+        <p>© <span id="year"></span> Mohammed-Taqi Jalil · Austin, TX</p>
+        <p>Hand-built. No frameworks. Every particle up top is a pixel of my name.</p>
+      </div>
+    </div>
   </footer>
 
   <script src="js/script.js"></script>
