@@ -81,7 +81,7 @@
 
       <div class="wrap hero__inner">
         <div class="hero__left">
-          <p class="status"><span class="status__dot"></span>Data Engineer · SNH AI · Austin, TX</p>
+          <p class="status"><span class="status__dot"></span>Data Engineer · SNH AI · Austin, TX<span class="status__time" id="localTime" hidden></span></p>
           <h1 class="hero__title">
             <span class="sr-only">Mohammed-Taqi Jalil. </span>
             <span class="rise"><span>Data engineer,</span></span>
@@ -235,6 +235,9 @@
               <div>
                 <h3 class="layer__title">The University of Texas at Austin</h3>
                 <p class="layer__org">B.S. Biology (Computational)</p>
+                <ul class="chips" aria-label="Coursework">
+                  <li>genomics algorithms</li><li>biostatistics</li><li>data structures</li><li>python</li>
+                </ul>
                 <p class="layer__note">// sequences before schemas: where the data habit started.</p>
               </div>
               <figure class="layer__photo">
@@ -391,6 +394,79 @@
         <div>
           <h3 class="stack__h">Cloud &amp; Data</h3>
           <p>Google Cloud Platform (BigQuery, Cloud Run, Pub/Sub), ETL / medallion architecture (bronze-silver-gold), data validation, Docker, Git/GitHub, Label Studio, Tableau</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OFF THE CLOCK -->
+    <section class="offclock" id="offclock" aria-labelledby="off-title">
+      <div class="wrap">
+        <header class="section-head" data-reveal>
+          <p class="kicker"><span>··</span> / field notes</p>
+          <h2 id="off-title" class="section-title" data-scramble>Off the clock.</h2>
+          <p class="section-sub">Where I write code, read systems papers, and recharge across Austin, and the bench it all happens on.</p>
+        </header>
+
+        <div class="compass" data-reveal>
+          <div class="compass__list" role="tablist" aria-label="Austin coffee shops">
+            <button type="button" class="compass__tab is-active" role="tab" aria-selected="true" aria-controls="brew-0" id="tab-0">
+              <span class="compass__n">01</span><span class="compass__name">Houndstooth Coffee</span><span class="compass__tag">morning deep work</span>
+            </button>
+            <button type="button" class="compass__tab" role="tab" aria-selected="false" aria-controls="brew-1" id="tab-1" tabindex="-1">
+              <span class="compass__n">02</span><span class="compass__name">Fleet Coffee</span><span class="compass__tag">east side ritual</span>
+            </button>
+            <button type="button" class="compass__tab" role="tab" aria-selected="false" aria-controls="brew-2" id="tab-2" tabindex="-1">
+              <span class="compass__n">03</span><span class="compass__name">Flat Track Coffee</span><span class="compass__tag">high-energy fuel</span>
+            </button>
+            <button type="button" class="compass__tab" role="tab" aria-selected="false" aria-controls="brew-3" id="tab-3" tabindex="-1">
+              <span class="compass__n">04</span><span class="compass__name">Greater Goods Roasting</span><span class="compass__tag">weekend reading</span>
+            </button>
+          </div>
+
+          <div class="compass__panels">
+            <article class="brew is-active" role="tabpanel" id="brew-0" aria-labelledby="tab-0">
+              <p class="brew__where">Downtown &amp; North Lamar</p>
+              <dl class="brew__spec">
+                <div><dt>order</dt><dd>Double Cortado (Washed Ethiopian)</dd></div>
+                <div><dt>beans</dt><dd>Pattern Coffee Roasters</dd></div>
+              </dl>
+              <p class="brew__notes">My quintessential engineering focus spot. Architectural, restrained interior, ultra-consistent extraction. The cortado has silky micro-foam with bright citrus and floral notes.</p>
+            </article>
+            <article class="brew" role="tabpanel" id="brew-1" aria-labelledby="tab-1">
+              <p class="brew__where">East Austin (Webberville Rd)</p>
+              <dl class="brew__spec">
+                <div><dt>order</dt><dd>Espresso Tonic / Classic Flat White</dd></div>
+                <div><dt>beans</dt><dd>Rotating guest roasters (Sweet Bloom, Ritual)</dd></div>
+              </dl>
+              <p class="brew__notes">An eclectic former gas-station outpost on the East Side. Best experimental coffee program in town. The espresso tonic on a humid 95°F Texas summer afternoon is unbeatable.</p>
+            </article>
+            <article class="brew" role="tabpanel" id="brew-2" aria-labelledby="tab-2">
+              <p class="brew__where">East Caesar Chavez</p>
+              <dl class="brew__spec">
+                <div><dt>order</dt><dd>House Drip or Colombian Pour Over</dd></div>
+                <div><dt>beans</dt><dd>In-house roast</dd></div>
+              </dl>
+              <p class="brew__notes">Coffee roastery meets custom vintage motorcycle garage. Grittier, high-energy community vibe. Rich chocolate, caramel, and tobacco roast profiles that fuel sprint weeks.</p>
+            </article>
+            <article class="brew" role="tabpanel" id="brew-3" aria-labelledby="tab-3">
+              <p class="brew__where">East 5th St</p>
+              <dl class="brew__spec">
+                <div><dt>order</dt><dd>Single-Origin Pour Over</dd></div>
+                <div><dt>beans</dt><dd>Greater Goods micro-lots</dd></div>
+              </dl>
+              <p class="brew__notes">Airy industrial space with lush greenery. Fantastic for long weekend reading sessions and testing bioinformatics or Python ideas.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="bench" data-reveal>
+          <h3 class="bench__h">The bench</h3>
+          <dl class="bench__rows">
+            <div class="bench__row"><dt>keyboard</dt><dd>Custom 75% mechanical, lubed &amp; filmed</dd><dd class="bench__note">Boba U4T tactiles / Gateron Oil King</dd></div>
+            <div class="bench__row"><dt>coffee</dt><dd>Hario V60 ceramic + Timemore C2</dd><dd class="bench__note">washed Ethiopian, 1:16</dd></div>
+            <div class="bench__row"><dt>audio</dt><dd>Sennheiser HD 6XX + DAC/amp</dd><dd class="bench__note">deep work soundtrack</dd></div>
+            <div class="bench__row"><dt>editor</dt><dd>VS Code / Neovim</dd><dd class="bench__note">Tokyo Night Storm</dd></div>
+          </dl>
         </div>
       </div>
     </section>

@@ -53,8 +53,13 @@
   "education": {
     "institution": "The University of Texas at Austin",
     "degree": "B.S. Biology (Computational)",
-    "graduation": "May 2024"
+    "graduation": "May 2024",
+    "coursework": ["Genomics Algorithms", "Biostatistics", "Data Structures", "Python"]
   },
+  "personal": [
+    "Favorite Austin coffee spots: Houndstooth Coffee (Downtown & North Lamar) for morning deep work, usually a Double Cortado with washed Ethiopian beans; Fleet Coffee (East Austin, Webberville Rd) for an Espresso Tonic or Flat White; Flat Track Coffee (East Caesar Chavez), a roastery inside a vintage motorcycle garage, for house drip or a Colombian pour over; Greater Goods Roasting (East 5th St) for single-origin pour overs and long weekend reading sessions.",
+    "Desk setup: a custom 75% mechanical keyboard (lubed and filmed, Boba U4T tactile / Gateron Oil King switches), a Hario V60 ceramic dripper with a Timemore C2 grinder (washed Ethiopian beans, 1:16 ratio), Sennheiser HD 6XX headphones with a DAC/amp, and VS Code / Neovim with the Tokyo Night Storm theme."
+  ],
   "projects": [
     {
       "id": "air-pollution",

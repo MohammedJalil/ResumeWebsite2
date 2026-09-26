@@ -576,6 +576,44 @@
       }
     }
 
+    // Local Austin time in the hero status pill
+    const timeEl = document.getElementById('localTime');
+    if (timeEl && window.Intl && Intl.DateTimeFormat) {
+      try {
+        const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit' });
+        const tick = () => (timeEl.textContent = fmt.format(new Date()) + ' CT');
+        tick();
+        timeEl.hidden = false;
+        setInterval(tick, 30000);
+      } catch (e) {
+        timeEl.hidden = true;
+      }
+    }
+
+    // Coffee compass tabs
+    const tabs = Array.from(document.querySelectorAll('.compass__tab'));
+    const selectTab = (tab, focus) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls'));
+        if (panel) panel.classList.toggle('is-active', on);
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => selectTab(tab, false));
+      if (finePointer) tab.addEventListener('pointerenter', () => selectTab(tab, false));
+      tab.addEventListener('keydown', (e) => {
+        const dir = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+        if (!dir) return;
+        e.preventDefault();
+        selectTab(tabs[(i + dir + tabs.length) % tabs.length], true);
+      });
+    });
+
     // Ask: suggested questions, and keep the thread pinned to the latest entry
     const askForm = document.getElementById('askForm');
     const askInput = document.getElementById('askInput');

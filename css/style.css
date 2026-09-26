@@ -896,9 +896,7 @@ html:not(.js) .timeline__rail span {
   padding: clamp(1.5rem, 3vw, 2.4rem);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--tone) 7%, transparent), transparent 45%),
-    var(--panel);
+  background: var(--panel);
 }
 
 .layer::after {
@@ -912,11 +910,6 @@ html:not(.js) .timeline__rail span {
   background: var(--bg);
   border: 2px solid var(--tone);
   box-shadow: 0 0 0 5px var(--bg), 0 0 18px var(--tone);
-}
-
-.layer--gold {
-  border-color: color-mix(in srgb, var(--gold) 28%, transparent);
-  box-shadow: 0 30px 80px -40px rgba(244, 197, 92, 0.35);
 }
 
 .layer__meta {
@@ -1110,7 +1103,7 @@ html:not(.js) .timeline__rail span {
   z-index: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: radial-gradient(520px circle at var(--mx) var(--my), color-mix(in srgb, var(--tone) 11%, transparent), transparent 45%);
+  background: radial-gradient(520px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.035), transparent 45%);
   opacity: 0;
   transition: opacity 0.4s ease;
 }
@@ -1165,8 +1158,7 @@ html.js .build[data-reveal].is-in {
 }
 
 .build:hover {
-  border-color: rgba(244, 197, 92, 0.35);
-  box-shadow: 0 40px 90px -45px rgba(244, 197, 92, 0.4);
+  border-color: var(--line-2);
 }
 
 .build--wide {
@@ -1363,6 +1355,191 @@ html.js .build[data-reveal].is-in {
   font-size: 0.95rem;
 }
 
+/* Off the clock */
+
+.offclock {
+  padding: clamp(5rem, 12vh, 8rem) 0;
+  border-top: 1px solid var(--line);
+}
+
+.compass {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.compass__list {
+  border-top: 1px solid var(--line);
+}
+
+.compass__tab {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  align-items: baseline;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.3rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease, padding 0.4s var(--ease);
+}
+
+.compass__n {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--dim);
+  transition: color 0.3s ease;
+}
+
+.compass__name {
+  font-family: var(--display);
+  font-size: clamp(1.3rem, 2.6vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.compass__tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.compass__tab:hover,
+.compass__tab.is-active {
+  color: var(--text);
+}
+
+.compass__tab.is-active {
+  padding-left: 0.75rem;
+}
+
+.compass__tab.is-active .compass__n {
+  color: var(--gold);
+}
+
+.compass__panels {
+  position: relative;
+  padding-top: 1.3rem;
+}
+
+html.js .brew:not(.is-active) {
+  display: none;
+}
+
+.brew {
+  animation: fadeUp 0.6s var(--ease);
+}
+
+.brew + .brew {
+  margin-top: 2.5rem;
+}
+
+html.js .brew + .brew {
+  margin-top: 0;
+}
+
+.brew__where {
+  margin: 0 0 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.brew__spec {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0 0 1.5rem;
+}
+
+.brew__spec div {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 1rem;
+}
+
+.brew__spec dt {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--dim);
+  padding-top: 0.2rem;
+}
+
+.brew__spec dd {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.brew__notes {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1.45;
+  color: #c8c6c0;
+}
+
+.bench {
+  margin-top: clamp(4rem, 9vh, 6rem);
+}
+
+.bench__h {
+  margin: 0 0 1rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.bench__rows {
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+
+.bench__row {
+  display: grid;
+  grid-template-columns: 8rem 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+
+.bench__row dt {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--dim);
+}
+
+.bench__row dd {
+  margin: 0;
+}
+
+.bench__row .bench__note {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.status__time {
+  padding-left: 0.6rem;
+  margin-left: 0.1rem;
+  border-left: 1px solid var(--line-2);
+  color: var(--text);
+}
+
 /* Ask (terminal) */
 
 .ask {
@@ -1375,7 +1552,7 @@ html.js .build[data-reveal].is-in {
   border: 1px solid var(--line-2);
   border-radius: 16px;
   background: rgba(10, 11, 14, 0.85);
-  box-shadow: 0 50px 120px -60px rgba(244, 197, 92, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   overflow: hidden;
 }
 
@@ -1741,8 +1918,22 @@ html.js .build[data-reveal].is-in {
   }
 
   .builds__grid,
-  .stack__lists {
+  .stack__lists,
+  .compass {
     grid-template-columns: 1fr;
+  }
+
+  .compass__tag {
+    display: none;
+  }
+
+  .bench__row {
+    grid-template-columns: 5.5rem 1fr;
+  }
+
+  .bench__row .bench__note {
+    grid-column: 2;
+    text-align: left;
   }
 
   .timeline {
@@ -1780,6 +1971,10 @@ html.js .build[data-reveal].is-in {
 }
 
 @media (max-width: 420px) {
+  .status__time {
+    display: none;
+  }
+
   .nav__links a:not(.nav__cta):nth-child(2),
   .nav__links a:not(.nav__cta):nth-child(3) {
     display: none;

@@ -338,6 +338,9 @@ IMPORTANT GUIDELINES:
                     'source': 'projects'
                 })
         
+        for note in kb.get('personal', []):
+            chunks.append({'text': note, 'source': 'personal'})
+        
         return chunks
     
     def semantic_search(self, query, chunks, top_k=3, vectorizer=None, cosine_similarity=None, np=None):
